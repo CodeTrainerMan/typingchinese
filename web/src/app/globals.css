@@ -1,0 +1,110 @@
+@import "tailwindcss";
+
+:root {
+  --bg: #f6f7f9;
+  --surface: #ffffff;
+  --surface-2: #f1f3f5;
+  --line: #e3e6ea;
+  --ink: #1f2328;
+  --dim: #6b7280;
+  --brand: #2563eb;
+  --brand-soft: #dbeafe;
+  --ok: #16a34a;
+  --err: #dc2626;
+  --warn: #d97706;
+}
+
+/* 深色：跟随系统（手动选浅色时不生效） */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --bg: #0d1117;
+    --surface: #161b22;
+    --surface-2: #1c2129;
+    --line: #2b313a;
+    --ink: #e6edf3;
+    --dim: #8b949e;
+    --brand: #4f8cff;
+    --brand-soft: #1d2b45;
+    --ok: #3fb950;
+    --err: #f85149;
+    --warn: #d29922;
+  }
+}
+
+/* 深色：手动指定，优先级高于系统设置 */
+:root[data-theme='dark'] {
+  --bg: #0d1117;
+  --surface: #161b22;
+  --surface-2: #1c2129;
+  --line: #2b313a;
+  --ink: #e6edf3;
+  --dim: #8b949e;
+  --brand: #4f8cff;
+  --brand-soft: #1d2b45;
+  --ok: #3fb950;
+  --err: #f85149;
+  --warn: #d29922;
+}
+
+/* 浅色：手动指定，压过系统深色 */
+:root[data-theme='light'] {
+  --bg: #f6f7f9;
+  --surface: #ffffff;
+  --surface-2: #f1f3f5;
+  --line: #e3e6ea;
+  --ink: #1f2328;
+  --dim: #6b7280;
+  --brand: #2563eb;
+  --brand-soft: #dbeafe;
+  --ok: #16a34a;
+  --err: #dc2626;
+  --warn: #d97706;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface2: var(--surface-2);
+  --color-line: var(--line);
+  --color-ink: var(--ink);
+  --color-dim: var(--dim);
+  --color-brand: var(--brand);
+  --color-brand-soft: var(--brand-soft);
+  --color-ok: var(--ok);
+  --color-err: var(--err);
+  --color-warn: var(--warn);
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: "PingFang SC", "Microsoft YaHei", "Hiragino Sans GB", "Noto Sans CJK SC", system-ui, -apple-system,
+    "Segoe UI", sans-serif;
+}
+
+/* 练习区禁止选中，避免快速打字误选文本 */
+.no-select {
+  user-select: none;
+}
+
+@keyframes shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-4px);
+  }
+  75% {
+    transform: translateX(4px);
+  }
+}
+
+.shake {
+  animation: shake 0.18s ease-in-out;
+}

@@ -1,0 +1,41 @@
+[
+  {
+    "id": "daily",
+    "name": "日常常用词",
+    "description": "最常用的双音节词，适合入门与日常提速",
+    "category": "基础",
+    "tags": [
+      "常用",
+      "入门"
+    ],
+    "level": 1,
+    "length": 59,
+    "url": "daily.json"
+  },
+  {
+    "id": "advanced",
+    "name": "进阶词汇",
+    "description": "学习、工作与 news 中常见的高频书面词",
+    "category": "进阶",
+    "tags": [
+      "书面",
+      "进阶"
+    ],
+    "level": 2,
+    "length": 51,
+    "url": "advanced.json"
+  },
+  {
+    "id": "idiom",
+    "name": "四字成语",
+    "description": "常用成语，兼顾打字速度与词汇积累",
+    "category": "成语",
+    "tags": [
+      "成语",
+      "挑战"
+    ],
+    "level": 3,
+    "length": 40,
+    "url": "idiom.json"
+  }
+]

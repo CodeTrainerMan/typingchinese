@@ -1,0 +1,112 @@
+/** 词条（由 scripts/gen-dict.mjs 预生成，运行时不依赖拼音库） */
+export interface CnWord {
+  id: string
+  word: string // 中国
+  pinyin: string[] // ['zhōng','guó'] 带声调，用于展示
+  flat: string // 'zhongguo' 判定串（ü 已转 v）
+  flatSpaced: string // 'zhong guo'
+  toneNum: string // 'zhong1 guo2'
+  initials: string // 'zg' 简拼判定串
+  syllables: string[] // ['zhong','guo']
+  trans: string // 释义
+  length: number
+}
+
+export interface DictResource {
+  id: string
+  name: string
+  description: string
+  category: string
+  tags: string[]
+  level: number
+  length: number
+  url: string
+}
+
+/** 用户已加入学习的词库（含学习进度） */
+export interface LearningDict extends DictResource {
+  words: CnWord[]
+  lastLearnIndex: number
+  perDayStudyNumber: number
+  addedAt: number
+}
+
+/** 打字判定模式：全拼 / 简拼 / 声调（带数字调号） */
+export type TypingMode = 'full' | 'initials' | 'tone'
+
+/**
+ * 输入方式：
+ * - pinyin：直接用英文键盘敲拉丁字母，逐字母实时纠错（需要英文输入状态）
+ * - hanzi：用中文输入法（微软拼音等）打出汉字，上屏后按整词判定（无法逐字母纠错）
+ */
+export type InputMode = 'pinyin' | 'hanzi'
+
+/**
+ * 练习模式：
+ * - spell 跟写：看汉字打拼音
+ * - dictation 听写：只听发音，不显示汉字与拼音
+ * - test 自测：只给拼音，写出对应的汉字或拼音
+ * - write 默写：只给释义，写出词语
+ */
+export type PracticeMode = 'spell' | 'dictation' | 'test' | 'write'
+
+/** 主题：跟随系统 / 浅色 / 深色 */
+export type ThemeMode = 'system' | 'light' | 'dark'
+
+/** 重听发音的快捷键 */
+export type ReplayKey = 'tab' | 'f2'
+
+/** 完成后进入下一词的按键 */
+export type NextKey = 'both' | 'space' | 'enter'
+
+/**
+ * 界面语言（只影响 UI 文案，与学习内容无关：词条、拼音、文章永远是中文）
+ * 加一种语言 = 在 src/i18n/messages/ 下加一个语言包并登记进 LOCALES
+ *
+ * 与对标项目（TypeWords）一致，覆盖 es / fr / pt / de / ru / uk / ja / ko / th / vi / id
+ */
+export type Locale =
+  | 'en'
+  | 'zh-CN'
+  | 'zh-TW'
+  | 'es'
+  | 'pt'
+  | 'fr'
+  | 'de'
+  | 'ru'
+  | 'uk'
+  | 'id'
+  | 'vi'
+  | 'ja'
+  | 'ko'
+  | 'th'
+
+export interface Statistics {
+  date: string // YYYY-MM-DD
+  spend: number // 毫秒
+  total: number // 完成的词条数
+  correct: number
+  wrong: number
+  keystrokes: number
+}
+
+export interface WrongRecord {
+  word: string
+  dictId: string
+  count: number
+  lastWrongAt: number
+}
+
+export interface CardRecord {
+  due: string
+  stability: number
+  difficulty: number
+  elapsedDays: number
+  scheduledDays: number
+  reps: number
+  lapses: number
+  state: number
+  /** FSRS 学习步进度：不落盘会让 Good 评级永远停在 10 分钟，无法毕业到长期间隔 */
+  learningSteps?: number
+  lastReview?: string
+}

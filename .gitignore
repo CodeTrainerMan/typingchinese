@@ -1,0 +1,36 @@
+# 参考资料（第三方/对标项目源码，不入库）
+/ref/
+
+# 依赖
+node_modules/
+.pnp
+.pnp.*
+
+# 构建产物
+.next/
+out/
+build/
+dist/
+
+# 日志
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# 环境变量
+.env*
+!.env.example
+
+# 缓存与本地文件
+.turbo/
+.vercel
+*.tsbuildinfo
+next-env.d.ts
+
+# 编辑器 / 系统
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
