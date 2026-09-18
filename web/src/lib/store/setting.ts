@@ -43,10 +43,8 @@ export interface SettingState {
   /** 复习比：复习词数量 = 每日学习量 × 该值；0 = 不安排复习 */
   reviewRatio: number
   fsrsParams: FsrsParams
-  /** 界面语言（默认英文：产品面向英语母语者学中文） */
+  /** 界面语言（默认英文：产品面向英语母语者学中文；只由用户在设置页手动切换） */
   lang: Locale
-  /** 是否已按浏览器语言做过首次推断，避免覆盖用户的手动选择 */
-  langDetected: boolean
   patch: (patch: Partial<SettingState>) => void
   reset: () => void
 }
@@ -77,7 +75,6 @@ export const DEFAULT_SETTING = {
   reviewRatio: 3,
   fsrsParams: DEFAULT_FSRS_PARAMS,
   lang: 'en' as Locale,
-  langDetected: false,
 }
 
 export const useSettingStore = create<SettingState>()(
@@ -87,6 +84,14 @@ export const useSettingStore = create<SettingState>()(
       patch: patch => set(patch),
       reset: () => set({ ...DEFAULT_SETTING }),
     }),
-    { name: 'cn-type-setting-v1' }
+    {
+      name: 'cn-type-setting-v1',
+      // v0 会按浏览器语言自动写入 lang，现已改为固定英文默认，旧数据统一回到英文
+      version: 1,
+      migrate: (persisted, version) => {
+        const old = (persisted ?? {}) as Partial<SettingState>
+        return version < 1 ? { ...DEFAULT_SETTING, ...old, lang: 'en' } : { ...DEFAULT_SETTING, ...old }
+      },
+    }
   )
 )

@@ -94,27 +94,9 @@ function htmlLangOf(locale: Locale): string {
   return LOCALES.find(l => l.code === locale)?.htmlLang ?? 'en'
 }
 
-/** 按浏览器语言挑一个已支持的语言；只用于首次访问 */
-function detectLocale(language: string): Locale | undefined {
-  const lower = language.toLowerCase()
-  const exact = LOCALES.find(l => l.code.toLowerCase() === lower)
-  if (exact) return exact.code
-  const main = lower.split('-')[0]
-  return LOCALES.find(l => l.code.toLowerCase().split('-')[0] === main)?.code
-}
-
 export function I18nProvider({ children }: { children: ReactNode }) {
   const locale = useSettingStore(s => s.lang)
-  const detected = useSettingStore(s => s.langDetected)
   const patch = useSettingStore(s => s.patch)
-
-  // 首次访问跟着浏览器语言走一次，之后以用户在设置页的选择为准
-  useEffect(() => {
-    if (detected) return
-    const hit = typeof navigator === 'undefined' ? undefined : detectLocale(navigator.language)
-    patch({ lang: hit ?? locale, langDetected: true })
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [detected])
 
   // html lang 跟随界面语言（TTS 的发音语言是显式指定的 zh-CN，不受影响）
   useEffect(() => {
@@ -130,7 +112,7 @@ export function I18nProvider({ children }: { children: ReactNode }) {
         const text = lookup(pack, key) ?? lookup(en, key) ?? key
         return interpolate(text, params)
       }) as TFn,
-      setLocale: next => patch({ lang: next, langDetected: true }),
+      setLocale: next => patch({ lang: next }),
     }
   }, [locale, patch])
 
