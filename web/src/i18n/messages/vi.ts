@@ -176,6 +176,18 @@ export const vi: Messages = {
 
   dicts: {
 
+  importedShared: 'Đã nhập “{name}” từ liên kết.',
+
+  export: 'Xuất',
+  share: 'Sao chép liên kết',
+  shareCopied: 'Đã sao chép liên kết',
+  shareTooBig: 'Danh sách này quá lớn cho một liên kết — hãy xuất tệp.',
+  shareImport: 'Nhập',
+  sharePlaceholder: 'Dán liên kết hoặc mã chia sẻ',
+  shareBad: 'Đây không phải danh sách chia sẻ hợp lệ.',
+  shareHint: 'Xuất danh sách ra tệp hoặc sao chép liên kết — mở liên kết sẽ nhập danh sách.',
+  copyFailed: 'Sao chép thủ công:',
+
   uploadMany: 'Bạn có thể chọn nhiều tệp cùng lúc',
   importedMany: 'Đã nhập {n} danh sách, {m} từ',
   importSkipped: 'Bỏ qua {n}',
@@ -236,6 +248,16 @@ export const vi: Messages = {
 
   article: {
 
+  customPanel: 'Dán văn bản của bạn',
+  customTitlePlaceholder: 'Tiêu đề (tùy chọn)',
+  customPlaceholder: 'Dán bất kỳ văn bản tiếng Trung nào vào đây — các câu sẽ thành đơn vị luyện tập.',
+  customStart: 'Luyện tập',
+  customSave: 'Lưu',
+  myArticles: 'Văn bản của tôi',
+  customNeedText: 'Hãy dán văn bản trước.',
+  customSaved: 'Đã lưu “{name}”.',
+  customDefaultTitle: 'Văn bản của tôi',
+
   readHint: 'Nghe một câu rồi đọc to để nhận điểm.',
   readAloud: 'Đọc to',
   reading: 'Đang nghe…',
@@ -252,6 +274,14 @@ export const vi: Messages = {
   },
 
   stats: {
+
+  readTitle: 'Đọc to',
+  readCount: 'Lần',
+  readAvg: 'Điểm trung bình',
+  readBest: 'Điểm cao nhất',
+  readRecent: 'Lần gần nhất',
+  readEmpty: 'Chưa có bản ghi — mở một bài và đọc to một câu.',
+  readClear: 'Xóa bản ghi',
 
   legendNew: 'Từ mới',
   legendReview: 'Đã ôn',
@@ -285,6 +315,12 @@ export const vi: Messages = {
   },
 
   wrong: {
+
+  groupByDue: 'Theo hạn ôn tập',
+  groupDueNow: 'Đến hạn ôn',
+  groupDueSoon: 'Hạn trong 24 giờ',
+  groupDueLater: 'Hạn sau đó',
+  groupNoCard: 'Chưa lên lịch',
 
   groupNone: 'Không nhóm',
   groupByCount: 'Theo số lần sai',

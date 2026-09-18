@@ -176,6 +176,18 @@ export const ru: Messages = {
 
   dicts: {
 
+  importedShared: '«{name}» импортирован по ссылке.',
+
+  export: 'Экспорт',
+  share: 'Копировать ссылку',
+  shareCopied: 'Ссылка скопирована',
+  shareTooBig: 'Список слишком большой для ссылки — экспортируйте файл.',
+  shareImport: 'Импорт',
+  sharePlaceholder: 'Вставьте ссылку или код',
+  shareBad: 'Это не корректный общий список.',
+  shareHint: 'Экспортируйте список в файл или скопируйте ссылку — при открытии он импортируется.',
+  copyFailed: 'Скопируйте вручную:',
+
   uploadMany: 'Можно выбрать несколько файлов сразу',
   importedMany: 'Импортировано списков: {n}, слов: {m}',
   importSkipped: 'пропущено: {n}',
@@ -236,6 +248,16 @@ export const ru: Messages = {
 
   article: {
 
+  customPanel: 'Вставить свой текст',
+  customTitlePlaceholder: 'Название (необязательно)',
+  customPlaceholder: 'Вставьте сюда любой китайский текст — предложения станут заданиями для печати.',
+  customStart: 'Тренироваться',
+  customSave: 'Сохранить',
+  myArticles: 'Мои тексты',
+  customNeedText: 'Сначала вставьте текст.',
+  customSaved: 'Сохранено «{name}».',
+  customDefaultTitle: 'Мой текст',
+
   readHint: 'Прослушайте строку, затем прочитайте её вслух, чтобы получить оценку.',
   readAloud: 'Читать вслух',
   reading: 'Слушаю…',
@@ -252,6 +274,14 @@ export const ru: Messages = {
   },
 
   stats: {
+
+  readTitle: 'Чтение вслух',
+  readCount: 'Раз',
+  readAvg: 'Средний балл',
+  readBest: 'Лучший балл',
+  readRecent: 'Последние попытки',
+  readEmpty: 'Пока нет записей — откройте статью и прочитайте строку вслух.',
+  readClear: 'Очистить записи',
 
   legendNew: 'Новые',
   legendReview: 'Повторения',
@@ -285,6 +315,12 @@ export const ru: Messages = {
   },
 
   wrong: {
+
+  groupByDue: 'По сроку повторения',
+  groupDueNow: 'Пора повторить',
+  groupDueSoon: 'Срок в течение 24 ч',
+  groupDueLater: 'Срок позже',
+  groupNoCard: 'Ещё не запланировано',
 
   groupNone: 'Без группировки',
   groupByCount: 'По числу ошибок',

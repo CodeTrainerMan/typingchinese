@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import { useBaseStore } from '@/lib/store/base'
+import { useExtraStore } from '@/lib/store/extra'
 import { useHydrated } from '@/lib/useHydrated'
 import { useI18n } from '@/i18n'
 import type { Statistics } from '@/lib/types'
@@ -29,6 +30,7 @@ function streak(stats: Statistics[]): number {
 export default function StatsPage() {
   const hydrated = useHydrated()
   const base = useBaseStore()
+  const extra = useExtraStore()
   const { t, locale } = useI18n()
   // 日期按界面语言排版（美式 9/18、德语 18.9. 等），不再手拼
   const fmtDay = new Intl.DateTimeFormat(locale, { month: 'numeric', day: 'numeric' })
@@ -99,6 +101,11 @@ export default function StatsPage() {
   const acc = sum.total ? Math.round((sum.correct / sum.total) * 1000) / 10 : 0
   const activeDays = stats.filter(s => s.total > 0).length
   const keep = streak(stats)
+
+  // 跟读记录：文章页朗读打分留下来的，最新的排在最前
+  const reads = extra.readRecords
+  const readAvg = reads.length ? Math.round(reads.reduce((a, r) => a + r.score, 0) / reads.length) : 0
+  const readBest = reads.reduce((a, r) => Math.max(a, r.score), 0)
 
   return (
     <div className="mx-auto max-w-4xl px-4 py-10">
@@ -217,6 +224,39 @@ export default function StatsPage() {
         <Card label={t('stats.totalTime')} value={t('common.minutes', { n: Math.round(sum.spend / 60000) })} />
         <Card label={t('stats.totalKeys')} value={`${sum.keystrokes}`} />
         <Card label={t('stats.totalWrong')} value={`${sum.wrong}`} />
+      </div>
+
+      <div className="rounded-2xl border border-line bg-surface p-5 mb-8">
+        <div className="text-sm font-medium mb-1">{t('stats.readTitle')}</div>
+        {reads.length === 0 ? (
+          <p className="text-xs text-dim mt-1">{t('stats.readEmpty')}</p>
+        ) : (
+          <>
+            <div className="grid gap-4 sm:grid-cols-3 mt-3 mb-4">
+              <Card label={t('stats.readCount')} value={`${reads.length}`} />
+              <Card label={t('stats.readAvg')} value={`${readAvg}`} />
+              <Card label={t('stats.readBest')} value={`${readBest}`} />
+            </div>
+            <div className="text-xs text-dim mb-2">{t('stats.readRecent')}</div>
+            <div className="space-y-1.5">
+              {reads.slice(0, 8).map(r => (
+                <div key={r.id} className="flex items-center gap-3 text-sm">
+                  <span className="text-brand font-medium w-14 shrink-0">
+                    {t('article.readScore', { n: r.score })}
+                  </span>
+                  <span className="flex-1 truncate">{r.sentence}</span>
+                  <span className="text-xs text-dim whitespace-nowrap">{fmtFull.format(new Date(r.at))}</span>
+                </div>
+              ))}
+            </div>
+            <button
+              onClick={extra.clearReadRecords}
+              className="mt-4 h-9 px-4 rounded-lg border border-line text-sm text-err hover:bg-surface2"
+            >
+              {t('stats.readClear')}
+            </button>
+          </>
+        )}
       </div>
 
       {activeDays === 0 ? (

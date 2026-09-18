@@ -176,6 +176,18 @@ export const id: Messages = {
 
   dicts: {
 
+  importedShared: '“{name}” diimpor dari tautan.',
+
+  export: 'Ekspor',
+  share: 'Salin tautan',
+  shareCopied: 'Tautan disalin',
+  shareTooBig: 'Daftar ini terlalu besar untuk tautan — ekspor saja filenya.',
+  shareImport: 'Impor',
+  sharePlaceholder: 'Tempel tautan atau kode bersama',
+  shareBad: 'Itu bukan daftar bersama yang valid.',
+  shareHint: 'Ekspor daftar menjadi file atau salin tautannya — membuka tautan akan mengimpornya.',
+  copyFailed: 'Salin secara manual:',
+
   uploadMany: 'Kamu bisa memilih beberapa file sekaligus',
   importedMany: '{n} daftar diimpor, {m} kata',
   importSkipped: '{n} dilewati',
@@ -236,6 +248,16 @@ export const id: Messages = {
 
   article: {
 
+  customPanel: 'Tempel teksmu sendiri',
+  customTitlePlaceholder: 'Judul (opsional)',
+  customPlaceholder: 'Tempel teks bahasa Mandarin apa pun di sini — kalimatnya akan menjadi unit latihan.',
+  customStart: 'Berlatih',
+  customSave: 'Simpan',
+  myArticles: 'Teksku',
+  customNeedText: 'Tempel teksnya dulu.',
+  customSaved: 'Tersimpan “{name}”.',
+  customDefaultTitle: 'Teksku',
+
   readHint: 'Dengarkan satu baris, lalu bacakan dengan lantang untuk mendapat skor.',
   readAloud: 'Baca lantang',
   reading: 'Mendengarkan…',
@@ -252,6 +274,14 @@ export const id: Messages = {
   },
 
   stats: {
+
+  readTitle: 'Membaca lantang',
+  readCount: 'Kali',
+  readAvg: 'Skor rata-rata',
+  readBest: 'Skor terbaik',
+  readRecent: 'Percobaan terakhir',
+  readEmpty: 'Belum ada rekaman — buka artikel dan bacalah satu baris dengan lantang.',
+  readClear: 'Hapus rekaman',
 
   legendNew: 'Baru',
   legendReview: 'Diulang',
@@ -285,6 +315,12 @@ export const id: Messages = {
   },
 
   wrong: {
+
+  groupByDue: 'Menurut jadwal ulang',
+  groupDueNow: 'Waktunya mengulang',
+  groupDueSoon: 'Jatuh tempo dalam 24 jam',
+  groupDueLater: 'Jatuh tempo nanti',
+  groupNoCard: 'Belum dijadwalkan',
 
   groupNone: 'Tanpa pengelompokan',
   groupByCount: 'Menurut jumlah salah',

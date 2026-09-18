@@ -176,6 +176,18 @@ export const ko: Messages = {
 
   dicts: {
 
+  importedShared: '링크에서 “{name}”을(를) 가져왔습니다.',
+
+  export: '내보내기',
+  share: '링크 복사',
+  shareCopied: '링크를 복사했습니다',
+  shareTooBig: '이 목록은 링크에 담기 너무 큽니다 — 파일로 내보내세요.',
+  shareImport: '가져오기',
+  sharePlaceholder: '공유 링크나 코드 붙여넣기',
+  shareBad: '유효한 공유 목록이 아닙니다.',
+  shareHint: '목록을 파일로 내보내거나 링크를 복사해 보내세요 — 링크를 열면 가져옵니다.',
+  copyFailed: '직접 복사하세요:',
+
   uploadMany: '여러 파일을 한 번에 선택할 수 있습니다',
   importedMany: '{n}개 목록, {m}개 단어를 가져왔습니다',
   importSkipped: '{n}개 건너뜀',
@@ -236,6 +248,16 @@ export const ko: Messages = {
 
   article: {
 
+  customPanel: '직접 텍스트 붙여넣기',
+  customTitlePlaceholder: '제목 (선택)',
+  customPlaceholder: '여기에 중국어 텍스트를 붙여넣으면 문장이 연습 단위가 됩니다.',
+  customStart: '연습하기',
+  customSave: '저장',
+  myArticles: '내 텍스트',
+  customNeedText: '먼저 텍스트를 붙여넣으세요.',
+  customSaved: '“{name}”을(를) 저장했습니다.',
+  customDefaultTitle: '내 텍스트',
+
   readHint: '문장을 듣고 소리 내어 읽으면 점수가 나옵니다.',
   readAloud: '소리 내어 읽기',
   reading: '듣는 중…',
@@ -252,6 +274,14 @@ export const ko: Messages = {
   },
 
   stats: {
+
+  readTitle: '소리 내어 읽기',
+  readCount: '회',
+  readAvg: '평균 점수',
+  readBest: '최고 점수',
+  readRecent: '최근 시도',
+  readEmpty: '아직 기록이 없습니다 — 글을 열고 한 문장을 소리 내어 읽어 보세요.',
+  readClear: '기록 삭제',
 
   legendNew: '새 단어',
   legendReview: '복습',
@@ -285,6 +315,12 @@ export const ko: Messages = {
   },
 
   wrong: {
+
+  groupByDue: '복습 시기별',
+  groupDueNow: '지금 복습',
+  groupDueSoon: '24시간 내',
+  groupDueLater: '그 이후',
+  groupNoCard: '아직 예약 없음',
 
   groupNone: '묶지 않음',
   groupByCount: '오류 횟수별',

@@ -176,6 +176,18 @@ export const uk: Messages = {
 
   dicts: {
 
+  importedShared: '«{name}» імпортовано за посиланням.',
+
+  export: 'Експорт',
+  share: 'Копіювати посилання',
+  shareCopied: 'Посилання скопійовано',
+  shareTooBig: 'Список занадто великий для посилання — експортуйте файл.',
+  shareImport: 'Імпорт',
+  sharePlaceholder: 'Вставте посилання або код',
+  shareBad: 'Це не коректний спільний список.',
+  shareHint: 'Експортуйте список у файл або скопіюйте посилання — при відкритті він імпортується.',
+  copyFailed: 'Скопіюйте вручну:',
+
   uploadMany: 'Можна вибрати кілька файлів одразу',
   importedMany: 'Імпортовано списків: {n}, слів: {m}',
   importSkipped: 'пропущено: {n}',
@@ -236,6 +248,16 @@ export const uk: Messages = {
 
   article: {
 
+  customPanel: 'Вставити свій текст',
+  customTitlePlaceholder: 'Назва (необов’язково)',
+  customPlaceholder: 'Вставте сюди будь-який китайський текст — речення стануть завданнями для друку.',
+  customStart: 'Тренуватися',
+  customSave: 'Зберегти',
+  myArticles: 'Мої тексти',
+  customNeedText: 'Спочатку вставте текст.',
+  customSaved: 'Збережено «{name}».',
+  customDefaultTitle: 'Мій текст',
+
   readHint: 'Прослухайте рядок, потім прочитайте його вголос, щоб отримати оцінку.',
   readAloud: 'Читати вголос',
   reading: 'Слухаю…',
@@ -252,6 +274,14 @@ export const uk: Messages = {
   },
 
   stats: {
+
+  readTitle: 'Читання вголос',
+  readCount: 'Разів',
+  readAvg: 'Середній бал',
+  readBest: 'Найкращий бал',
+  readRecent: 'Останні спроби',
+  readEmpty: 'Ще немає записів — відкрийте статтю і прочитайте рядок вголос.',
+  readClear: 'Очистити записи',
 
   legendNew: 'Нові',
   legendReview: 'Повторення',
@@ -285,6 +315,12 @@ export const uk: Messages = {
   },
 
   wrong: {
+
+  groupByDue: 'За строком повторення',
+  groupDueNow: 'Час повторювати',
+  groupDueSoon: 'Строк протягом 24 год',
+  groupDueLater: 'Строк пізніше',
+  groupNoCard: 'Ще не заплановано',
 
   groupNone: 'Без групування',
   groupByCount: 'За кількістю помилок',

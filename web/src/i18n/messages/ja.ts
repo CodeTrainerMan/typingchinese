@@ -176,6 +176,18 @@ export const ja: Messages = {
 
   dicts: {
 
+  importedShared: 'リンクから「{name}」を読み込みました。',
+
+  export: '書き出し',
+  share: 'リンクをコピー',
+  shareCopied: 'リンクをコピーしました',
+  shareTooBig: 'このリストはリンクに収まりません — ファイルを書き出してください。',
+  shareImport: '読み込み',
+  sharePlaceholder: '共有リンクまたはコードを貼り付け',
+  shareBad: '有効な共有リストではありません。',
+  shareHint: 'リストをファイルに書き出すか、リンクをコピーして送ってください — 開くと取り込まれます。',
+  copyFailed: '手動でコピーしてください:',
+
   uploadMany: '複数のファイルを一度に選べます',
   importedMany: '{n} 件のリスト、{m} 語を読み込みました',
   importSkipped: '{n} 件をスキップ',
@@ -236,6 +248,16 @@ export const ja: Messages = {
 
   article: {
 
+  customPanel: '自分の文章を貼り付け',
+  customTitlePlaceholder: 'タイトル（任意）',
+  customPlaceholder: 'ここに中国語の文章を貼り付けると、文が練習単位になります。',
+  customStart: '練習する',
+  customSave: '保存',
+  myArticles: '自分の文章',
+  customNeedText: '先に文章を貼り付けてください。',
+  customSaved: '「{name}」を保存しました。',
+  customDefaultTitle: '自分の文章',
+
   readHint: '行を再生してから声に出して読むと採点されます。',
   readAloud: '音読',
   reading: '聞き取り中…',
@@ -252,6 +274,14 @@ export const ja: Messages = {
   },
 
   stats: {
+
+  readTitle: '音読',
+  readCount: '回',
+  readAvg: '平均スコア',
+  readBest: '最高スコア',
+  readRecent: '最近の挑戦',
+  readEmpty: 'まだ音読記録がありません — 記事を開いて一行読んでみてください。',
+  readClear: '記録を削除',
 
   legendNew: '新出',
   legendReview: '復習',
@@ -285,6 +315,12 @@ export const ja: Messages = {
   },
 
   wrong: {
+
+  groupByDue: '復習時期別',
+  groupDueNow: '今すぐ復習',
+  groupDueSoon: '24 時間以内',
+  groupDueLater: 'それ以降',
+  groupNoCard: '未登録',
 
   groupNone: 'グループなし',
   groupByCount: '間違い回数別',

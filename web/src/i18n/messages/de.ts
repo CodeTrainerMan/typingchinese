@@ -176,6 +176,18 @@ export const de: Messages = {
 
   dicts: {
 
+  importedShared: '„{name}“ aus dem Link importiert.',
+
+  export: 'Exportieren',
+  share: 'Link kopieren',
+  shareCopied: 'Link kopiert',
+  shareTooBig: 'Diese Liste ist zu groß für einen Link — exportiere sie als Datei.',
+  shareImport: 'Importieren',
+  sharePlaceholder: 'Geteilten Link oder Code einfügen',
+  shareBad: 'Das ist keine gültig geteilte Liste.',
+  shareHint: 'Liste als Datei exportieren oder Link kopieren — beim Öffnen wird sie importiert.',
+  copyFailed: 'Manuell kopieren:',
+
   uploadMany: 'Du kannst mehrere Dateien gleichzeitig auswählen',
   importedMany: '{n} Listen importiert, {m} Wörter',
   importSkipped: '{n} übersprungen',
@@ -236,6 +248,16 @@ export const de: Messages = {
 
   article: {
 
+  customPanel: 'Eigenen Text einfügen',
+  customTitlePlaceholder: 'Titel (optional)',
+  customPlaceholder: 'Füge hier beliebigen chinesischen Text ein — die Sätze werden zu Übungseinheiten.',
+  customStart: 'Üben',
+  customSave: 'Speichern',
+  myArticles: 'Meine Texte',
+  customNeedText: 'Füge zuerst einen Text ein.',
+  customSaved: '„{name}“ gespeichert.',
+  customDefaultTitle: 'Mein Text',
+
   readHint: 'Hör dir eine Zeile an und lies sie dann laut vor, um Punkte zu bekommen.',
   readAloud: 'Laut lesen',
   reading: 'Hört zu…',
@@ -252,6 +274,14 @@ export const de: Messages = {
   },
 
   stats: {
+
+  readTitle: 'Vorlesen',
+  readCount: 'Mal',
+  readAvg: 'Durchschnitt',
+  readBest: 'Beste Punktzahl',
+  readRecent: 'Letzte Versuche',
+  readEmpty: 'Noch keine Aufnahmen — öffne einen Artikel und lies eine Zeile laut vor.',
+  readClear: 'Aufnahmen löschen',
 
   legendNew: 'Neu',
   legendReview: 'Wiederholt',
@@ -285,6 +315,12 @@ export const de: Messages = {
   },
 
   wrong: {
+
+  groupByDue: 'Nach Fälligkeit',
+  groupDueNow: 'Jetzt fällig',
+  groupDueSoon: 'In 24 h fällig',
+  groupDueLater: 'Später fällig',
+  groupNoCard: 'Noch nicht geplant',
 
   groupNone: 'Nicht gruppiert',
   groupByCount: 'Nach Fehlern',

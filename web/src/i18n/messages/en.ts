@@ -185,6 +185,18 @@ export const en = {
 
   dicts: {
 
+  importedShared: 'Imported “{name}” from the link.',
+
+  export: 'Export',
+  share: 'Copy link',
+  shareCopied: 'Link copied',
+  shareTooBig: 'This list is too big for a link — export the file instead.',
+  shareImport: 'Import',
+  sharePlaceholder: 'Paste a shared link or code',
+  shareBad: 'That is not a valid shared list.',
+  shareHint: 'Export a list to a file, or copy a link and send it to someone — opening the link imports it.',
+  copyFailed: 'Copy it manually:',
+
   uploadMany: 'Pick several files at once',
   importedMany: '{n} lists imported, {m} words',
   importSkipped: '{n} skipped',
@@ -245,6 +257,16 @@ export const en = {
 
   article: {
 
+  customPanel: 'Paste your own text',
+  customTitlePlaceholder: 'Title (optional)',
+  customPlaceholder: 'Paste any Chinese text here — sentences become typing units.',
+  customStart: 'Practise it',
+  customSave: 'Save',
+  myArticles: 'My texts',
+  customNeedText: 'Paste some text first.',
+  customSaved: 'Saved “{name}”.',
+  customDefaultTitle: 'My text',
+
   readHint: 'Play a line, then read it out loud to get a score.',
   readAloud: 'Read aloud',
   reading: 'Listening…',
@@ -261,6 +283,14 @@ export const en = {
   },
 
   stats: {
+
+  readTitle: 'Read-aloud',
+  readCount: 'Times',
+  readAvg: 'Average score',
+  readBest: 'Best score',
+  readRecent: 'Latest tries',
+  readEmpty: 'No read-aloud yet — open an article and read a line out loud.',
+  readClear: 'Clear records',
 
   legendNew: 'New',
   legendReview: 'Reviewed',
@@ -294,6 +324,12 @@ export const en = {
   },
 
   wrong: {
+
+  groupByDue: 'Group by review time',
+  groupDueNow: 'Due now',
+  groupDueSoon: 'Due within 24h',
+  groupDueLater: 'Due later',
+  groupNoCard: 'Not scheduled yet',
 
   groupNone: 'No grouping',
   groupByCount: 'Group by misses',

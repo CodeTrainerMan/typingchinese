@@ -176,6 +176,18 @@ export const es: Messages = {
 
   dicts: {
 
+  importedShared: '«{name}» importado desde el enlace.',
+
+  export: 'Exportar',
+  share: 'Copiar enlace',
+  shareCopied: 'Enlace copiado',
+  shareTooBig: 'Esta lista es demasiado grande para un enlace — expórtala como archivo.',
+  shareImport: 'Importar',
+  sharePlaceholder: 'Pega un enlace o código compartido',
+  shareBad: 'Eso no es una lista compartida válida.',
+  shareHint: 'Exporta la lista a un archivo o copia el enlace: al abrirlo se importa.',
+  copyFailed: 'Cópialo manualmente:',
+
   uploadMany: 'Puedes elegir varios archivos a la vez',
   importedMany: '{n} listas importadas, {m} palabras',
   importSkipped: '{n} omitidos',
@@ -236,6 +248,16 @@ export const es: Messages = {
 
   article: {
 
+  customPanel: 'Pega tu propio texto',
+  customTitlePlaceholder: 'Título (opcional)',
+  customPlaceholder: 'Pega aquí cualquier texto en chino: las frases se convierten en unidades de práctica.',
+  customStart: 'Practicar',
+  customSave: 'Guardar',
+  myArticles: 'Mis textos',
+  customNeedText: 'Primero pega un texto.',
+  customSaved: 'Guardado «{name}».',
+  customDefaultTitle: 'Mi texto',
+
   readHint: 'Escucha una frase y luego léela en voz alta para obtener una puntuación.',
   readAloud: 'Leer en voz alta',
   reading: 'Escuchando…',
@@ -252,6 +274,14 @@ export const es: Messages = {
   },
 
   stats: {
+
+  readTitle: 'Lectura en voz',
+  readCount: 'Veces',
+  readAvg: 'Puntuación media',
+  readBest: 'Mejor puntuación',
+  readRecent: 'Últimos intentos',
+  readEmpty: 'Aún no hay lecturas — abre un artículo y lee una frase en voz alta.',
+  readClear: 'Borrar registros',
 
   legendNew: 'Nuevas',
   legendReview: 'Repasadas',
@@ -285,6 +315,12 @@ export const es: Messages = {
   },
 
   wrong: {
+
+  groupByDue: 'Por repaso',
+  groupDueNow: 'Toca repasar',
+  groupDueSoon: 'Vence en 24 h',
+  groupDueLater: 'Vence más tarde',
+  groupNoCard: 'Sin programar',
 
   groupNone: 'Sin agrupar',
   groupByCount: 'Por fallos',

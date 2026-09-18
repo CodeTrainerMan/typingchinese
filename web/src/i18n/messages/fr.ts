@@ -176,6 +176,18 @@ export const fr: Messages = {
 
   dicts: {
 
+  importedShared: '« {name} » importé depuis le lien.',
+
+  export: 'Exporter',
+  share: 'Copier le lien',
+  shareCopied: 'Lien copié',
+  shareTooBig: 'Cette liste est trop grosse pour un lien — exportez le fichier.',
+  shareImport: 'Importer',
+  sharePlaceholder: 'Collez un lien ou un code partagé',
+  shareBad: 'Ce n’est pas une liste partagée valide.',
+  shareHint: 'Exportez la liste vers un fichier ou copiez le lien : l’ouvrir l’importe.',
+  copyFailed: 'Copiez-le manuellement :',
+
   uploadMany: 'Vous pouvez choisir plusieurs fichiers à la fois',
   importedMany: '{n} listes importées, {m} mots',
   importSkipped: '{n} ignorés',
@@ -236,6 +248,16 @@ export const fr: Messages = {
 
   article: {
 
+  customPanel: 'Collez votre propre texte',
+  customTitlePlaceholder: 'Titre (facultatif)',
+  customPlaceholder: 'Collez ici n’importe quel texte chinois : les phrases deviennent des unités d’entraînement.',
+  customStart: 'S’entraîner',
+  customSave: 'Enregistrer',
+  myArticles: 'Mes textes',
+  customNeedText: 'Collez d’abord un texte.',
+  customSaved: '« {name} » enregistré.',
+  customDefaultTitle: 'Mon texte',
+
   readHint: 'Écoutez une phrase puis lisez-la à voix haute pour obtenir un score.',
   readAloud: 'Lire à voix haute',
   reading: 'Écoute…',
@@ -252,6 +274,14 @@ export const fr: Messages = {
   },
 
   stats: {
+
+  readTitle: 'Lecture à voix haute',
+  readCount: 'Fois',
+  readAvg: 'Score moyen',
+  readBest: 'Meilleur score',
+  readRecent: 'Derniers essais',
+  readEmpty: 'Pas encore de lecture — ouvrez un article et lisez une phrase à voix haute.',
+  readClear: 'Effacer les enregistrements',
 
   legendNew: 'Nouveaux',
   legendReview: 'Révisés',
@@ -285,6 +315,12 @@ export const fr: Messages = {
   },
 
   wrong: {
+
+  groupByDue: 'Par révision',
+  groupDueNow: 'À réviser maintenant',
+  groupDueSoon: 'Échéance dans 24 h',
+  groupDueLater: 'Échéance plus tard',
+  groupNoCard: 'Pas encore planifié',
 
   groupNone: 'Sans regroupement',
   groupByCount: 'Par erreurs',

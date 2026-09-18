@@ -176,6 +176,18 @@ export const zhCN: Messages = {
 
   dicts: {
 
+  importedShared: '已从链接导入「{name}」。',
+
+  export: '导出',
+  share: '复制链接',
+  shareCopied: '链接已复制',
+  shareTooBig: '词库太大，链接放不下 — 请导出文件。',
+  shareImport: '导入',
+  sharePlaceholder: '粘贴分享链接或分享码',
+  shareBad: '这不是有效的分享词库。',
+  shareHint: '可以把词库导出成文件，或复制链接发给别人 — 打开链接即可导入。',
+  copyFailed: '请手动复制：',
+
   uploadMany: '一次可选多个文件',
   importedMany: '已导入 {n} 个词库，共 {m} 个词',
   importSkipped: '{n} 个文件被跳过',
@@ -236,6 +248,16 @@ export const zhCN: Messages = {
 
   article: {
 
+  customPanel: '粘贴自己的文章',
+  customTitlePlaceholder: '标题（可留空）',
+  customPlaceholder: '在这里粘贴任意中文文本，句子会自动变成练习单元。',
+  customStart: '开始练习',
+  customSave: '保存',
+  myArticles: '我的文章',
+  customNeedText: '先粘贴一段文本。',
+  customSaved: '已保存「{name}」。',
+  customDefaultTitle: '我的文章',
+
   readHint: '点一行先听示范，再跟读得分',
   readAloud: '跟读',
   reading: '正在听…',
@@ -252,6 +274,14 @@ export const zhCN: Messages = {
   },
 
   stats: {
+
+  readTitle: '跟读',
+  readCount: '次数',
+  readAvg: '平均分',
+  readBest: '最高分',
+  readRecent: '最近跟读',
+  readEmpty: '还没有跟读记录 — 去文章页读一句试试。',
+  readClear: '清除跟读记录',
 
   legendNew: '新学',
   legendReview: '复习',
@@ -285,6 +315,12 @@ export const zhCN: Messages = {
   },
 
   wrong: {
+
+  groupByDue: '按记忆到期',
+  groupDueNow: '现在该复习',
+  groupDueSoon: '24 小时内',
+  groupDueLater: '之后到期',
+  groupNoCard: '还没排期',
 
   groupNone: '不分组',
   groupByCount: '按错误次数',

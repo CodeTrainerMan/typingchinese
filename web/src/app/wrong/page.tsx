@@ -10,7 +10,7 @@ import { resolveVoiceURI, speak } from '@/lib/tts'
 import type { CnWord, WrongRecord } from '@/lib/types'
 
 /** 错词本的分组方式 */
-type GroupMode = 'none' | 'count' | 'time' | 'dict'
+type GroupMode = 'none' | 'count' | 'time' | 'due' | 'dict'
 
 export default function WrongPage() {
   const hydrated = useHydrated()
@@ -85,7 +85,29 @@ export default function WrongPage() {
 
     const day = 86_400_000
     // now 还是 0 说明挂载后的取值还没到，先不分组
-    if (group === 'time' && !now) return [{ label: '', rows: records }]
+    if ((group === 'time' || group === 'due') && !now) return [{ label: '', rows: records }]
+
+    // 按记忆卡片的下次到期时间：该复习的排在最前
+    if (group === 'due') {
+      const dueAt = (word: string) => {
+        const card = base.fsrsData[word]
+        return card ? Date.parse(card.due) : NaN
+      }
+      const isScheduled = (r: WrongRecord) => Number.isFinite(dueAt(r.word))
+      return [
+        {
+          label: t('wrong.groupDueNow'),
+          rows: records.filter(r => isScheduled(r) && dueAt(r.word) <= now),
+        },
+        {
+          label: t('wrong.groupDueSoon'),
+          rows: records.filter(r => isScheduled(r) && dueAt(r.word) > now && dueAt(r.word) - now <= day),
+        },
+        { label: t('wrong.groupDueLater'), rows: records.filter(r => isScheduled(r) && dueAt(r.word) - now > day) },
+        { label: t('wrong.groupNoCard'), rows: records.filter(r => !isScheduled(r)) },
+      ].filter(g => g.rows.length)
+    }
+
     if (group === 'time')
       return [
         { label: t('wrong.groupToday'), rows: records.filter(r => now - r.lastWrongAt < day) },
@@ -128,6 +150,7 @@ export default function WrongPage() {
             <option value="none">{t('wrong.groupNone')}</option>
             <option value="count">{t('wrong.groupByCount')}</option>
             <option value="time">{t('wrong.groupByTime')}</option>
+            <option value="due">{t('wrong.groupByDue')}</option>
             <option value="dict">{t('wrong.groupByDict')}</option>
           </select>
         )}

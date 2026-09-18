@@ -176,6 +176,18 @@ export const zhTW: Messages = {
 
   dicts: {
 
+  importedShared: '已從連結匯入「{name}」。',
+
+  export: '匯出',
+  share: '複製連結',
+  shareCopied: '連結已複製',
+  shareTooBig: '詞庫太大，連結放不下 — 請匯出檔案。',
+  shareImport: '匯入',
+  sharePlaceholder: '貼上分享連結或分享碼',
+  shareBad: '這不是有效的分享詞庫。',
+  shareHint: '可以把詞庫匯出成檔案，或複製連結傳給別人 — 打開連結即可匯入。',
+  copyFailed: '請手動複製：',
+
   uploadMany: '一次可選多個檔案',
   importedMany: '已匯入 {n} 個詞庫，共 {m} 個詞',
   importSkipped: '{n} 個檔案被略過',
@@ -236,6 +248,16 @@ export const zhTW: Messages = {
 
   article: {
 
+  customPanel: '貼上自己的文章',
+  customTitlePlaceholder: '標題（可留空）',
+  customPlaceholder: '在這裡貼上任意中文文本，句子會自動變成練習單元。',
+  customStart: '開始練習',
+  customSave: '儲存',
+  myArticles: '我的文章',
+  customNeedText: '先貼上一段文本。',
+  customSaved: '已儲存「{name}」。',
+  customDefaultTitle: '我的文章',
+
   readHint: '點一行先聽示範，再跟讀得分',
   readAloud: '跟讀',
   reading: '正在聽…',
@@ -252,6 +274,14 @@ export const zhTW: Messages = {
   },
 
   stats: {
+
+  readTitle: '跟讀',
+  readCount: '次數',
+  readAvg: '平均分',
+  readBest: '最高分',
+  readRecent: '最近跟讀',
+  readEmpty: '還沒有跟讀記錄 — 去文章頁讀一句試試。',
+  readClear: '清除跟讀記錄',
 
   legendNew: '新學',
   legendReview: '複習',
@@ -285,6 +315,12 @@ export const zhTW: Messages = {
   },
 
   wrong: {
+
+  groupByDue: '按記憶到期',
+  groupDueNow: '現在該複習',
+  groupDueSoon: '24 小時內',
+  groupDueLater: '之後到期',
+  groupNoCard: '還沒排程',
 
   groupNone: '不分組',
   groupByCount: '按錯誤次數',

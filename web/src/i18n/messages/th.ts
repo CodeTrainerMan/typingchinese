@@ -176,6 +176,18 @@ export const th: Messages = {
 
   dicts: {
 
+  importedShared: 'นำเข้า “{name}” จากลิงก์แล้ว',
+
+  export: 'ส่งออก',
+  share: 'คัดลอกลิงก์',
+  shareCopied: 'คัดลอกลิงก์แล้ว',
+  shareTooBig: 'รายการนี้ใหญ่เกินใส่ในลิงก์ — ให้ส่งออกเป็นไฟล์',
+  shareImport: 'นำเข้า',
+  sharePlaceholder: 'วางลิงก์หรือโค้ดที่แชร์',
+  shareBad: 'นี่ไม่ใช่รายการที่แชร์ที่ถูกต้อง',
+  shareHint: 'ส่งออกรายการเป็นไฟล์หรือคัดลอกลิงก์ไปให้ใคร — เปิดลิงก์แล้วจะนำเข้าทันที',
+  copyFailed: 'คัดลอกด้วยตนเอง:',
+
   uploadMany: 'เลือกหลายไฟล์ได้ในครั้งเดียว',
   importedMany: 'นำเข้า {n} รายการคำ รวม {m} คำ',
   importSkipped: 'ข้าม {n} ไฟล์',
@@ -236,6 +248,16 @@ export const th: Messages = {
 
   article: {
 
+  customPanel: 'วางข้อความของคุณเอง',
+  customTitlePlaceholder: 'ชื่อเรื่อง (ไม่บังคับ)',
+  customPlaceholder: 'วางข้อความภาษาจีนที่นี่ — ประโยคจะกลายเป็นหน่วยฝึก',
+  customStart: 'ฝึกเลย',
+  customSave: 'บันทึก',
+  myArticles: 'ข้อความของฉัน',
+  customNeedText: 'วางข้อความก่อน',
+  customSaved: 'บันทึก “{name}” แล้ว',
+  customDefaultTitle: 'ข้อความของฉัน',
+
   readHint: 'ฟังหนึ่งประโยคแล้วอ่านออกเสียงเพื่อรับคะแนน',
   readAloud: 'อ่านออกเสียง',
   reading: 'กำลังฟัง…',
@@ -252,6 +274,14 @@ export const th: Messages = {
   },
 
   stats: {
+
+  readTitle: 'อ่านออกเสียง',
+  readCount: 'ครั้ง',
+  readAvg: 'คะแนนเฉลี่ย',
+  readBest: 'คะแนนสูงสุด',
+  readRecent: 'ครั้งล่าสุด',
+  readEmpty: 'ยังไม่มีบันทึก — เปิดบทความแล้วอ่านออกเสียงหนึ่งประโยค',
+  readClear: 'ล้างบันทึก',
 
   legendNew: 'คำใหม่',
   legendReview: 'ทบทวน',
@@ -285,6 +315,12 @@ export const th: Messages = {
   },
 
   wrong: {
+
+  groupByDue: 'ตามกำหนดทบทวน',
+  groupDueNow: 'ถึงเวลาทบทวน',
+  groupDueSoon: 'ครบกำหนดใน 24 ชม.',
+  groupDueLater: 'ครบกำหนดภายหลัง',
+  groupNoCard: 'ยังไม่ได้กำหนด',
 
   groupNone: 'ไม่จัดกลุ่ม',
   groupByCount: 'ตามจำนวนครั้งที่ผิด',

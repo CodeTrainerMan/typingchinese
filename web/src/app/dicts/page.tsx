@@ -5,8 +5,9 @@ import Link from 'next/link'
 import { useBaseStore } from '@/lib/store/base'
 import { useHydrated } from '@/lib/useHydrated'
 import { buildCustomDict, buildCustomDictFromEntries, parseDictFile, parseEntries } from '@/lib/customDict'
+import { SHARE_URL_LIMIT, decodeShare, exportDictFile, shareUrl } from '@/lib/dictShare'
 import { useI18n } from '@/i18n'
-import type { DictResource } from '@/lib/types'
+import type { DictResource, LearningDict } from '@/lib/types'
 
 export default function DictsPage() {
   const hydrated = useHydrated()
@@ -20,24 +21,76 @@ export default function DictsPage() {
   const [text, setText] = useState('')
   const [importing, setImporting] = useState(false)
   const [msg, setMsg] = useState('')
+  const [shareInput, setShareInput] = useState('')
   const fileRef = useRef<HTMLInputElement>(null)
+
+  // 自定义词库的默认名 / 描述 / 分类按当前界面语言生成后落盘
+  const dictMeta = {
+    fallbackName: t('dicts.defaultName'),
+    description: (count: number) => t('dicts.defaultDesc', { n: count }),
+    category: t('dicts.defaultCategory'),
+  }
+
+  /** 从分享码 / 分享链接导入；成功后清掉地址栏里的 share 参数，免得刷新又导一遍 */
+  const importShare = async (raw: string) => {
+    setMsg('')
+    const shared = decodeShare(raw)
+    if (!shared || !shared.words.length) {
+      setMsg(t('dicts.shareBad'))
+      return
+    }
+    setImporting(true)
+    try {
+      const dict = await buildCustomDictFromEntries(shared.name, shared.words, dictMeta)
+      base.addCustomDict(dict)
+      setMsg(t('dicts.importedShared', { name: dict.name }))
+      setShareInput('')
+      window.history.replaceState(null, '', '/dicts')
+    } catch {
+      setMsg(t('dicts.shareBad'))
+    } finally {
+      setImporting(false)
+    }
+  }
 
   useEffect(() => {
     fetch('/dicts/list.json')
       .then(r => r.json())
       .then((data: DictResource[]) => setResources(data))
       .finally(() => setLoading(false))
+    // 别人分享的链接形如 /dicts?share=xxx，打开时直接把词库接下来；
+    // 放到下一个 tick，避免首屏渲染里同步改状态
+    const id = window.setTimeout(() => {
+      const code = new URLSearchParams(window.location.search).get('share')
+      if (code) void importShare(code)
+    }, 0)
+    return () => window.clearTimeout(id)
+    // 只在挂载时跑一次：依赖是 store 与文案函数，稳定
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   if (!hydrated) return <div className="mx-auto max-w-4xl px-4 py-16 text-dim">{t('common.loading')}</div>
 
   const customDicts = base.dicts.filter(d => !resources.some(r => r.id === d.id))
   const parsed = parseEntries(text).length
-  // 自定义词库的默认名 / 描述 / 分类按当前界面语言生成后落盘
-  const dictMeta = {
-    fallbackName: t('dicts.defaultName'),
-    description: (count: number) => t('dicts.defaultDesc', { n: count }),
-    category: t('dicts.defaultCategory'),
+
+  /** 导出成 .json 文件 */
+  const exportJson = (dict: LearningDict) => exportDictFile(dict)
+
+  /** 生成分享链接并复制；太大的词库放不进链接，提示改用文件 */
+  const copyShare = async (dict: LearningDict) => {
+    const url = shareUrl(dict)
+    if (url.length > SHARE_URL_LIMIT) {
+      setMsg(t('dicts.shareTooBig'))
+      return
+    }
+    try {
+      await navigator.clipboard.writeText(url)
+      setMsg(t('dicts.shareCopied'))
+    } catch {
+      // 浏览器不给剪贴板权限时退回手动复制
+      window.prompt(t('dicts.copyFailed'), url)
+    }
   }
 
   const onImport = async () => {
@@ -182,6 +235,22 @@ export default function DictsPage() {
             {parsed > 0 && <span className="text-xs text-dim">{t('dicts.parsed', { n: parsed })}</span>}
             {msg && <span className="text-xs text-dim">{msg}</span>}
           </div>
+          <div className="flex items-center gap-3 mt-3">
+            <input
+              value={shareInput}
+              onChange={e => setShareInput(e.target.value)}
+              placeholder={t('dicts.sharePlaceholder')}
+              className="h-9 flex-1 px-3 rounded-lg border border-line bg-surface2 text-sm"
+            />
+            <button
+              onClick={() => void importShare(shareInput)}
+              disabled={importing || !shareInput.trim()}
+              className="h-9 px-4 rounded-lg border border-line text-sm disabled:opacity-50 hover:bg-surface2"
+            >
+              {t('dicts.shareImport')}
+            </button>
+          </div>
+          <p className="text-xs text-dim mt-3">{t('dicts.shareHint')}</p>
         </div>
       )}
 
@@ -219,6 +288,18 @@ export default function DictsPage() {
                     >
                       {t('common.edit')}
                     </Link>
+                    <button
+                      onClick={() => exportJson(dict)}
+                      className="h-9 px-4 rounded-lg border border-line text-sm hover:bg-surface2"
+                    >
+                      {t('dicts.export')}
+                    </button>
+                    <button
+                      onClick={() => void copyShare(dict)}
+                      className="h-9 px-4 rounded-lg border border-line text-sm hover:bg-surface2"
+                    >
+                      {t('dicts.share')}
+                    </button>
                     <button
                       onClick={() => base.removeDict(dict.id)}
                       className="h-9 px-4 rounded-lg border border-line text-sm text-err hover:bg-surface2"
@@ -281,6 +362,18 @@ export default function DictsPage() {
                     >
                       {t('common.edit')}
                     </Link>
+                    <button
+                      onClick={() => exportJson(added)}
+                      className="h-9 px-4 rounded-lg border border-line text-sm hover:bg-surface2"
+                    >
+                      {t('dicts.export')}
+                    </button>
+                    <button
+                      onClick={() => void copyShare(added)}
+                      className="h-9 px-4 rounded-lg border border-line text-sm hover:bg-surface2"
+                    >
+                      {t('dicts.share')}
+                    </button>
                     <button
                       onClick={() => base.removeDict(res.id)}
                       className="h-9 px-4 rounded-lg border border-line text-sm text-err hover:bg-surface2"
