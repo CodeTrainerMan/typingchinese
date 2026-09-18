@@ -1,55 +1,120 @@
-# typingchinese · 中文打字练习
+<h1 align="center">Pinyin Type</h1>
 
-> A typing practice web app for Chinese learners — pinyin typing, dictation, FSRS-spaced review, 14 UI languages.
+<p align="center">
+  <a href="/README.md">English</a> |
+  <a href="/docs/README.zh-CN.md">简体中文</a> |
+  <a href="/docs/README.zh-TW.md">繁體中文</a> |
+  <a href="/docs/README.es.md">Español</a> |
+  <a href="/docs/README.pt.md">Português</a> |
+  <a href="/docs/README.fr.md">Français</a> |
+  <a href="/docs/README.de.md">Deutsch</a> |
+  <a href="/docs/README.ru.md">Русский</a> |
+  <a href="/docs/README.uk.md">Українська</a> |
+  <a href="/docs/README.ja.md">日本語</a> |
+  <a href="/docs/README.ko.md">한국어</a> |
+  <a href="/docs/README.th.md">ไทย</a> |
+  <a href="/docs/README.vi.md">Tiếng Việt</a> |
+  <a href="/docs/README.id.md">Bahasa Indonesia</a>
+</p>
 
-跟着拼音打汉字，错了自动进入复习队列，按遗忘曲线安排下一次复习。纯前端应用，数据存在浏览器本地，不需要账号和后端。
+<p align="center">
+  <b>Learn Chinese, one keystroke at a time — type the pinyin, hear the tone, keep the word. An open-source tool for practising Chinese words and texts.</b>
+</p>
 
-## 功能
+## Online Demo
 
-- **拼音跟打**：显示汉字与拼音，逐字判定，实时标红错误
-- **听写模式**：隐藏汉字与拼音，听发音打字（Web Speech API）
-- **文章练习**：整段材料连续输入，统计速度与准确率
-- **词库**：日常常用词 / 进阶 / 每日 / 成语，也支持导入自定义词库（CSV）
-- **错词本 + 间隔重复**：ts-fsrs 遗忘曲线自动排程复习
-- **统计**：练习时长、准确率、速度趋势
-- **14 种界面语言**：English、简体中文、繁體中文、Español、Português、Français、Deutsch、Русский、Українська、Bahasa Indonesia、Tiếng Việt、日本語、한국어、ไทย，首次访问跟随浏览器语言
+<https://typingchinese.vercel.app>
 
-## 技术栈
+## Features
 
-Next.js 16（App Router）· React 19 · Tailwind CSS 4 · TypeScript · zustand · ts-fsrs · pinyin-pro · Web Speech API
+### Word Practice
 
-## 快速开始
+- **Four practice modes**: follow-along (see the hanzi, type the pinyin), dictation (listen only), self-test (pinyin shown, produce the word), write-from-meaning (only the translation is shown)
+- **Three typing modes**: full pinyin `zhongguo`, initials `zg`, or tones `zhong1 guo2`
+- **Two input methods**: type Latin letters on an English keyboard with instant per-letter feedback, or type hanzi with your Chinese IME (Microsoft Pinyin and friends) and get graded per word
+- Tone-marked pinyin, Chinese speech synthesis and a translation on every word
+- Repeat each word as many times as you like; mistyped words can be cleared and retyped automatically
+
+### Article Practice
+
+- Built-in graded texts from beginner to intermediate (short sentences up to short fables)
+- Add your own article: paste the text and start typing it sentence by sentence
+- Each sentence is pronounced as you go, so reading, listening and typing reinforce each other
+
+### Mistakes, Reviews, Statistics
+
+- Every word you get wrong is collected into the mistake book for later review
+- Reviews are scheduled with **FSRS** (Free Spaced Repetition Scheduler); the daily review ratio is configurable
+- Daily goal, words per day, time spent, accuracy and keystrokes are tracked on the statistics page
+
+### Highly Customizable
+
+- Keyboard sound effects and word/keystroke sounds, volume and speech rate
+- Custom shortcuts: replay-key (<kbd>Tab</kbd> / <kbd>F2</kbd>) and next-word key (<kbd>Space</kbd> / <kbd>Enter</kbd>)
+- Virtual on-screen keyboard, light / dark / follow-system theme
+- **14 interface languages** — the UI follows your choice, while the learning content is always Chinese
+
+### Clean and Efficient
+
+- Modern, ad-free interface
+- Runs entirely in the browser: no account, no backend, no forced sign-up
+- All progress is stored locally in `localStorage`
+
+### Dictionaries
+
+Built in: **Daily Words** (59), **Advanced Vocabulary** (51), **Four-character Idioms** (40).
+
+Bring your own: paste a list or upload `.json` / `.csv` / `.txt`. One entry per line, in any of these shapes — pinyin is generated automatically:
+
+```
+中国,国家名称
+旅行 lv you
+安静=没有声音
+```
+
+See `sample-words.csv` for a ready-to-import example.
+
+## Run It Locally
+
+The app is a Next.js project and needs Node.js 18 or newer.
 
 ```bash
-cd web
+git clone https://github.com/CodeTrainerMan/typingchinese.git
+cd typingchinese/web
 npm install
 npm run dev
 ```
 
-打开 <http://localhost:3000>。
+Open <http://localhost:3000>.
 
-## 常用脚本
-
-| 命令 | 说明 |
+| Command | What it does |
 | --- | --- |
-| `npm run dev` | 开发服务器 |
-| `npm run build` | 生产构建 |
-| `npm run start` | 启动构建产物 |
-| `npm run lint` | ESLint 检查 |
-| `npm run gen:dict` | 由 `scripts/seed-words.mjs` 重新生成 `public/dicts/*.json` |
+| `npm run dev` | Start the dev server |
+| `npm run build` | Production build |
+| `npm run start` | Serve the production build |
+| `npm run lint` | ESLint |
+| `npm run gen:dict` | Rebuild `public/dicts/*.json` from `scripts/seed-words.mjs` |
 
-## 目录结构
+## Project Structure
 
 ```
-web/                Next.js 应用，唯一的部署单元
-  src/app/          路由：practice / article / dicts / wrong / stats / setting
-  src/i18n/         语言包（新增语言 = 加包 + 在 index.tsx 登记）
-  src/lib/          词库、拼音、TTS、FSRS 排程、本地存储
-  public/dicts/     由种子词表生成的词库 JSON
-sample-words.csv    自定义词库示例（词语,拼音,释义）
-ref/                参考资料，不入库
+web/                    Next.js application (the only deployable unit)
+  src/app/              Routes: / (home) /practice /article /dicts /wrong /stats /setting
+  src/i18n/             Language packs (add a language: new pack + one entry in LOCALES)
+  src/lib/              Dictionaries, pinyin, TTS, FSRS scheduling, local storage
+  public/dicts/         Pre-generated dictionaries
+  public/articles/      Built-in practice texts
+  scripts/              Seed word list and dictionary generator
+sample-words.csv        Example file for importing your own dictionary
 ```
 
-## 部署（Vercel）
+## Deploy
 
-Root Directory 填 `web`，Framework 选 Next.js，其余保持默认。
+The repository root has no `package.json`, so the **Root Directory must be set to `web`** when importing the project on Vercel (or any other platform). Everything else uses the Next.js defaults.
+
+## Feedback and Contributions
+
+This project is young and features are still being added. Ideas and bug reports are welcome as `Issues`; if you like the approach, feel free to open a `PR`.
+
+- Adding a language: drop a pack into `src/i18n/messages/` and register it in `src/i18n/index.tsx`
+- Adding words: edit `scripts/seed-words.mjs` and run `npm run gen:dict`
