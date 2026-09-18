@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import Link from 'next/link'
-import type { CnWord, LearningDict, Statistics, StepType } from '@/lib/types'
+import type { CnWord, LearningDict, ShortcutAction, Statistics, StepType } from '@/lib/types'
 import type { SettingState } from '@/lib/store/setting'
 import { useTypingSession } from '@/lib/useTypingSession'
 import { isAudioStep, isMaskedStep, showsPinyinStep } from '@/lib/practice/flow'
@@ -36,6 +36,8 @@ interface Props {
   collect: string[]
   /** 当日统计（结算页的本周打卡用） */
   statistics: Statistics[]
+  /** 本组首轮的新学 / 复习词数（结算页展示用） */
+  counts?: { newCount: number; reviewCount: number }
   /** 再来一组：重新选题 */
   onRestartSession: () => void
   /** 重新开始：回到本组第 1 词 */
@@ -57,6 +59,7 @@ export default function PracticeBoard({
   onToggleCollect,
   collect,
   statistics,
+  counts,
   onRestartSession,
   onResetSession,
 }: Props) {
@@ -69,6 +72,8 @@ export default function PracticeBoard({
   // 触屏设备（手机 / 平板）默认给出屏幕键盘
   const [coarsePointer, setCoarsePointer] = useState(false)
   useEffect(() => {
+    // 只能在挂载后探测（服务端没有 window），否则会与 SSR 结果不一致
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setCoarsePointer(window.matchMedia('(pointer: coarse)').matches)
   }, [])
   // 汉字模式由真实输入框承接 IME，屏幕键盘没有意义
@@ -164,19 +169,30 @@ export default function PracticeBoard({
     lastWrongRef.current = session.wrongTimes
   }, [session.wrongTimes])
 
-  // 功能键快捷键：F3 切换拼音提示 / F4 标记掌握 / F8 收藏（避开 F5 刷新等浏览器占用键）
+  // 功能键快捷键：键位可在设置页自定义；同一键被多个动作占用时只认第一个
   useEffect(() => {
     if (session.finished || !session.word) return
+    const map = new Map<string, ShortcutAction>()
+    for (const action of SHORTCUT_ACTIONS) {
+      const key = setting.shortcuts?.[action]
+      // 空串 = 未绑定；重复绑定时先出现的动作优先
+      if (key && !map.has(key)) map.set(key, action)
+    }
+    if (!map.size) return
+    const current = session.word
     const onKey = (e: KeyboardEvent) => {
-      if (e.key !== 'F3' && e.key !== 'F4' && e.key !== 'F8') return
+      const action = map.get(e.key)
+      if (!action) return
       e.preventDefault()
-      if (e.key === 'F3') setting.patch({ showPinyin: !setting.showPinyin })
-      else if (e.key === 'F4') onToggleKnown(session.word!.word)
-      else onToggleCollect(session.word!.word)
+      if (action === 'pinyin') setting.patch({ showPinyin: !setting.showPinyin })
+      else if (action === 'trans') setting.patch({ showTrans: !setting.showTrans })
+      else if (action === 'known') onToggleKnown(current.word)
+      else if (action === 'collect') onToggleCollect(current.word)
+      else session.skip()
     }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
-  }, [session.finished, session.word, setting, onToggleKnown, onToggleCollect])
+  }, [session.finished, session.word, session.skip, setting, onToggleKnown, onToggleCollect])
 
   // 移动端：保持隐藏输入框聚焦，软键盘才不会收起
   useEffect(() => {
@@ -234,6 +250,11 @@ export default function PracticeBoard({
             />
             <Stat label={t('board.time')} value={`${Math.round(spend / 1000)}s`} />
           </div>
+          {counts && counts.newCount + counts.reviewCount > 0 && (
+            <p className="text-xs text-dim -mt-4 mb-8">
+              {t('board.newReview', { n: counts.newCount, m: counts.reviewCount })}
+            </p>
+          )}
           <div className="flex items-center justify-center gap-1.5 mb-6">
             <span className="text-xs text-dim mr-1">{t('board.week')}</span>
             {week.map(d => (
@@ -383,10 +404,15 @@ export default function PracticeBoard({
 
       <div className="mt-10 flex flex-wrap justify-center items-center gap-2 text-xs text-dim">
         <Key>{setting.replayKey === 'f2' ? t('board.keyReplayF2') : t('board.keyReplayTab')}</Key>
-        <Key>{t('board.keySkip')}</Key>
-        <Key>{t('board.keyToggleHint')}</Key>
-        <Key>{t('board.keyKnown')}</Key>
-        <Key>{t('board.keyCollect')}</Key>
+        {SHORTCUT_ACTIONS.map(action => {
+          const key = setting.shortcuts?.[action]
+          if (!key) return null
+          return (
+            <Key key={action}>
+              {key === 'Escape' ? 'Esc' : key} · {t(ACTION_LABEL[action])}
+            </Key>
+          )
+        })}
         <Key>{hanziMode ? t('board.keyBackspaceHanzi') : t('board.keyBackspacePinyin')}</Key>
         <button onClick={session.skip} className="px-3 py-1.5 rounded-lg border border-line hover:bg-surface2">
           {t('board.skip')}
@@ -412,6 +438,18 @@ export default function PracticeBoard({
       )}
     </div>
   )
+}
+
+/** 功能键顺序（与设置页一致）；同一键被多个动作占用时靠前的动作生效 */
+const SHORTCUT_ACTIONS: ShortcutAction[] = ['skip', 'pinyin', 'trans', 'known', 'collect']
+
+/** 底部提示只写动作名，键名由设置动态拼上，改键后提示不会说谎 */
+const ACTION_LABEL: Record<ShortcutAction, MessageKey> = {
+  skip: 'board.actSkip',
+  pinyin: 'board.actPinyin',
+  trans: 'board.actTrans',
+  known: 'board.actKnown',
+  collect: 'board.actCollect',
 }
 
 /** 步骤名直接复用设置页的模式文案，避免多一套翻译 */

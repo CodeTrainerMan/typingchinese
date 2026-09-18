@@ -69,8 +69,11 @@ export default function StatsPage() {
       correct: acc.correct + s.correct,
       wrong: acc.wrong + s.wrong,
       keystrokes: acc.keystrokes + s.keystrokes,
+      // 新学 / 复习是后加的字段，旧存档没有，按 0 处理
+      newCount: acc.newCount + (s.newCount ?? 0),
+      reviewCount: acc.reviewCount + (s.reviewCount ?? 0),
     }),
-    { total: 0, spend: 0, correct: 0, wrong: 0, keystrokes: 0 }
+    { total: 0, spend: 0, correct: 0, wrong: 0, keystrokes: 0, newCount: 0, reviewCount: 0 }
   )
   const acc = sum.total ? Math.round((sum.correct / sum.total) * 1000) / 10 : 0
   const activeDays = stats.filter(s => s.total > 0).length
@@ -151,7 +154,9 @@ export default function StatsPage() {
         </div>
       </div>
 
-      <div className="grid gap-4 sm:grid-cols-3 mb-8">
+      <div className="grid gap-4 sm:grid-cols-5 mb-8">
+        <Card label={t('stats.newWords')} value={t('common.words', { n: sum.newCount })} />
+        <Card label={t('stats.reviewWords')} value={t('common.words', { n: sum.reviewCount })} />
         <Card label={t('stats.totalTime')} value={t('common.minutes', { n: Math.round(sum.spend / 60000) })} />
         <Card label={t('stats.totalKeys')} value={`${sum.keystrokes}`} />
         <Card label={t('stats.totalWrong')} value={`${sum.wrong}`} />

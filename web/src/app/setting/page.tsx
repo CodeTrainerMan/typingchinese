@@ -6,7 +6,7 @@ import { useBaseStore } from '@/lib/store/base'
 import { useHydrated } from '@/lib/useHydrated'
 import { listZhVoices, speak } from '@/lib/tts'
 import { LOCALES, useI18n, type MessageKey } from '@/i18n'
-import type { InputMode, NextKey, PracticeMode, ReplayKey, ThemeMode, TypingMode } from '@/lib/types'
+import type { InputMode, NextKey, PracticeMode, ReplayKey, ShortcutAction, ThemeMode, TypingMode } from '@/lib/types'
 
 export default function SettingPage() {
   const hydrated = useHydrated()
@@ -16,6 +16,16 @@ export default function SettingPage() {
   const [voices, setVoices] = useState<SpeechSynthesisVoice[]>([])
   const [importMsg, setImportMsg] = useState<{ ok: boolean; text: string } | null>(null)
   const fileRef = useRef<HTMLInputElement>(null)
+
+  // 同一个键绑到多个动作时后一个不会触发，先提示出来
+  const usedKeys = new Set<string>()
+  const conflict = SHORTCUT_ROWS.some(([action]) => {
+    const key = setting.shortcuts?.[action]
+    if (!key) return false
+    if (usedKeys.has(key)) return true
+    usedKeys.add(key)
+    return false
+  })
 
   useEffect(() => {
     listZhVoices().then(setVoices)
@@ -268,6 +278,29 @@ export default function SettingPage() {
         </Row>
       </Section>
 
+      <Section title={t('setting.sectionShortcut')}>
+        <p className="text-xs text-dim -mt-2">{t('setting.shortcutHint')}</p>
+        {SHORTCUT_ROWS.map(([action, label]) => (
+          <Row key={action} label={t(label)}>
+            <select
+              value={setting.shortcuts?.[action] ?? ''}
+              onChange={e =>
+                setting.patch({ shortcuts: { ...setting.shortcuts, [action]: e.target.value } })
+              }
+              className="h-9 min-w-[8rem] rounded-lg border border-line bg-surface px-2 text-sm"
+            >
+              <option value="">{t('setting.shortcutNone')}</option>
+              {SHORTCUT_KEYS.map(k => (
+                <option key={k.value} value={k.value}>
+                  {k.label}
+                </option>
+              ))}
+            </select>
+          </Row>
+        ))}
+        {conflict && <p className="text-xs text-warn -mt-2">{t('setting.shortcutConflict')}</p>}
+      </Section>
+
       <Section title={t('setting.sectionAppearance')}>
         <Row label={t('setting.theme')} desc={t('setting.themeDesc')}>
           <Segmented
@@ -343,6 +376,28 @@ export default function SettingPage() {
     </div>
   )
 }
+
+/** 可自定义的功能键：顺序与练习页生效优先级一致 */
+const SHORTCUT_ROWS: [ShortcutAction, MessageKey][] = [
+  ['skip', 'setting.scSkip'],
+  ['pinyin', 'setting.scPinyin'],
+  ['trans', 'setting.scTrans'],
+  ['known', 'setting.scKnown'],
+  ['collect', 'setting.scCollect'],
+]
+
+/** 候选键：避开浏览器占用的 F1 / F5 / F11 / F12 */
+const SHORTCUT_KEYS = [
+  { value: 'Escape', label: 'Esc' },
+  { value: 'F2', label: 'F2' },
+  { value: 'F3', label: 'F3' },
+  { value: 'F4', label: 'F4' },
+  { value: 'F6', label: 'F6' },
+  { value: 'F7', label: 'F7' },
+  { value: 'F8', label: 'F8' },
+  { value: 'F9', label: 'F9' },
+  { value: 'F10', label: 'F10' },
+]
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (

@@ -157,6 +157,7 @@ export default function PracticePage() {
       knownWords={base.knownWords}
       collect={base.collect}
       statistics={base.statistics}
+      counts={{ newCount: session.newCount ?? 0, reviewCount: session.reviewCount ?? 0 }}
       onCommit={commit}
       onFinish={finish}
       onFlush={flush}

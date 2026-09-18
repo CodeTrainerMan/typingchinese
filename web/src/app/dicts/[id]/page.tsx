@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 import Link from 'next/link'
 import { useParams, useRouter } from 'next/navigation'
 import { useBaseStore } from '@/lib/store/base'
@@ -29,11 +29,13 @@ export default function DictDetailPage() {
   const [busy, setBusy] = useState(false)
   const fileRef = useRef<HTMLInputElement>(null)
 
-  useEffect(() => {
-    if (!dict) return
+  // 切换词库时用该词库的元数据重置表单：在渲染期同步更新，避免 effect 里的级联渲染
+  const [formOwner, setFormOwner] = useState('')
+  if (dict && formOwner !== dict.id) {
+    setFormOwner(dict.id)
     setName(dict.name)
     setDesc(dict.description)
-  }, [dict?.id]) // eslint-disable-line react-hooks/exhaustive-deps
+  }
 
   if (!hydrated) return <div className="mx-auto max-w-4xl px-4 py-16 text-dim">{t('common.loading')}</div>
 

@@ -44,6 +44,10 @@ export interface StudySession {
   stepWords?: string[]
   /** 当前步骤打错的词，步骤结束时用于补练 */
   stepWrong?: string[]
+  /** 本组首轮里新学的词数（结算页展示用） */
+  newCount?: number
+  /** 本组首轮里复习的词数（结算页展示用） */
+  reviewCount?: number
 }
 
 interface BaseState {
@@ -304,7 +308,7 @@ export const useBaseStore = create<BaseState>()(
         const reviewCount = Math.floor(perDayStudyNumber * (isEnd ? Math.max(1, reviewRatio) : reviewRatio))
 
         let newWords: CnWord[] = isEnd ? [] : pickNewWords(dict, perDayStudyNumber, known)
-        let review = reviewCount
+        const review = reviewCount
           ? pickReviewWords(dict, cards, reviewCount, known).filter(w => !newWords.some(n => n.word === w.word))
           : []
         // 兜底：既没复习词又没新词时（比如复习比 0 且刚学完），至少给一批新词，免得空白会话
@@ -399,6 +403,8 @@ export const useBaseStore = create<BaseState>()(
             patch: false,
             stepWords: s.wordIds,
             stepWrong: [],
+            newCount: 0,
+            reviewCount: 0,
             wrongTimes: {},
             keystrokes: 0,
             startedAt: Date.now(),
@@ -483,6 +489,8 @@ export const useBaseStore = create<BaseState>()(
         // 记忆曲线与「今日完成」只在首轮计一次：同一个词在后续步骤会重复出现，
         // 否则一组 20 词在三步流程里会被记成 60 个，每日目标也会瞬间达成
         const firstRound = (session.stepIndex ?? 0) === 0 && !session.patch
+        // 首轮里第一次见到的词算新学，FSRS 里已有卡片的算复习
+        const isNew = !state.fsrsData[word.word]
 
         let statistics = state.statistics
         if (firstRound) {
@@ -500,6 +508,8 @@ export const useBaseStore = create<BaseState>()(
           entry.total += 1
           entry.wrong += wrongTimes
           entry.correct += wrongTimes === 0 ? 1 : 0
+          if (isNew) entry.newCount = (entry.newCount ?? 0) + 1
+          else entry.reviewCount = (entry.reviewCount ?? 0) + 1
           if (idx >= 0) statistics[idx] = entry
           else statistics.push(entry)
         }
@@ -510,7 +520,15 @@ export const useBaseStore = create<BaseState>()(
           wrongTimes > 0 && !prevWrong.includes(word.word) ? [...prevWrong, word.word] : prevWrong
 
         const { wrongWordClear } = useSettingStore.getState()
-        const nextSession = advanceSession(session, word.word, wrongTimes, stepWrong, wrongWordClear)
+        const advanced = advanceSession(session, word.word, wrongTimes, stepWrong, wrongWordClear)
+        // 本组的新学 / 复习计数同样只记首轮，供结算页展示
+        const nextSession = firstRound
+          ? {
+              ...advanced,
+              newCount: (session.newCount ?? 0) + (isNew ? 1 : 0),
+              reviewCount: (session.reviewCount ?? 0) + (isNew ? 0 : 1),
+            }
+          : advanced
 
         const dict = state.dicts.find(d => d.id === (session?.dictId ?? state.currentDictId))
         // 文章练习只统计，不进记忆曲线与错词本；找不到归属词库时至少别卡住进度
@@ -536,7 +554,6 @@ export const useBaseStore = create<BaseState>()(
 
         const extra: Partial<BaseState> = { wrongWords }
         if (firstRound) {
-          const isNew = !state.fsrsData[word.word]
           const { fsrsLimits, fsrsParams } = useSettingStore.getState()
           const grade = gradeByWrongTimes(wrongTimes, fsrsLimits)
           const nextCard = reviewCard(reviveCard(state.fsrsData[word.word]), grade, fsrsParams)

@@ -121,13 +121,13 @@ export function useTypingSession({
     startedAtRef.current = Date.now()
   }, [])
 
-  useEffect(() => {
-    const next = initialSnapshot()
-    snapshotRef.current = next
-    waitingSinceRef.current = 0
-    setSnapshot(next)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [batchKey])
+  // 换批（下一步骤 / 错词补练）时在渲染期同步归零，比 effect 里 setState 少一次级联渲染
+  // 这里只动 state：snapshotRef 由下面的同步 effect 跟着更新，渲染期不碰 ref
+  const [lastBatch, setLastBatch] = useState(batchKey)
+  if (lastBatch !== batchKey) {
+    setLastBatch(batchKey)
+    setSnapshot(initialSnapshot())
+  }
 
   // 渲染后同步快照引用，供键盘事件回调读取最新状态
   useEffect(() => {

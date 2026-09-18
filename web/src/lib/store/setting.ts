@@ -1,6 +1,15 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
-import type { InputMode, Locale, NextKey, PracticeMode, ReplayKey, ThemeMode, TypingMode } from '../types'
+import type {
+  InputMode,
+  Locale,
+  NextKey,
+  PracticeMode,
+  ReplayKey,
+  ShortcutMap,
+  ThemeMode,
+  TypingMode,
+} from '../types'
 import { DEFAULT_FSRS_LIMITS, DEFAULT_FSRS_PARAMS, type FsrsLimits, type FsrsParams } from '../fsrs'
 
 export interface SettingState {
@@ -41,6 +50,8 @@ export interface SettingState {
   replayKey: ReplayKey
   /** 完成后进入下一词的按键 */
   nextKey: NextKey
+  /** 功能键：动作 → 按键，空串表示未绑定 */
+  shortcuts: ShortcutMap
   fsrsLimits: FsrsLimits
   /** 复习比：复习词数量 = 每日学习量 × 该值；0 = 不安排复习 */
   reviewRatio: number
@@ -75,6 +86,8 @@ export const DEFAULT_SETTING = {
   theme: 'system' as ThemeMode,
   replayKey: 'tab' as ReplayKey,
   nextKey: 'both' as NextKey,
+  // 浏览器占用的键（F5 刷新 / F12 开发者工具 / F1 帮助）不进默认绑定
+  shortcuts: { skip: 'Escape', pinyin: 'F3', trans: 'F6', known: 'F4', collect: 'F8' } as ShortcutMap,
   fsrsLimits: DEFAULT_FSRS_LIMITS,
   reviewRatio: 3,
   fsrsParams: DEFAULT_FSRS_PARAMS,
@@ -91,10 +104,16 @@ export const useSettingStore = create<SettingState>()(
     {
       name: 'cn-type-setting-v1',
       // v0 会按浏览器语言自动写入 lang，现已改为固定英文默认，旧数据统一回到英文
-      version: 1,
+      // v2 新增 shortcuts：旧存档没有该字段，必须与默认值合并，否则解出来是 undefined
+      version: 2,
       migrate: (persisted, version) => {
         const old = (persisted ?? {}) as Partial<SettingState>
-        return version < 1 ? { ...DEFAULT_SETTING, ...old, lang: 'en' } : { ...DEFAULT_SETTING, ...old }
+        const next = { ...DEFAULT_SETTING, ...old }
+        return {
+          ...next,
+          lang: version < 1 ? 'en' : next.lang,
+          shortcuts: { ...DEFAULT_SETTING.shortcuts, ...(old.shortcuts ?? {}) },
+        }
       },
     }
   )

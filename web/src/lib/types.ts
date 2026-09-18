@@ -64,6 +64,15 @@ export type ReplayKey = 'tab' | 'f2'
 export type NextKey = 'both' | 'space' | 'enter'
 
 /**
+ * 可自定义的功能键动作（对齐参考项目的全自定义快捷键，先上最高频的 5 个）
+ * 重听键单独由 replayKey 控制，不在这里，避免两处配置互相打架
+ */
+export type ShortcutAction = 'skip' | 'pinyin' | 'trans' | 'known' | 'collect'
+
+/** 动作 → 按键；值为 KeyboardEvent.key，空字符串表示该动作未绑定 */
+export type ShortcutMap = Record<ShortcutAction, string>
+
+/**
  * 界面语言（只影响 UI 文案，与学习内容无关：词条、拼音、文章永远是中文）
  * 加一种语言 = 在 src/i18n/messages/ 下加一个语言包并登记进 LOCALES
  *
@@ -92,6 +101,10 @@ export interface Statistics {
   correct: number
   wrong: number
   keystrokes: number
+  /** 当日新学的词条数（首轮首次见到即算新学）；旧存档没有该字段，读取时按 0 处理 */
+  newCount?: number
+  /** 当日复习的词条数（FSRS 里已有卡片） */
+  reviewCount?: number
 }
 
 export interface WrongRecord {
