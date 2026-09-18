@@ -316,6 +316,10 @@ export const zhTW: Messages = {
 
   wrong: {
 
+  practiceDue: '只練到期的 {n} 個詞',
+  practiceGroup: '練這組',
+  dueBook: '到期複習',
+
   groupByDue: '按記憶到期',
   groupDueNow: '現在該複習',
   groupDueSoon: '24 小時內',

@@ -316,6 +316,10 @@ export const id: Messages = {
 
   wrong: {
 
+  practiceDue: 'Latih {n} kata yang jatuh tempo',
+  practiceGroup: 'Latih grup ini',
+  dueBook: 'Ulangan jatuh tempo',
+
   groupByDue: 'Menurut jadwal ulang',
   groupDueNow: 'Waktunya mengulang',
   groupDueSoon: 'Jatuh tempo dalam 24 jam',

@@ -75,6 +75,8 @@ interface BaseState {
   /** 收藏本专项练习：取收藏的词组成一组，返回是否成功开组 */
   /** title 由调用方按当前语言传入，避免把中文标题写进持久化数据 */
   startCollectSession: (limit?: number, title?: string) => boolean
+  /** 给定词名开一组练习（错词本的分组 / 到期词），返回是否成功开组 */
+  startWordsSession: (words: string[], title?: string) => boolean
   /** 临时会话（文章练习等），直接给定词条，不走词库选题 */
   startCustomSession: (words: CnWord[], title: string) => void
   clearSession: () => void
@@ -380,6 +382,27 @@ export const useBaseStore = create<BaseState>()(
         set({
           session: {
             ...makeSession(ids, 'collect', owner?.id ?? '', {
+              steps: stepsOf(useSettingStore.getState().practiceMode, true),
+            }),
+            title,
+          },
+        })
+        return true
+      },
+
+      /** 按给定词名开组：顺序沿用传入顺序，已掌握/已忽略/词库里没有的词会被剔掉 */
+      startWordsSession(words, title) {
+        const { dicts, knownWords, ignoreWords } = get()
+        const known = new Set(knownWords)
+        const ids = [...new Set(words)].filter(
+          w => !known.has(w) && !ignoreWords.includes(w) && findWordInDicts(dicts, w)
+        )
+        if (!ids.length) return false
+
+        const owner = dicts.find(d => d.words.some(w => w.word === ids[0])) ?? dicts[0]
+        set({
+          session: {
+            ...makeSession(ids, 'wrong', owner?.id ?? '', {
               steps: stepsOf(useSettingStore.getState().practiceMode, true),
             }),
             title,

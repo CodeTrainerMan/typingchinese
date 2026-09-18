@@ -325,6 +325,10 @@ export const en = {
 
   wrong: {
 
+  practiceDue: 'Practise the {n} due words',
+  practiceGroup: 'Practise this group',
+  dueBook: 'Due review',
+
   groupByDue: 'Group by review time',
   groupDueNow: 'Due now',
   groupDueSoon: 'Due within 24h',

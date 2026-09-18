@@ -316,6 +316,10 @@ export const ja: Messages = {
 
   wrong: {
 
+  practiceDue: '期限が来た {n} 語を練習',
+  practiceGroup: 'このグループを練習',
+  dueBook: '期限到来分の復習',
+
   groupByDue: '復習時期別',
   groupDueNow: '今すぐ復習',
   groupDueSoon: '24 時間以内',

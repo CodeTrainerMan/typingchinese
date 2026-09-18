@@ -32,6 +32,13 @@ export default function WrongPage() {
 
   const records = Object.values(base.wrongWords).sort((a, b) => b.count - a.count || b.lastWrongAt - a.lastWrongAt)
   const collectWords = base.collect
+  // 记忆卡片到期的错词：这些词现在练最划算，单独给个入口
+  const dueRows = now
+    ? records.filter(r => {
+        const card = base.fsrsData[r.word]
+        return !!card && Date.parse(card.due) <= now
+      })
+    : []
 
   const findWord = (word: string): CnWord | undefined => {
     for (const dict of base.dicts) {
@@ -157,11 +164,21 @@ export default function WrongPage() {
 
         {tab === 'wrong' && records.length > 0 && (
           <div className="flex gap-2">
+            {dueRows.length > 0 && (
+              <button
+                onClick={() => {
+                  if (base.startWordsSession(dueRows.map(r => r.word), t('wrong.dueBook'))) router.push('/practice')
+                }}
+                className="h-9 px-4 rounded-lg bg-brand text-white text-sm"
+              >
+                {t('wrong.practiceDue', { n: dueRows.length })}
+              </button>
+            )}
             <button
               onClick={() => {
                 if (base.startWrongSession(20)) router.push('/practice')
               }}
-              className="h-9 px-4 rounded-lg bg-brand text-white text-sm"
+              className={btnCls}
             >
               {t('wrong.practiceWrong')}
             </button>
@@ -202,6 +219,14 @@ export default function WrongPage() {
                   <div className="flex items-center gap-2 mb-2">
                     <span className="text-sm font-medium">{g.label}</span>
                     <span className="text-xs text-dim">{t('common.words', { n: g.rows.length })}</span>
+                    <button
+                      onClick={() => {
+                        if (base.startWordsSession(g.rows.map(r => r.word), g.label)) router.push('/practice')
+                      }}
+                      className="ml-auto px-2 py-1 rounded-md border border-line text-xs hover:bg-surface2"
+                    >
+                      {t('wrong.practiceGroup')}
+                    </button>
                   </div>
                 )}
                 <WrongTable rows={g.rows} findWord={findWord} onPlay={play} onRemove={base.removeWrong} />

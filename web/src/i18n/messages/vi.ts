@@ -316,6 +316,10 @@ export const vi: Messages = {
 
   wrong: {
 
+  practiceDue: 'Luyện {n} từ đến hạn',
+  practiceGroup: 'Luyện nhóm này',
+  dueBook: 'Ôn đến hạn',
+
   groupByDue: 'Theo hạn ôn tập',
   groupDueNow: 'Đến hạn ôn',
   groupDueSoon: 'Hạn trong 24 giờ',

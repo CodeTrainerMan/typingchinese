@@ -316,6 +316,10 @@ export const th: Messages = {
 
   wrong: {
 
+  practiceDue: 'ฝึก {n} คำที่ถึงกำหนด',
+  practiceGroup: 'ฝึกกลุ่มนี้',
+  dueBook: 'ทบทวนที่ถึงกำหนด',
+
   groupByDue: 'ตามกำหนดทบทวน',
   groupDueNow: 'ถึงเวลาทบทวน',
   groupDueSoon: 'ครบกำหนดใน 24 ชม.',

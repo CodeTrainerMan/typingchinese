@@ -316,6 +316,10 @@ export const uk: Messages = {
 
   wrong: {
 
+  practiceDue: 'Потренувати {n} слів з простроченим строком',
+  practiceGroup: 'Тренувати цю групу',
+  dueBook: 'Повторення за строком',
+
   groupByDue: 'За строком повторення',
   groupDueNow: 'Час повторювати',
   groupDueSoon: 'Строк протягом 24 год',

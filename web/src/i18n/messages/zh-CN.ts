@@ -316,6 +316,10 @@ export const zhCN: Messages = {
 
   wrong: {
 
+  practiceDue: '只练到期的 {n} 个词',
+  practiceGroup: '练这组',
+  dueBook: '到期复习',
+
   groupByDue: '按记忆到期',
   groupDueNow: '现在该复习',
   groupDueSoon: '24 小时内',

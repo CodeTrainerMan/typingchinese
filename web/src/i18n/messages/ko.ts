@@ -316,6 +316,10 @@ export const ko: Messages = {
 
   wrong: {
 
+  practiceDue: '기한이 된 {n}개 단어만 연습',
+  practiceGroup: '이 그룹 연습',
+  dueBook: '기한 복습',
+
   groupByDue: '복습 시기별',
   groupDueNow: '지금 복습',
   groupDueSoon: '24시간 내',

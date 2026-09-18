@@ -316,6 +316,10 @@ export const fr: Messages = {
 
   wrong: {
 
+  practiceDue: 'Réviser les {n} mots échus',
+  practiceGroup: 'Travailler ce groupe',
+  dueBook: 'Révision échue',
+
   groupByDue: 'Par révision',
   groupDueNow: 'À réviser maintenant',
   groupDueSoon: 'Échéance dans 24 h',

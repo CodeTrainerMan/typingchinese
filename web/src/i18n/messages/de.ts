@@ -316,6 +316,10 @@ export const de: Messages = {
 
   wrong: {
 
+  practiceDue: 'Die {n} fälligen Wörter üben',
+  practiceGroup: 'Diese Gruppe üben',
+  dueBook: 'Fällige Wiederholung',
+
   groupByDue: 'Nach Fälligkeit',
   groupDueNow: 'Jetzt fällig',
   groupDueSoon: 'In 24 h fällig',

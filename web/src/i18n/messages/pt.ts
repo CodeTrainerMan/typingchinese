@@ -316,6 +316,10 @@ export const pt: Messages = {
 
   wrong: {
 
+  practiceDue: 'Praticar as {n} palavras vencidas',
+  practiceGroup: 'Praticar este grupo',
+  dueBook: 'Revisão vencida',
+
   groupByDue: 'Por revisão',
   groupDueNow: 'Para rever agora',
   groupDueSoon: 'Vence em 24 h',

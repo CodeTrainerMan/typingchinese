@@ -316,6 +316,10 @@ export const ru: Messages = {
 
   wrong: {
 
+  practiceDue: 'Потренировать {n} слов с истёкшим сроком',
+  practiceGroup: 'Тренировать эту группу',
+  dueBook: 'Повторение по сроку',
+
   groupByDue: 'По сроку повторения',
   groupDueNow: 'Пора повторить',
   groupDueSoon: 'Срок в течение 24 ч',
