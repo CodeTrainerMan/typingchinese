@@ -10,7 +10,39 @@ export interface CnWord {
   syllables: string[] // ['zhong','guo']
   trans: string // 释义
   length: number
+
+  // —— 以下为可选富化信息：由导入文件提供，为空时界面不显示对应区块 ——
+  /** 词性，如 名词 / noun */
+  pos?: string
+  /** 繁体写法 */
+  traditional?: string
+  /** 部首 */
+  radical?: string
+  /** 例句（含该词） */
+  example?: string
+  /** 例句的翻译 / 解释 */
+  exampleTrans?: string
+  /** 同义词，按 、/,/;/ 分隔 */
+  synonyms?: string
+  /** 反义词，同上 */
+  antonyms?: string
+  /** 常见搭配，同上 */
+  collocations?: string
 }
+
+/** 富化字段的键（导入、导出、表单都按这个顺序处理） */
+export const RICH_FIELDS = [
+  'pos',
+  'traditional',
+  'radical',
+  'example',
+  'exampleTrans',
+  'synonyms',
+  'antonyms',
+  'collocations',
+] as const
+
+export type RichField = (typeof RICH_FIELDS)[number]
 
 export interface DictResource {
   id: string
@@ -67,7 +99,7 @@ export type NextKey = 'both' | 'space' | 'enter'
  * 可自定义的功能键动作（对齐参考项目的全自定义快捷键，先上最高频的 5 个）
  * 重听键单独由 replayKey 控制，不在这里，避免两处配置互相打架
  */
-export type ShortcutAction = 'skip' | 'pinyin' | 'trans' | 'known' | 'collect'
+export type ShortcutAction = 'skip' | 'pinyin' | 'trans' | 'known' | 'collect' | 'detail'
 
 /** 动作 → 按键；值为 KeyboardEvent.key，空字符串表示该动作未绑定 */
 export type ShortcutMap = Record<ShortcutAction, string>

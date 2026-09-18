@@ -122,6 +122,19 @@ export const id: Messages = {
     cheerLow: 'Kerja bagus — kata yang salah masuk ke buku kesalahan.',
     wrongPractice: 'Ulangi',
 
+    prev: 'Sebelumnya',
+    detail: 'Detail',
+    actDetail: 'Detail kata',
+    detailNext: 'Ulasan berikutnya',
+    detailStability: 'Stabilitas',
+    detailRetention: 'Daya ingat',
+    detailNoCard: 'Belum dipelajari',
+    ignore: 'Abaikan',
+    ignored: 'Diabaikan',
+    share: 'Bagikan kartu',
+    shareOk: 'Gambar tersimpan di folder unduhan',
+    shareFail: 'Gagal menyimpan gambar',
+
     newReview: 'Baru {n} · Diulang {m}',
     actSkip: 'Lewati',
     actPinyin: 'Hint pinyin',
@@ -179,6 +192,22 @@ export const id: Messages = {
   },
 
   dictDetail: {
+
+  colPos: 'Kelas kata',
+  colTraditional: 'Tradisional',
+  colRadical: 'Radikal',
+  colExample: 'Contoh',
+  colExampleTrans: 'Terjemahan contoh',
+  colSynonyms: 'Sinonim',
+  colAntonyms: 'Antonim',
+  colCollocations: 'Kolokasi',
+  detailBtn: 'Detail',
+  richTitle: 'Informasi tambahan',
+  richHint: 'Ditampilkan di kartu kata dan popup detail. Sinonim / antonim / kolokasi: pisahkan dengan 、atau ,.',
+  statWords: 'Kata',
+  statCards: 'Kartu',
+  statDue: 'Jatuh tempo hari ini',
+  statRetention: 'Daya ingat',
     back: '← Daftar kata',
     notFound: 'Daftar ini tidak ada di daftar belajarmu.',
     backToDicts: 'Kembali ke daftar',
@@ -213,6 +242,11 @@ export const id: Messages = {
   },
 
   stats: {
+
+  legendNew: 'Baru',
+  legendReview: 'Diulang',
+  forecastTitle: 'Ulasan jatuh tempo dalam {n} hari',
+  forecastDesc: 'Berapa kartu yang akan dibawa penjadwal tiap hari.',
     title: 'Statistik',
     streak: 'Rangkaian hari',
     daysValue: '{n} hari',
@@ -341,6 +375,8 @@ export const id: Messages = {
     scTrans: 'Tampilkan/sembunyikan terjemahan',
     scKnown: 'Tandai sudah dikuasai',
     scCollect: 'Bintangi kata',
+
+    scDetail: 'Popup detail kata',
     sectionAppearance: 'Tampilan',
     theme: 'Tema',
     themeDesc: 'Mengikuti sistem secara bawaan, atau dikunci ke terang / gelap.',

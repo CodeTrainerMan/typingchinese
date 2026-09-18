@@ -56,6 +56,8 @@ interface BaseState {
   wrongWords: Record<string, WrongRecord>
   knownWords: string[]
   collect: string[]
+  /** 忽略的词：不再进入任何练习组（错词本 / 收藏本 / 词库选题都跳过） */
+  ignoreWords: string[]
   fsrsData: Record<string, CardRecord>
   statistics: Statistics[]
   session: StudySession | null
@@ -94,6 +96,7 @@ interface BaseState {
   clearKnown: () => void
   toggleCollect: (word: string) => void
   clearCollect: () => void
+  toggleIgnore: (word: string) => void
   removeWrong: (word: string) => void
   resetWrong: () => void
   exportData: () => string
@@ -142,6 +145,13 @@ function pickReviewWords(
     })
     .sort((a, b) => (fsrsData[a.word]?.due ?? '').localeCompare(fsrsData[b.word]?.due ?? ''))
     .slice(0, count)
+}
+
+/** 排除已忽略的词；整组都被忽略时退回原列表，免得开出空会话 */
+function withoutIgnored<T extends { word: string }>(list: T[], ignored: string[]): T[] {
+  if (!ignored.length) return list
+  const kept = list.filter(w => !ignored.includes(w.word))
+  return kept.length ? kept : list
 }
 
 /** 在所有词库里找词条 */
@@ -236,6 +246,7 @@ export const useBaseStore = create<BaseState>()(
       wrongWords: {},
       knownWords: [],
       collect: [],
+      ignoreWords: [],
       fsrsData: {},
       statistics: [],
       session: null,
@@ -315,7 +326,7 @@ export const useBaseStore = create<BaseState>()(
         if (!newWords.length && !review.length) newWords = pickNewWords(dict, perDayStudyNumber, known)
 
         // 打散顺序，避免永远「先新词后复习」
-        const list = shuffle([...newWords, ...review])
+        const list = shuffle(withoutIgnored([...newWords, ...review], get().ignoreWords))
         const wordIds = list.map(w => w.word)
         set({
           fsrsData: cards,
@@ -338,10 +349,10 @@ export const useBaseStore = create<BaseState>()(
       },
 
       startWrongSession(limit = 20) {
-        const { wrongWords, dicts, knownWords } = get()
+        const { wrongWords, dicts, knownWords, ignoreWords } = get()
         const known = new Set(knownWords)
         const ids = Object.values(wrongWords)
-          .filter(r => !known.has(r.word))
+          .filter(r => !known.has(r.word) && !ignoreWords.includes(r.word))
           .sort((a, b) => b.count - a.count || b.lastWrongAt - a.lastWrongAt)
           .map(r => r.word)
           .filter(w => findWordInDicts(dicts, w))
@@ -358,9 +369,11 @@ export const useBaseStore = create<BaseState>()(
       },
 
       startCollectSession(limit = 20, title?: string) {
-        const { collect, dicts, knownWords } = get()
+        const { collect, dicts, knownWords, ignoreWords } = get()
         const known = new Set(knownWords)
-        const ids = collect.filter(w => !known.has(w) && findWordInDicts(dicts, w)).slice(0, Math.max(1, limit))
+        const ids = collect
+          .filter(w => !known.has(w) && !ignoreWords.includes(w) && findWordInDicts(dicts, w))
+          .slice(0, Math.max(1, limit))
         if (!ids.length) return false
 
         const owner = dicts.find(d => d.words.some(w => w.word === ids[0])) ?? dicts[0]
@@ -586,6 +599,17 @@ export const useBaseStore = create<BaseState>()(
         set({ collect: [] })
       },
 
+      toggleIgnore(word) {
+        set(state => {
+          const ignored = state.ignoreWords.includes(word)
+          const next = ignored ? state.ignoreWords.filter(w => w !== word) : [...state.ignoreWords, word]
+          // 忽略的词从错词本里撤掉：以后不会再练，留着只会让错词本虚高
+          const wrongWords = { ...state.wrongWords }
+          if (!ignored) delete wrongWords[word]
+          return { ignoreWords: next, wrongWords }
+        })
+      },
+
       removeWrong(word) {
         const wrongWords = { ...get().wrongWords }
         delete wrongWords[word]
@@ -606,6 +630,7 @@ export const useBaseStore = create<BaseState>()(
             wrongWords: s.wrongWords,
             knownWords: s.knownWords,
             collect: s.collect,
+            ignoreWords: s.ignoreWords,
             fsrsData: s.fsrsData,
             statistics: s.statistics,
           },
@@ -625,7 +650,7 @@ export const useBaseStore = create<BaseState>()(
           return { ok: false, code: 'notObject' }
         }
         const data = raw as Record<string, unknown>
-        const keys = ['dicts', 'wrongWords', 'knownWords', 'collect', 'fsrsData', 'statistics'] as const
+        const keys = ['dicts', 'wrongWords', 'knownWords', 'collect', 'ignoreWords', 'fsrsData', 'statistics'] as const
         if (!keys.some(k => k in data)) {
           return { ok: false, code: 'noFields' }
         }
@@ -641,6 +666,7 @@ export const useBaseStore = create<BaseState>()(
           wrongWords: (data.wrongWords as Record<string, WrongRecord>) ?? s.wrongWords,
           knownWords: (data.knownWords as string[]) ?? s.knownWords,
           collect: (data.collect as string[]) ?? s.collect,
+          ignoreWords: (data.ignoreWords as string[]) ?? s.ignoreWords,
           fsrsData: (data.fsrsData as Record<string, CardRecord>) ?? s.fsrsData,
           statistics: (data.statistics as Statistics[]) ?? s.statistics,
           currentDictId: s.dicts.some(d => d.id === s.currentDictId) ? s.currentDictId : (s.dicts[0]?.id ?? null),
@@ -657,6 +683,7 @@ export const useBaseStore = create<BaseState>()(
         wrongWords: state.wrongWords,
         knownWords: state.knownWords,
         collect: state.collect,
+        ignoreWords: state.ignoreWords,
         fsrsData: state.fsrsData,
         statistics: state.statistics,
         session: state.session,

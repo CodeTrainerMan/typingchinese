@@ -87,7 +87,14 @@ export const DEFAULT_SETTING = {
   replayKey: 'tab' as ReplayKey,
   nextKey: 'both' as NextKey,
   // 浏览器占用的键（F5 刷新 / F12 开发者工具 / F1 帮助）不进默认绑定
-  shortcuts: { skip: 'Escape', pinyin: 'F3', trans: 'F6', known: 'F4', collect: 'F8' } as ShortcutMap,
+  shortcuts: {
+    skip: 'Escape',
+    pinyin: 'F3',
+    trans: 'F6',
+    known: 'F4',
+    collect: 'F8',
+    detail: 'F7',
+  } as ShortcutMap,
   fsrsLimits: DEFAULT_FSRS_LIMITS,
   reviewRatio: 3,
   fsrsParams: DEFAULT_FSRS_PARAMS,

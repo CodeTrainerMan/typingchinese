@@ -122,6 +122,19 @@ export const vi: Messages = {
     cheerLow: 'Làm tốt — từ sai đã được đưa vào sổ lỗi.',
     wrongPractice: 'Luyện lại',
 
+    prev: 'Từ trước',
+    detail: 'Chi tiết',
+    actDetail: 'Chi tiết từ',
+    detailNext: 'Ôn tiếp theo',
+    detailStability: 'Độ ổn định',
+    detailRetention: 'Tỷ lệ nhớ',
+    detailNoCard: 'Chưa học',
+    ignore: 'Bỏ qua',
+    ignored: 'Đã bỏ qua',
+    share: 'Chia sẻ thẻ',
+    shareOk: 'Ảnh đã lưu vào thư mục tải xuống',
+    shareFail: 'Không lưu được ảnh',
+
     newReview: 'Mới {n} · Ôn {m}',
     actSkip: 'Bỏ qua',
     actPinyin: 'Gợi ý pinyin',
@@ -179,6 +192,22 @@ export const vi: Messages = {
   },
 
   dictDetail: {
+
+  colPos: 'Từ loại',
+  colTraditional: 'Phồn thể',
+  colRadical: 'Bộ thủ',
+  colExample: 'Ví dụ',
+  colExampleTrans: 'Dịch ví dụ',
+  colSynonyms: 'Từ đồng nghĩa',
+  colAntonyms: 'Từ trái nghĩa',
+  colCollocations: 'Cụm từ đi kèm',
+  detailBtn: 'Chi tiết',
+  richTitle: 'Thông tin bổ sung',
+  richHint: 'Hiển thị trên thẻ từ và popup chi tiết. Đồng nghĩa / trái nghĩa / cụm từ: tách bằng 、hoặc ,.',
+  statWords: 'Số từ',
+  statCards: 'Số thẻ',
+  statDue: 'Đến hạn hôm nay',
+  statRetention: 'Tỷ lệ nhớ',
     back: '← Danh sách từ',
     notFound: 'Danh sách này không có trong danh sách học của bạn.',
     backToDicts: 'Về danh sách',
@@ -213,6 +242,11 @@ export const vi: Messages = {
   },
 
   stats: {
+
+  legendNew: 'Từ mới',
+  legendReview: 'Đã ôn',
+  forecastTitle: 'Số từ đến hạn trong {n} ngày tới',
+  forecastDesc: 'Mỗi ngày lịch ôn sẽ đưa lại bao nhiêu thẻ.',
     title: 'Thống kê',
     streak: 'Chuỗi ngày',
     daysValue: '{n} ngày',
@@ -341,6 +375,8 @@ export const vi: Messages = {
     scTrans: 'Bật/tắt nghĩa',
     scKnown: 'Đánh dấu đã thuộc',
     scCollect: 'Gắn sao từ',
+
+    scDetail: 'Popup chi tiết từ',
     sectionAppearance: 'Giao diện',
     theme: 'Chủ đề',
     themeDesc: 'Mặc định theo hệ thống, hoặc khóa sáng / tối.',

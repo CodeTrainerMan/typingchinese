@@ -122,6 +122,19 @@ export const uk: Messages = {
     cheerLow: 'Гарна робота — помилки потрапили до зошита.',
     wrongPractice: 'Повтор',
 
+    prev: 'Назад',
+    detail: 'Деталі',
+    actDetail: 'Картка слова',
+    detailNext: 'Наступне повторення',
+    detailStability: 'Стабільність',
+    detailRetention: 'Утримання',
+    detailNoCard: 'Ще не вчили',
+    ignore: 'Ігнорувати',
+    ignored: 'Ігнорується',
+    share: 'Поділитися карткою',
+    shareOk: 'Зображення збережено у завантаження',
+    shareFail: 'Не вдалося зберегти зображення',
+
     newReview: 'Нових {n} · Повторено {m}',
     actSkip: 'Пропустити',
     actPinyin: 'Піньїнь',
@@ -179,6 +192,22 @@ export const uk: Messages = {
   },
 
   dictDetail: {
+
+  colPos: 'Частина мови',
+  colTraditional: 'Традиційне',
+  colRadical: 'Ключ (радикал)',
+  colExample: 'Приклад',
+  colExampleTrans: 'Переклад прикладу',
+  colSynonyms: 'Синоніми',
+  colAntonyms: 'Антоніми',
+  colCollocations: 'Сполучення',
+  detailBtn: 'Деталі',
+  richTitle: 'Додаткова інформація',
+  richHint: 'Показується на картці та у вікні слова. Синоніми / антоніми / сполучення розділяйте 、або ,.',
+  statWords: 'Слів',
+  statCards: 'Карток',
+  statDue: 'Сьогодні на повторення',
+  statRetention: 'Утримання в пам’яті',
     back: '← Списки',
     notFound: 'Цього списку немає у вашому списку для вивчення.',
     backToDicts: 'До списків',
@@ -213,6 +242,11 @@ export const uk: Messages = {
   },
 
   stats: {
+
+  legendNew: 'Нові',
+  legendReview: 'Повторення',
+  forecastTitle: 'Повторень у найближчі {n} днів',
+  forecastDesc: 'Скільки карток планувальник повертатиме щодня.',
     title: 'Статистика',
     streak: 'Серія днів',
     daysValue: '{n} дн.',
@@ -341,6 +375,8 @@ export const uk: Messages = {
     scTrans: 'Показати/сховати переклад',
     scKnown: 'Позначити як вивчене',
     scCollect: 'До обраного',
+
+    scDetail: 'Вікно картки слова',
     sectionAppearance: 'Вигляд',
     theme: 'Тема',
     themeDesc: 'За замовчуванням як у системі, або зафіксуйте світлу / темну.',

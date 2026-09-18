@@ -122,6 +122,19 @@ export const de: Messages = {
     cheerLow: 'Gut gemacht — die Fehler landen im Fehlerheft.',
     wrongPractice: 'Nachholen',
 
+    prev: 'Zurück',
+    detail: 'Details',
+    actDetail: 'Wortdetail',
+    detailNext: 'Nächste Wiederholung',
+    detailStability: 'Stabilität',
+    detailRetention: 'Behalten',
+    detailNoCard: 'Noch nicht gelernt',
+    ignore: 'Ignorieren',
+    ignored: 'Ignoriert',
+    share: 'Karte teilen',
+    shareOk: 'Bild in Downloads gespeichert',
+    shareFail: 'Bild konnte nicht gespeichert werden',
+
     newReview: 'Neu {n} · Wiederholt {m}',
     actSkip: 'Überspringen',
     actPinyin: 'Pinyin-Hinweis',
@@ -179,6 +192,22 @@ export const de: Messages = {
   },
 
   dictDetail: {
+
+  colPos: 'Wortart',
+  colTraditional: 'Traditionell',
+  colRadical: 'Radikal',
+  colExample: 'Beispiel',
+  colExampleTrans: 'Beispielübersetzung',
+  colSynonyms: 'Synonyme',
+  colAntonyms: 'Antonyme',
+  colCollocations: 'Kollokationen',
+  detailBtn: 'Details',
+  richTitle: 'Zusatzinformationen',
+  richHint: 'Auf der Wortkarte und im Detail-Popup sichtbar. Synonyme / Antonyme / Kollokationen mit 、oder , trennen.',
+  statWords: 'Wörter',
+  statCards: 'Karten',
+  statDue: 'Heute fällig',
+  statRetention: 'Behalten',
     back: '← Listen',
     notFound: 'Diese Liste ist nicht in deiner Lernliste.',
     backToDicts: 'Zurück zu den Listen',
@@ -213,6 +242,11 @@ export const de: Messages = {
   },
 
   stats: {
+
+  legendNew: 'Neu',
+  legendReview: 'Wiederholt',
+  forecastTitle: 'Geplante Wiederholungen in {n} Tagen',
+  forecastDesc: 'Wie viele Karten der Planer pro Tag zurückbringt.',
     title: 'Statistik',
     streak: 'Serie',
     daysValue: '{n} Tage',
@@ -341,6 +375,8 @@ export const de: Messages = {
     scTrans: 'Übersetzung umschalten',
     scKnown: 'Als beherrscht markieren',
     scCollect: 'Wort merken',
+
+    scDetail: 'Wortdetail-Popup',
     sectionAppearance: 'Darstellung',
     theme: 'Design',
     themeDesc: 'Standardmäßig dem System folgen, oder auf hell / dunkel festlegen.',

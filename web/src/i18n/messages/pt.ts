@@ -122,6 +122,19 @@ export const pt: Messages = {
     cheerLow: 'Bom trabalho — os erros vão para o caderno.',
     wrongPractice: 'Revisão',
 
+    prev: 'Anterior',
+    detail: 'Detalhes',
+    actDetail: 'Detalhe da palavra',
+    detailNext: 'Próxima revisão',
+    detailStability: 'Estabilidade',
+    detailRetention: 'Retenção',
+    detailNoCard: 'Ainda não estudada',
+    ignore: 'Ignorar',
+    ignored: 'Ignorada',
+    share: 'Compartilhar cartão',
+    shareOk: 'Imagem salva nos downloads',
+    shareFail: 'Não foi possível salvar a imagem',
+
     newReview: 'Novas {n} · Revisadas {m}',
     actSkip: 'Pular',
     actPinyin: 'Pinyin',
@@ -179,6 +192,22 @@ export const pt: Messages = {
   },
 
   dictDetail: {
+
+  colPos: 'Categoria gramatical',
+  colTraditional: 'Tradicional',
+  colRadical: 'Radical',
+  colExample: 'Exemplo',
+  colExampleTrans: 'Tradução do exemplo',
+  colSynonyms: 'Sinônimos',
+  colAntonyms: 'Antônimos',
+  colCollocations: 'Colocações',
+  detailBtn: 'Detalhes',
+  richTitle: 'Informações extras',
+  richHint: 'Aparece no cartão e no popup. Sinônimos / antônimos / colocações: separe com 、ou ,.',
+  statWords: 'Palavras',
+  statCards: 'Cartões',
+  statDue: 'Vencem hoje',
+  statRetention: 'Retenção',
     back: '← Listas',
     notFound: 'Esta lista não está na sua lista de estudos.',
     backToDicts: 'Voltar às listas',
@@ -213,6 +242,11 @@ export const pt: Messages = {
   },
 
   stats: {
+
+  legendNew: 'Novas',
+  legendReview: 'Revisadas',
+  forecastTitle: 'Revisões previstas em {n} dias',
+  forecastDesc: 'Quantos cartões o agendador trará por dia.',
     title: 'Estatísticas',
     streak: 'Sequência',
     daysValue: '{n} dias',
@@ -341,6 +375,8 @@ export const pt: Messages = {
     scTrans: 'Mostrar/ocultar tradução',
     scKnown: 'Marcar como dominada',
     scCollect: 'Favoritar palavra',
+
+    scDetail: 'Popup de detalhes da palavra',
     sectionAppearance: 'Aparência',
     theme: 'Tema',
     themeDesc: 'Segue o sistema por padrão, ou fixe em claro / escuro.',

@@ -122,6 +122,19 @@ export const zhCN: Messages = {
     cheerLow: '完成一组，打错的词已进错词本。',
     wrongPractice: '错词重练',
 
+    prev: '上一个',
+    detail: '详情',
+    actDetail: '词条详情',
+    detailNext: '下次复习',
+    detailStability: '稳定度',
+    detailRetention: '记忆保持率',
+    detailNoCard: '还没学过',
+    ignore: '忽略',
+    ignored: '已忽略',
+    share: '分享成绩卡',
+    shareOk: '图片已保存到下载目录',
+    shareFail: '图片保存失败',
+
     newReview: '新学 {n} · 复习 {m}',
     actSkip: '跳过',
     actPinyin: '拼音提示',
@@ -179,6 +192,22 @@ export const zhCN: Messages = {
   },
 
   dictDetail: {
+
+  colPos: '词性',
+  colTraditional: '繁体',
+  colRadical: '部首',
+  colExample: '例句',
+  colExampleTrans: '例句翻译',
+  colSynonyms: '同义词',
+  colAntonyms: '反义词',
+  colCollocations: '搭配',
+  detailBtn: '详情',
+  richTitle: '补充信息',
+  richHint: '会显示在词条卡片与详情弹窗里；同义词 / 反义词 / 搭配用 、或 , 分隔。',
+  statWords: '词条数',
+  statCards: '已学卡片',
+  statDue: '今日到期',
+  statRetention: '记忆保持率',
     back: '← 词库',
     notFound: '这个词库不在你的学习列表里',
     backToDicts: '回词库页',
@@ -213,6 +242,11 @@ export const zhCN: Messages = {
   },
 
   stats: {
+
+  legendNew: '新学',
+  legendReview: '复习',
+  forecastTitle: '未来 {n} 天到期复习量',
+  forecastDesc: '按记忆排程，每天会带回多少张卡片。',
     title: '学习统计',
     streak: '连续打卡',
     daysValue: '{n} 天',
@@ -340,6 +374,8 @@ export const zhCN: Messages = {
     scTrans: '切换释义',
     scKnown: '标记已掌握',
     scCollect: '收藏词语',
+
+    scDetail: '词条详情弹窗',
     sectionAppearance: '外观',
     theme: '主题',
     themeDesc: '默认跟随系统深浅色，也可手动固定',

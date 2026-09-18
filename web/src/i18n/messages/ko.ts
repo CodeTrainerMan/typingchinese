@@ -122,6 +122,19 @@ export const ko: Messages = {
     cheerLow: '수고했어요 — 틀린 단어는 오답 노트에 담겼어요.',
     wrongPractice: '다시 쓰기',
 
+    prev: '이전 단어',
+    detail: '상세',
+    actDetail: '단어 상세',
+    detailNext: '다음 복습',
+    detailStability: '안정성',
+    detailRetention: '기억률',
+    detailNoCard: '아직 학습 안 함',
+    ignore: '무시',
+    ignored: '무시됨',
+    share: '카드 공유',
+    shareOk: '이미지를 다운로드 폴더에 저장했습니다',
+    shareFail: '이미지를 저장하지 못했습니다',
+
     newReview: '새 단어 {n} · 복습 {m}',
     actSkip: '건너뛰기',
     actPinyin: '병음',
@@ -179,6 +192,22 @@ export const ko: Messages = {
   },
 
   dictDetail: {
+
+  colPos: '품사',
+  colTraditional: '번체자',
+  colRadical: '부수',
+  colExample: '예문',
+  colExampleTrans: '예문 번역',
+  colSynonyms: '동의어',
+  colAntonyms: '반의어',
+  colCollocations: '연어',
+  detailBtn: '상세',
+  richTitle: '추가 정보',
+  richHint: '단어 카드와 상세 팝업에 표시됩니다. 동의어 / 반의어 / 연어는 、또는 , 로 구분하세요.',
+  statWords: '단어 수',
+  statCards: '카드 수',
+  statDue: '오늘 복습 예정',
+  statRetention: '기억률',
     back: '← 단어장',
     notFound: '이 단어장은 학습 목록에 없습니다.',
     backToDicts: '단어장으로',
@@ -213,6 +242,11 @@ export const ko: Messages = {
   },
 
   stats: {
+
+  legendNew: '새 단어',
+  legendReview: '복습',
+  forecastTitle: '앞으로 {n}일간 복습 예정',
+  forecastDesc: '스케줄러가 매일 가져올 카드 수입니다.',
     title: '통계',
     streak: '연속 학습',
     daysValue: '{n}일',
@@ -341,6 +375,8 @@ export const ko: Messages = {
     scTrans: '뜻 켜기/끄기',
     scKnown: '완전히 익힘으로 표시',
     scCollect: '즐겨찾기',
+
+    scDetail: '단어 상세 팝업',
     sectionAppearance: '화면',
     theme: '테마',
     themeDesc: '기본은 시스템을 따르고, 밝게 / 어둡게로 고정할 수도 있습니다.',

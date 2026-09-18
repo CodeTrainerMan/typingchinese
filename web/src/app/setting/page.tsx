@@ -384,6 +384,7 @@ const SHORTCUT_ROWS: [ShortcutAction, MessageKey][] = [
   ['trans', 'setting.scTrans'],
   ['known', 'setting.scKnown'],
   ['collect', 'setting.scCollect'],
+  ['detail', 'setting.scDetail'],
 ]
 
 /** 候选键：避开浏览器占用的 F1 / F5 / F11 / F12 */

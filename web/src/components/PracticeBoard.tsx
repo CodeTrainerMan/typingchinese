@@ -2,17 +2,19 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import Link from 'next/link'
-import type { CnWord, LearningDict, ShortcutAction, Statistics, StepType } from '@/lib/types'
+import type { CardRecord, CnWord, LearningDict, ShortcutAction, Statistics, StepType } from '@/lib/types'
 import type { SettingState } from '@/lib/store/setting'
 import { useTypingSession } from '@/lib/useTypingSession'
 import { isAudioStep, isMaskedStep, showsPinyinStep } from '@/lib/practice/flow'
+import { currentRetention, reviveCard } from '@/lib/fsrs'
+import { downloadShareCard } from '@/lib/shareCard'
 import { getTarget, getTargetSyllables } from '@/lib/pinyin'
 import { accuracy, speed } from '@/lib/typing'
 import { useI18n, type MessageKey } from '@/i18n'
 import PinyinDisplay from './PinyinDisplay'
 import HanziInput from './HanziInput'
 import VirtualKeyboard from './VirtualKeyboard'
-import WordCard from './WordCard'
+import WordCard, { RichInfo } from './WordCard'
 
 interface Props {
   /** 文章练习等临时会话没有所属词库 */
@@ -34,6 +36,11 @@ interface Props {
   onToggleKnown: (word: string) => void
   onToggleCollect: (word: string) => void
   collect: string[]
+  /** 记忆卡片（详情弹窗里的复习安排） */
+  fsrsData?: Record<string, CardRecord>
+  /** 被忽略的词：详情弹窗里可切换，之后不再进入练习 */
+  ignoreWords?: string[]
+  onToggleIgnore: (word: string) => void
   /** 当日统计（结算页的本周打卡用） */
   statistics: Statistics[]
   /** 本组首轮的新学 / 复习词数（结算页展示用） */
@@ -58,6 +65,9 @@ export default function PracticeBoard({
   onToggleKnown,
   onToggleCollect,
   collect,
+  fsrsData,
+  ignoreWords,
+  onToggleIgnore,
   statistics,
   counts,
   onRestartSession,
@@ -67,6 +77,10 @@ export default function PracticeBoard({
   const boardTitle = title ?? dict?.name ?? t('board.defaultTitle')
   const [spend, setSpend] = useState(0)
   const [shakeKey, setShakeKey] = useState(0)
+  /** 词条详情弹窗（词性 / 例句 / 复习安排 / 忽略） */
+  const [detailOpen, setDetailOpen] = useState(false)
+  /** 分享卡导出结果的提示 */
+  const [shareMsg, setShareMsg] = useState('')
   const lastWrongRef = useRef(0)
 
   // 触屏设备（手机 / 平板）默认给出屏幕键盘
@@ -188,6 +202,7 @@ export default function PracticeBoard({
       else if (action === 'trans') setting.patch({ showTrans: !setting.showTrans })
       else if (action === 'known') onToggleKnown(current.word)
       else if (action === 'collect') onToggleCollect(current.word)
+      else if (action === 'detail') setDetailOpen(true)
       else session.skip()
     }
     window.addEventListener('keydown', onKey)
@@ -281,10 +296,27 @@ export default function PracticeBoard({
             >
               {t('board.again')}
             </button>
+            <button
+              onClick={async () => {
+                const ok = await downloadShareCard({
+                  title: boardTitle,
+                  accuracy: acc,
+                  speed: `${sp.kpm} ${hanziMode ? t('board.charsPerMin') : t('board.keysPerMin')}`,
+                  seconds: spend / 1000,
+                  words: words.length,
+                  date: new Date().toISOString().slice(0, 10),
+                })
+                setShareMsg(ok ? t('board.shareOk') : t('board.shareFail'))
+              }}
+              className="h-10 px-5 rounded-xl border border-line"
+            >
+              {t('board.share')}
+            </button>
             <Link href="/" className="h-10 px-5 inline-flex items-center rounded-xl border border-line">
               {t('common.backHome')}
             </Link>
           </div>
+          {shareMsg && <p className="mt-3 text-xs text-dim">{shareMsg}</p>}
         </div>
       </div>
     )
@@ -325,6 +357,8 @@ export default function PracticeBoard({
           typingMode={setting.typingMode}
           showPinyin={setting.showPinyin && showsPinyinStep(mode)}
           showTrans={setting.showTrans}
+          // 例句里带着这个词本身，遮罩步骤（听写 / 默写）展示就等于给答案
+          showRich={setting.showTrans && !masked}
           masked={masked}
           onPlay={session.playCurrent}
           onToggleKnown={() => onToggleKnown(session.word!.word)}
@@ -414,6 +448,20 @@ export default function PracticeBoard({
           )
         })}
         <Key>{hanziMode ? t('board.keyBackspaceHanzi') : t('board.keyBackspacePinyin')}</Key>
+        <button
+          onClick={session.prev}
+          disabled={session.progress.index === 0}
+          className="px-3 py-1.5 rounded-lg border border-line hover:bg-surface2 disabled:opacity-40"
+        >
+          {t('board.prev')}
+        </button>
+        <button
+          onClick={() => setDetailOpen(true)}
+          disabled={!session.word}
+          className="px-3 py-1.5 rounded-lg border border-line hover:bg-surface2 disabled:opacity-40"
+        >
+          {t('board.detail')}
+        </button>
         <button onClick={session.skip} className="px-3 py-1.5 rounded-lg border border-line hover:bg-surface2">
           {t('board.skip')}
         </button>
@@ -436,12 +484,121 @@ export default function PracticeBoard({
           {t('board.imeWarning')}
         </div>
       )}
+
+      {detailOpen && session.word && (
+        <WordDetail
+          word={session.word}
+          card={fsrsData?.[session.word.word]}
+          known={knownWords.includes(session.word.word)}
+          collected={collect.includes(session.word.word)}
+          ignored={(ignoreWords ?? []).includes(session.word.word)}
+          onPlay={session.playCurrent}
+          onToggleKnown={() => onToggleKnown(session.word!.word)}
+          onToggleCollect={() => onToggleCollect(session.word!.word)}
+          onToggleIgnore={() => onToggleIgnore(session.word!.word)}
+          onClose={() => setDetailOpen(false)}
+        />
+      )}
+    </div>
+  )
+}
+
+/** 词条详情弹窗：完整释义 + 富化信息 + 记忆安排，顺便能标记掌握 / 收藏 / 忽略 */
+function WordDetail({
+  word,
+  card,
+  known,
+  collected,
+  ignored,
+  onPlay,
+  onToggleKnown,
+  onToggleCollect,
+  onToggleIgnore,
+  onClose,
+}: {
+  word: CnWord
+  card?: CardRecord
+  known: boolean
+  collected: boolean
+  ignored: boolean
+  onPlay: () => void
+  onToggleKnown: () => void
+  onToggleCollect: () => void
+  onToggleIgnore: () => void
+  onClose: () => void
+}) {
+  const { t } = useI18n()
+  const revived = card ? reviveCard(card) : undefined
+  const nextReview = revived?.due ? new Date(revived.due).toLocaleDateString() : t('board.detailNoCard')
+
+  return (
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4"
+      onClick={onClose}
+      role="presentation"
+    >
+      <div
+        className="w-full max-w-md rounded-2xl border border-line bg-surface p-6"
+        onClick={e => e.stopPropagation()}
+      >
+        <div className="flex items-start justify-between gap-3 mb-3">
+          <div>
+            <div className="text-2xl tracking-widest">{word.word}</div>
+            <div className="text-brand text-sm mt-1">{word.pinyin.join(' ')}</div>
+          </div>
+          <button onClick={onClose} className="px-2 py-1 rounded-md border border-line text-xs">
+            {t('common.cancel')}
+          </button>
+        </div>
+
+        <div className="text-sm text-dim">{word.trans || t('dictDetail.meaningPlaceholder')}</div>
+        <RichInfo word={word} />
+
+        <div className="grid grid-cols-3 gap-2 mt-4 text-xs">
+          <MiniStat label={t('board.detailNext')} value={nextReview} />
+          <MiniStat
+            label={t('board.detailStability')}
+            value={revived ? `${revived.stability.toFixed(1)}d` : '—'}
+          />
+          <MiniStat
+            label={t('board.detailRetention')}
+            value={revived ? `${Math.round(currentRetention(revived) * 100)}%` : '—'}
+          />
+        </div>
+
+        <div className="flex flex-wrap gap-2 mt-5 text-xs">
+          <button onClick={onPlay} className="px-3 py-1.5 rounded-lg border border-line hover:bg-surface2">
+            {t('common.play')}
+          </button>
+          <button onClick={onToggleKnown} className="px-3 py-1.5 rounded-lg border border-line hover:bg-surface2">
+            {known ? t('wordCard.known') : t('wordCard.markKnown')}
+          </button>
+          <button onClick={onToggleCollect} className="px-3 py-1.5 rounded-lg border border-line hover:bg-surface2">
+            {collected ? t('wordCard.collected') : t('wordCard.collect')}
+          </button>
+          <button
+            onClick={onToggleIgnore}
+            className="px-3 py-1.5 rounded-lg border border-line hover:bg-surface2"
+          >
+            {ignored ? t('board.ignored') : t('board.ignore')}
+          </button>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function MiniStat({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="rounded-lg border border-line px-2 py-2">
+      <div className="text-dim truncate">{label}</div>
+      <div className="font-medium mt-0.5 truncate">{value}</div>
     </div>
   )
 }
 
 /** 功能键顺序（与设置页一致）；同一键被多个动作占用时靠前的动作生效 */
-const SHORTCUT_ACTIONS: ShortcutAction[] = ['skip', 'pinyin', 'trans', 'known', 'collect']
+const SHORTCUT_ACTIONS: ShortcutAction[] = ['skip', 'pinyin', 'trans', 'known', 'collect', 'detail']
 
 /** 底部提示只写动作名，键名由设置动态拼上，改键后提示不会说谎 */
 const ACTION_LABEL: Record<ShortcutAction, MessageKey> = {
@@ -450,6 +607,7 @@ const ACTION_LABEL: Record<ShortcutAction, MessageKey> = {
   trans: 'board.actTrans',
   known: 'board.actKnown',
   collect: 'board.actCollect',
+  detail: 'board.actDetail',
 }
 
 /** 步骤名直接复用设置页的模式文案，避免多一套翻译 */

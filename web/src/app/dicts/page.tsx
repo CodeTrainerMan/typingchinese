@@ -118,6 +118,13 @@ export default function DictsPage() {
           <textarea
             value={text}
             onChange={e => setText(e.target.value)}
+            onKeyDown={e => {
+              // Cmd / Ctrl + Enter 直接导入
+              if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') {
+                e.preventDefault()
+                void onImport()
+              }
+            }}
             rows={6}
             placeholder={'中国,国家名称\n旅行 lv you\n安静=没有声音'}
             className="w-full px-3 py-2 rounded-lg border border-line bg-surface2 text-sm font-mono"

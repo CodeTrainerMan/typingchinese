@@ -122,6 +122,19 @@ export const es: Messages = {
     cheerLow: 'Buen trabajo — los fallos van al cuaderno.',
     wrongPractice: 'Repaso',
 
+    prev: 'Anterior',
+    detail: 'Detalles',
+    actDetail: 'Detalle de la palabra',
+    detailNext: 'Próximo repaso',
+    detailStability: 'Estabilidad',
+    detailRetention: 'Retención',
+    detailNoCard: 'Aún no estudiada',
+    ignore: 'Ignorar',
+    ignored: 'Ignorada',
+    share: 'Compartir tarjeta',
+    shareOk: 'Imagen guardada en descargas',
+    shareFail: 'No se pudo guardar la imagen',
+
     newReview: 'Nuevas {n} · Repasadas {m}',
     actSkip: 'Saltar',
     actPinyin: 'Pinyin',
@@ -179,6 +192,22 @@ export const es: Messages = {
   },
 
   dictDetail: {
+
+  colPos: 'Categoría gramatical',
+  colTraditional: 'Tradicional',
+  colRadical: 'Radical',
+  colExample: 'Ejemplo',
+  colExampleTrans: 'Traducción del ejemplo',
+  colSynonyms: 'Sinónimos',
+  colAntonyms: 'Antónimos',
+  colCollocations: 'Colocaciones',
+  detailBtn: 'Detalles',
+  richTitle: 'Información extra',
+  richHint: 'Se muestra en la tarjeta y en el popup. Sinónimos / antónimos / colocaciones: sepáralos con 、o ,.',
+  statWords: 'Palabras',
+  statCards: 'Tarjetas',
+  statDue: 'Vencen hoy',
+  statRetention: 'Retención',
     back: '← Listas',
     notFound: 'Esta lista no está en tu lista de estudio.',
     backToDicts: 'Volver a listas',
@@ -213,6 +242,11 @@ export const es: Messages = {
   },
 
   stats: {
+
+  legendNew: 'Nuevas',
+  legendReview: 'Repasadas',
+  forecastTitle: 'Repasos previstos en {n} días',
+  forecastDesc: 'Cuántas tarjetas traerá el programador cada día.',
     title: 'Estadísticas',
     streak: 'Racha',
     daysValue: '{n} días',
@@ -341,6 +375,8 @@ export const es: Messages = {
     scTrans: 'Mostrar/ocultar traducción',
     scKnown: 'Marcar como dominada',
     scCollect: 'Marcar favorita',
+
+    scDetail: 'Popup de detalle de palabra',
     sectionAppearance: 'Apariencia',
     theme: 'Tema',
     themeDesc: 'Sigue al sistema por defecto, o fíjalo en claro / oscuro.',

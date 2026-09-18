@@ -122,6 +122,19 @@ export const th: Messages = {
     cheerLow: 'ทำได้ดี — คำที่ผิดถูกเก็บไว้แล้ว',
     wrongPractice: 'ทบทวน',
 
+    prev: 'คำก่อนหน้า',
+    detail: 'รายละเอียด',
+    actDetail: 'รายละเอียดคำ',
+    detailNext: 'ทบทวนครั้งถัดไป',
+    detailStability: 'ความมั่นคง',
+    detailRetention: 'อัตราความจำ',
+    detailNoCard: 'ยังไม่ได้เรียน',
+    ignore: 'ข้าม',
+    ignored: 'ถูกข้ามแล้ว',
+    share: 'แชร์การ์ด',
+    shareOk: 'บันทึกรูปภาพไว้ในโฟลเดอร์ดาวน์โหลดแล้ว',
+    shareFail: 'ไม่สามารถบันทึกรูปภาพได้',
+
     newReview: 'คำใหม่ {n} · ทบทวน {m}',
     actSkip: 'ข้าม',
     actPinyin: 'พินอิน',
@@ -179,6 +192,22 @@ export const th: Messages = {
   },
 
   dictDetail: {
+
+  colPos: 'ประเภทคำ',
+  colTraditional: 'ตัวเต็ม',
+  colRadical: 'เรเดียคัล',
+  colExample: 'ประโยคตัวอย่าง',
+  colExampleTrans: 'คำแปลประโยค',
+  colSynonyms: 'คำเหมือน',
+  colAntonyms: 'คำตรงข้าม',
+  colCollocations: 'คำที่ใช้ร่วมกัน',
+  detailBtn: 'รายละเอียด',
+  richTitle: 'ข้อมูลเพิ่มเติม',
+  richHint: 'แสดงบนการ์ดคำและป๊อปอัปรายละเอียด คำเหมือน / คำตรงข้าม / คำที่ใช้ร่วมกัน ให้คั่นด้วย 、หรือ ,',
+  statWords: 'จำนวนคำ',
+  statCards: 'จำนวนการ์ด',
+  statDue: 'ครบกำหนดวันนี้',
+  statRetention: 'อัตราความจำ',
     back: '← รายการคำ',
     notFound: 'รายการนี้ไม่ได้อยู่ในรายการเรียนของคุณ',
     backToDicts: 'กลับไปรายการคำ',
@@ -213,6 +242,11 @@ export const th: Messages = {
   },
 
   stats: {
+
+  legendNew: 'คำใหม่',
+  legendReview: 'ทบทวน',
+  forecastTitle: 'รายการทบทวนในอีก {n} วัน',
+  forecastDesc: 'จำนวนการ์ดที่ตัวจัดตารางจะนำกลับมาในแต่ละวัน',
     title: 'สถิติ',
     streak: 'ต่อเนื่อง',
     daysValue: '{n} วัน',
@@ -341,6 +375,8 @@ export const th: Messages = {
     scTrans: 'สลับการแสดงคำแปล',
     scKnown: 'ทำเครื่องหมายว่าจำได้แล้ว',
     scCollect: 'ติดดาวคำศัพท์',
+
+    scDetail: 'ป๊อปอัปรายละเอียดคำ',
     sectionAppearance: 'รูปลักษณ์',
     theme: 'ธีม',
     themeDesc: 'ตามระบบโดยค่าเริ่มต้น หรือล็อกเป็นสว่าง / มืด',

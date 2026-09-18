@@ -122,6 +122,19 @@ export const ja: Messages = {
     cheerLow: 'お疲れさま — 間違いは単語帳に入りました。',
     wrongPractice: '再練習',
 
+    prev: '前の語',
+    detail: '詳細',
+    actDetail: '単語の詳細',
+    detailNext: '次回の復習',
+    detailStability: '安定性',
+    detailRetention: '想起率',
+    detailNoCard: 'まだ未学習',
+    ignore: '無視',
+    ignored: '無視中',
+    share: 'カードを共有',
+    shareOk: '画像をダウンロードに保存しました',
+    shareFail: '画像を保存できませんでした',
+
     newReview: '新出 {n} · 復習 {m}',
     actSkip: 'スキップ',
     actPinyin: 'ピンイン',
@@ -179,6 +192,22 @@ export const ja: Messages = {
   },
 
   dictDetail: {
+
+  colPos: '品詞',
+  colTraditional: '繁体字',
+  colRadical: '部首',
+  colExample: '例文',
+  colExampleTrans: '例文の訳',
+  colSynonyms: '類義語',
+  colAntonyms: '対義語',
+  colCollocations: 'コロケーション',
+  detailBtn: '詳細',
+  richTitle: '補足情報',
+  richHint: '単語カードと詳細ポップアップに表示されます。類義語 / 対義語 / コロケーションは 、または , で区切ります。',
+  statWords: '語数',
+  statCards: 'カード数',
+  statDue: '今日が期限',
+  statRetention: '想起率',
     back: '← 単語リスト',
     notFound: 'このリストは学習リストにありません。',
     backToDicts: 'リストへ戻る',
@@ -213,6 +242,11 @@ export const ja: Messages = {
   },
 
   stats: {
+
+  legendNew: '新出',
+  legendReview: '復習',
+  forecastTitle: '今後 {n} 日間の復習予定',
+  forecastDesc: 'スケジューラが毎日何枚のカードを出すかの予測です。',
     title: '統計',
     streak: '連続日数',
     daysValue: '{n} 日',
@@ -341,6 +375,8 @@ export const ja: Messages = {
     scTrans: '訳の表示切替',
     scKnown: '習得済みにする',
     scCollect: 'スターを付ける',
+
+    scDetail: '単語詳細ポップアップ',
     sectionAppearance: '外観',
     theme: 'テーマ',
     themeDesc: '既定はシステム追従。ライト / ダークに固定もできます。',

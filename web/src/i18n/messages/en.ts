@@ -131,6 +131,19 @@ export const en = {
     cheerLow: 'Nice work — the missed words went to your notebook.',
     wrongPractice: 'Redo',
 
+    prev: 'Previous',
+    detail: 'Details',
+    actDetail: 'Word detail',
+    detailNext: 'Next review',
+    detailStability: 'Stability',
+    detailRetention: 'Recall',
+    detailNoCard: 'Not studied yet',
+    ignore: 'Ignore',
+    ignored: 'Ignored',
+    share: 'Share card',
+    shareOk: 'Image saved to your downloads',
+    shareFail: 'Could not save the image',
+
     newReview: 'New {n} · Reviewed {m}',
     actSkip: 'Skip',
     actPinyin: 'Pinyin hint',
@@ -188,6 +201,22 @@ export const en = {
   },
 
   dictDetail: {
+
+  colPos: 'Part of speech',
+  colTraditional: 'Traditional',
+  colRadical: 'Radical',
+  colExample: 'Example',
+  colExampleTrans: 'Example translation',
+  colSynonyms: 'Synonyms',
+  colAntonyms: 'Antonyms',
+  colCollocations: 'Collocations',
+  detailBtn: 'Details',
+  richTitle: 'Extra information',
+  richHint: 'Shown on the word card and in the detail popup. Synonyms / antonyms / collocations: separate with 、or ,.',
+  statWords: 'Words',
+  statCards: 'Cards',
+  statDue: 'Due today',
+  statRetention: 'Recall',
     back: '← Word Lists',
     notFound: 'This list is not in your study list.',
     backToDicts: 'Back to lists',
@@ -222,6 +251,11 @@ export const en = {
   },
 
   stats: {
+
+  legendNew: 'New',
+  legendReview: 'Reviewed',
+  forecastTitle: 'Reviews due in the next {n} days',
+  forecastDesc: 'How many cards the scheduler will bring back each day.',
     title: 'Statistics',
     streak: 'Streak',
     daysValue: '{n} days',
@@ -350,6 +384,8 @@ export const en = {
     scTrans: 'Toggle translation',
     scKnown: 'Mark mastered',
     scCollect: 'Star word',
+
+    scDetail: 'Word detail popup',
     sectionAppearance: 'Appearance',
     theme: 'Theme',
     themeDesc: 'Follows your system by default, or lock it to light / dark.',

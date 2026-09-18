@@ -63,6 +63,7 @@ export default function PracticePage() {
   )
   const toggleKnown = useCallback((word: string) => base.toggleKnown(word), [base])
   const toggleCollect = useCallback((word: string) => base.toggleCollect(word), [base])
+  const toggleIgnore = useCallback((word: string) => base.toggleIgnore(word), [base])
   const restartSession = useCallback(() => {
     base.clearSession()
     if (isWrongSession) {
@@ -156,6 +157,9 @@ export default function PracticePage() {
       step={step}
       knownWords={base.knownWords}
       collect={base.collect}
+      fsrsData={base.fsrsData}
+      ignoreWords={base.ignoreWords}
+      onToggleIgnore={toggleIgnore}
       statistics={base.statistics}
       counts={{ newCount: session.newCount ?? 0, reviewCount: session.reviewCount ?? 0 }}
       onCommit={commit}

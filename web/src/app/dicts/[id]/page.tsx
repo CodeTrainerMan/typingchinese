@@ -1,15 +1,23 @@
 'use client'
 
-import { useRef, useState } from 'react'
+import { Fragment, useRef, useState } from 'react'
 import Link from 'next/link'
 import { useParams, useRouter } from 'next/navigation'
 import { useBaseStore } from '@/lib/store/base'
 import { useSettingStore } from '@/lib/store/setting'
 import { useHydrated } from '@/lib/useHydrated'
-import { buildWords, parseDictFile, parseEntries, type RawEntry } from '@/lib/customDict'
+import {
+  buildWords,
+  csvCell,
+  parseDictFile,
+  parseEntries,
+  RICH_KEYS,
+  type RawEntry,
+} from '@/lib/customDict'
 import { speak } from '@/lib/tts'
-import { useI18n } from '@/i18n'
-import type { CnWord } from '@/lib/types'
+import { currentRetention, isDue, reviveCard } from '@/lib/fsrs'
+import { useI18n, type MessageKey } from '@/i18n'
+import type { CnWord, RichField } from '@/lib/types'
 
 export default function DictDetailPage() {
   const hydrated = useHydrated()
@@ -27,6 +35,8 @@ export default function DictDetailPage() {
   const [query, setQuery] = useState('')
   const [msg, setMsg] = useState('')
   const [busy, setBusy] = useState(false)
+  /** 展开富化信息编辑面板的词条 id */
+  const [openId, setOpenId] = useState('')
   const fileRef = useRef<HTMLInputElement>(null)
 
   // 切换词库时用该词库的元数据重置表单：在渲染期同步更新，避免 effect 里的级联渲染
@@ -65,6 +75,13 @@ export default function DictDetailPage() {
 
   const updateTrans = (wordId: string, trans: string) => {
     base.updateDict(dict.id, { words: dict.words.map(w => (w.id === wordId ? { ...w, trans } : w)) })
+  }
+
+  /** 富化字段（例句 / 词性 …）就地编辑 */
+  const updateRich = (wordId: string, field: RichField, value: string) => {
+    base.updateDict(dict.id, {
+      words: dict.words.map(w => (w.id === wordId ? { ...w, [field]: value } : w)),
+    })
   }
 
   const removeWord = (wordId: string) => {
@@ -132,9 +149,18 @@ export default function DictDetailPage() {
   }
 
   const exportCsv = () => {
-    const rows = dict.words.map(w => `${w.word},${w.flatSpaced},${w.trans.replace(/,/g, '，')}`)
+    // 富化列一并导出：导出的表头能被 parseDictFile 认回来（中英文列名都支持）
+    const header = [
+      t('common.wordCol'),
+      t('common.pinyinCol'),
+      t('common.meaningCol'),
+      ...RICH_KEYS.map(k => t(RICH_LABEL[k])),
+    ]
+    const rows = dict.words.map(w =>
+      [w.word, w.flatSpaced, w.trans, ...RICH_KEYS.map(k => w[k] ?? '')].map(csvCell).join(',')
+    )
     download(
-      [`${t('common.wordCol')},${t('common.pinyinCol')},${t('common.meaningCol')}`, ...rows].join('\n'),
+      [header.map(csvCell).join(','), ...rows].join('\n'),
       `${dict.name}.csv`,
       'text/csv;charset=utf-8'
     )
@@ -144,6 +170,17 @@ export default function DictDetailPage() {
     speak(word, { rate: setting.soundSpeed, volume: setting.soundVolume / 100, voiceURI: setting.voiceURI })
 
   const current = base.currentDictId === dict.id
+
+  // 词库概览：总词数 / 已建卡片 / 今天到期 / 平均记忆保持率
+  const cards = dict.words.map(w => base.fsrsData[w.word]).filter(Boolean)
+  const dueNow = dict.words.filter(w => {
+    const raw = base.fsrsData[w.word]
+    // 没有卡片的词是「还没学过」，不算到期
+    return raw ? isDue(reviveCard(raw)) : false
+  }).length
+  const retention = cards.length
+    ? Math.round((cards.reduce((sum, raw) => sum + currentRetention(reviveCard(raw)), 0) / cards.length) * 100)
+    : 0
 
   return (
     <div className="mx-auto max-w-4xl px-4 py-10">
@@ -191,12 +228,26 @@ export default function DictDetailPage() {
         </div>
       </div>
 
+      <div className="grid gap-4 sm:grid-cols-4 mb-6">
+        <StatCard label={t('dictDetail.statWords')} value={`${dict.length}`} />
+        <StatCard label={t('dictDetail.statCards')} value={`${cards.length}`} />
+        <StatCard label={t('dictDetail.statDue')} value={`${dueNow}`} />
+        <StatCard label={t('dictDetail.statRetention')} value={`${retention}%`} />
+      </div>
+
       <div className="rounded-2xl border border-line bg-surface p-5 mb-6">
         <div className="font-medium mb-1">{t('dictDetail.addWords')}</div>
         <p className="text-xs text-dim mb-3">{t('dictDetail.addWordsDesc')}</p>
         <textarea
           value={adding}
           onChange={e => setAdding(e.target.value)}
+          onKeyDown={e => {
+            // Cmd / Ctrl + Enter 直接提交，不必去点按钮
+            if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') {
+              e.preventDefault()
+              void onAdd()
+            }
+          }}
           rows={4}
           placeholder={'苹果,一种水果\n安静=没有声音'}
           className="w-full px-3 py-2 rounded-lg border border-line bg-surface2 text-sm font-mono"
@@ -263,29 +314,61 @@ export default function DictDetailPage() {
           </thead>
           <tbody>
             {visible.map((w: CnWord) => (
-              <tr key={w.id} className="border-t border-line">
-                <td className="px-4 py-2 text-base tracking-widest whitespace-nowrap">{w.word}</td>
-                <td className="px-4 py-2 font-mono text-dim whitespace-nowrap">{w.flatSpaced}</td>
-                <td className="px-4 py-2">
-                  <input
-                    value={w.trans}
-                    onChange={e => updateTrans(w.id, e.target.value)}
-                    placeholder={t('dictDetail.meaningPlaceholder')}
-                    className="w-full h-8 px-2 rounded-md border border-line bg-surface2 text-sm"
-                  />
-                </td>
-                <td className="px-4 py-2 text-right whitespace-nowrap">
-                  <button onClick={() => play(w.word)} className="px-2 py-1 rounded-md border border-line text-xs hover:bg-surface2">
-                    {t('common.play')}
-                  </button>
-                  <button
-                    onClick={() => removeWord(w.id)}
-                    className="ml-2 px-2 py-1 rounded-md border border-line text-xs text-err hover:bg-surface2"
-                  >
-                    {t('common.delete')}
-                  </button>
-                </td>
-              </tr>
+              <Fragment key={w.id}>
+                <tr className="border-t border-line">
+                  <td className="px-4 py-2 text-base tracking-widest whitespace-nowrap">{w.word}</td>
+                  <td className="px-4 py-2 font-mono text-dim whitespace-nowrap">{w.flatSpaced}</td>
+                  <td className="px-4 py-2">
+                    <input
+                      value={w.trans}
+                      onChange={e => updateTrans(w.id, e.target.value)}
+                      placeholder={t('dictDetail.meaningPlaceholder')}
+                      className="w-full h-8 px-2 rounded-md border border-line bg-surface2 text-sm"
+                    />
+                  </td>
+                  <td className="px-4 py-2 text-right whitespace-nowrap">
+                    <button
+                      onClick={() => setOpenId(openId === w.id ? '' : w.id)}
+                      className="px-2 py-1 rounded-md border border-line text-xs hover:bg-surface2"
+                    >
+                      {t('dictDetail.detailBtn')}
+                    </button>
+                    <button
+                      onClick={() => play(w.word)}
+                      className="ml-2 px-2 py-1 rounded-md border border-line text-xs hover:bg-surface2"
+                    >
+                      {t('common.play')}
+                    </button>
+                    <button
+                      onClick={() => removeWord(w.id)}
+                      className="ml-2 px-2 py-1 rounded-md border border-line text-xs text-err hover:bg-surface2"
+                    >
+                      {t('common.delete')}
+                    </button>
+                  </td>
+                </tr>
+                {openId === w.id && (
+                  <tr className="border-t border-line bg-surface2/40">
+                    <td colSpan={4} className="px-4 py-3">
+                      <div className="text-xs font-medium mb-2">{t('dictDetail.richTitle')}</div>
+                      <div className="grid gap-2 sm:grid-cols-2">
+                        {RICH_KEYS.map(field => (
+                          <label key={field} className="block">
+                            <span className="text-[11px] text-dim">{t(RICH_LABEL[field])}</span>
+                            <input
+                              value={w[field] ?? ''}
+                              onChange={e => updateRich(w.id, field, e.target.value)}
+                              placeholder={t(RICH_LABEL[field])}
+                              className="mt-1 w-full h-8 px-2 rounded-md border border-line bg-surface2 text-sm"
+                            />
+                          </label>
+                        ))}
+                      </div>
+                      <p className="text-[11px] text-dim mt-2">{t('dictDetail.richHint')}</p>
+                    </td>
+                  </tr>
+                )}
+              </Fragment>
             ))}
           </tbody>
         </table>
@@ -293,4 +376,25 @@ export default function DictDetailPage() {
       </div>
     </div>
   )
+}
+
+function StatCard({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="rounded-2xl border border-line bg-surface p-4">
+      <div className="text-xs text-dim">{label}</div>
+      <div className="text-xl font-semibold mt-1">{value}</div>
+    </div>
+  )
+}
+
+/** 富化字段 → 文案 key：详情页表单、CSV 表头、练习卡片共用一套翻译 */
+const RICH_LABEL: Record<RichField, MessageKey> = {
+  pos: 'dictDetail.colPos',
+  traditional: 'dictDetail.colTraditional',
+  radical: 'dictDetail.colRadical',
+  example: 'dictDetail.colExample',
+  exampleTrans: 'dictDetail.colExampleTrans',
+  synonyms: 'dictDetail.colSynonyms',
+  antonyms: 'dictDetail.colAntonyms',
+  collocations: 'dictDetail.colCollocations',
 }

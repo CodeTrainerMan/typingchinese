@@ -122,6 +122,19 @@ export const fr: Messages = {
     cheerLow: 'Bon travail — les erreurs vont dans le carnet.',
     wrongPractice: 'Révision',
 
+    prev: 'Précédent',
+    detail: 'Détails',
+    actDetail: 'Détail du mot',
+    detailNext: 'Prochaine révision',
+    detailStability: 'Stabilité',
+    detailRetention: 'Rétention',
+    detailNoCard: 'Pas encore étudié',
+    ignore: 'Ignorer',
+    ignored: 'Ignoré',
+    share: 'Partager la carte',
+    shareOk: 'Image enregistrée dans les téléchargements',
+    shareFail: 'Impossible d’enregistrer l’image',
+
     newReview: 'Nouveaux {n} · Révisés {m}',
     actSkip: 'Ignorer',
     actPinyin: 'Pinyin',
@@ -179,6 +192,22 @@ export const fr: Messages = {
   },
 
   dictDetail: {
+
+  colPos: 'Catégorie grammaticale',
+  colTraditional: 'Traditionnel',
+  colRadical: 'Radical',
+  colExample: 'Exemple',
+  colExampleTrans: 'Traduction de l’exemple',
+  colSynonyms: 'Synonymes',
+  colAntonyms: 'Antonymes',
+  colCollocations: 'Collocations',
+  detailBtn: 'Détails',
+  richTitle: 'Informations supplémentaires',
+  richHint: 'Affiché sur la carte et dans la popup. Synonymes / antonymes / collocations : sépare-les par 、ou ,.',
+  statWords: 'Mots',
+  statCards: 'Cartes',
+  statDue: 'À revoir aujourd’hui',
+  statRetention: 'Rétention',
     back: '← Listes',
     notFound: 'Cette liste n’est pas dans votre liste d’étude.',
     backToDicts: 'Retour aux listes',
@@ -213,6 +242,11 @@ export const fr: Messages = {
   },
 
   stats: {
+
+  legendNew: 'Nouveaux',
+  legendReview: 'Révisés',
+  forecastTitle: 'Révisions prévues dans {n} jours',
+  forecastDesc: 'Combien de cartes le planificateur ramènera chaque jour.',
     title: 'Statistiques',
     streak: 'Série',
     daysValue: '{n} jours',
@@ -341,6 +375,8 @@ export const fr: Messages = {
     scTrans: 'Afficher/masquer la traduction',
     scKnown: 'Marquer comme maîtrisé',
     scCollect: 'Mettre en favori',
+
+    scDetail: 'Popup de détail du mot',
     sectionAppearance: 'Apparence',
     theme: 'Thème',
     themeDesc: 'Suit le système par défaut, ou bloquez en clair / sombre.',

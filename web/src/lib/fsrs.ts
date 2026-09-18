@@ -100,6 +100,16 @@ function startOfDay(d: Date): number {
  * 是否到期：按自然日比较（对齐参考项目 dict.ts:195）。
  * 今天之内到期的词今天就能复习，而不是精确到毫秒等到那一刻。
  */
+/**
+ * 当前记忆保持率（FSRS 遗忘曲线 R = (1 + t / (9·S))⁻¹，t 为距上次复习的天数）。
+ * 只用于给用户一个直观的「还记得多少」，不参与排程。
+ */
+export function currentRetention(card?: Card): number {
+  if (!card?.last_review) return 0
+  const days = Math.max(0, (Date.now() - card.last_review.getTime()) / 86_400_000)
+  return (1 + days / (9 * Math.max(0.1, card.stability))) ** -1
+}
+
 export function isDue(card: Card | undefined): boolean {
   if (!card) return true
   return startOfDay(card.due) <= startOfDay(new Date())

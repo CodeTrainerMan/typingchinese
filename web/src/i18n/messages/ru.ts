@@ -122,6 +122,19 @@ export const ru: Messages = {
     cheerLow: 'Хорошая работа — ошибки попали в тетрадь.',
     wrongPractice: 'Повтор',
 
+    prev: 'Назад',
+    detail: 'Подробнее',
+    actDetail: 'Карточка слова',
+    detailNext: 'Следующее повторение',
+    detailStability: 'Устойчивость',
+    detailRetention: 'Удержание',
+    detailNoCard: 'Ещё не учили',
+    ignore: 'Игнорировать',
+    ignored: 'Игнорируется',
+    share: 'Поделиться карточкой',
+    shareOk: 'Изображение сохранено в загрузки',
+    shareFail: 'Не удалось сохранить изображение',
+
     newReview: 'Новых {n} · Повторено {m}',
     actSkip: 'Пропустить',
     actPinyin: 'Пинъинь',
@@ -179,6 +192,22 @@ export const ru: Messages = {
   },
 
   dictDetail: {
+
+  colPos: 'Часть речи',
+  colTraditional: 'Традиционное',
+  colRadical: 'Ключ (радикал)',
+  colExample: 'Пример',
+  colExampleTrans: 'Перевод примера',
+  colSynonyms: 'Синонимы',
+  colAntonyms: 'Антонимы',
+  colCollocations: 'Сочетания',
+  detailBtn: 'Подробнее',
+  richTitle: 'Дополнительная информация',
+  richHint: 'Показывается на карточке и в окне слова. Синонимы / антонимы / сочетания разделяйте 、или ,.',
+  statWords: 'Слов',
+  statCards: 'Карточек',
+  statDue: 'Сегодня к повторению',
+  statRetention: 'Удержание в памяти',
     back: '← Списки',
     notFound: 'Этого списка нет в вашем списке для изучения.',
     backToDicts: 'К спискам',
@@ -213,6 +242,11 @@ export const ru: Messages = {
   },
 
   stats: {
+
+  legendNew: 'Новые',
+  legendReview: 'Повторения',
+  forecastTitle: 'Повторений в ближайшие {n} дней',
+  forecastDesc: 'Сколько карточек планировщик вернёт в каждый день.',
     title: 'Статистика',
     streak: 'Серия дней',
     daysValue: '{n} дн.',
@@ -341,6 +375,8 @@ export const ru: Messages = {
     scTrans: 'Показать/скрыть перевод',
     scKnown: 'Отметить как выученное',
     scCollect: 'В избранное',
+
+    scDetail: 'Окно карточки слова',
     sectionAppearance: 'Вид',
     theme: 'Тема',
     themeDesc: 'По умолчанию как в системе, либо зафиксируйте светлую / тёмную.',

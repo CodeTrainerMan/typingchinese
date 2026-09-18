@@ -53,6 +53,8 @@ export interface TypingSessionHandle {
   /** 直接喂一个按键（虚拟键盘 / 软键盘输入用） */
   type: (key: string) => void
   skip: () => void
+  /** 回到上一个词：只回退光标，已提交的成绩与统计保持不变 */
+  prev: () => void
   restart: () => void
   playCurrent: () => void
 }
@@ -199,6 +201,17 @@ export function useTypingSession({
     if (snapshotRef.current.finished) return
     gotoNext()
   }, [gotoNext])
+
+  /** 回看上一个词：不清统计（该词的结果已提交过），只把光标挪回去 */
+  const prev = useCallback(() => {
+    const s = snapshotRef.current
+    if (s.finished || s.index <= 0) return
+    clearTimer()
+    if (wrongTimerRef.current) clearTimeout(wrongTimerRef.current)
+    const next: Snapshot = { ...initialSnapshot(), index: s.index - 1 }
+    snapshotRef.current = next
+    setSnapshot(next)
+  }, [clearTimer])
 
   const elapsed = useCallback(() => Date.now() - startedAtRef.current, [])
 
@@ -377,6 +390,7 @@ export function useTypingSession({
     elapsed,
     type: handleKey,
     skip,
+    prev,
     restart,
     playCurrent,
   }

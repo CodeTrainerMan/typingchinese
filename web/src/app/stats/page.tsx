@@ -49,6 +49,27 @@ export default function StatsPage() {
 
   const maxTotal = Math.max(1, ...days.map(d => d.stat?.total ?? 0))
 
+  // 未来 14 天的复习量预测：按记忆卡片的下次到期日分桶
+  const forecast: { key: string; label: string; full: string; count: number }[] = []
+  {
+    const buckets = new Map<string, number>()
+    const todayKey = dayKey(new Date())
+    for (const raw of Object.values(base.fsrsData)) {
+      const due = raw.due?.slice(0, 10)
+      if (!due) continue
+      // 早就该复习但还没练的，都算今天的活儿
+      const key = due < todayKey ? todayKey : due
+      buckets.set(key, (buckets.get(key) ?? 0) + 1)
+    }
+    for (let i = 0; i < DAYS; i++) {
+      const d = new Date()
+      d.setDate(d.getDate() + i)
+      const key = dayKey(d)
+      forecast.push({ key, label: fmtDay.format(d), full: fmtFull.format(d), count: buckets.get(key) ?? 0 })
+    }
+  }
+  const maxDue = Math.max(1, ...forecast.map(f => f.count))
+
   // 打卡热力图：从本周往前推 WEEKS 周，按周一为每周第一天
   const heat: { key: string; full: string; total: number }[] = []
   {
@@ -97,23 +118,59 @@ export default function StatsPage() {
 
       <div className="rounded-2xl border border-line bg-surface p-5 mb-8">
         <div className="text-sm font-medium mb-1">{t('stats.recentDone', { n: DAYS })}</div>
-        <div className="text-xs text-dim mb-5">{t('stats.recentDoneDesc', { n: maxTotal })}</div>
+        <div className="text-xs text-dim mb-2">{t('stats.recentDoneDesc', { n: maxTotal })}</div>
+        <div className="flex items-center gap-4 text-xs text-dim mb-4">
+          <span className="inline-flex items-center gap-1">
+            <span className="w-3 h-3 rounded-sm bg-brand inline-block" />
+            {t('stats.legendNew')}
+          </span>
+          <span className="inline-flex items-center gap-1">
+            <span className="w-3 h-3 rounded-sm bg-brand/40 inline-block" />
+            {t('stats.legendReview')}
+          </span>
+        </div>
         <div className="flex items-end gap-1.5 h-40">
           {days.map(d => {
             const total = d.stat?.total ?? 0
+            const fresh = d.stat?.newCount ?? 0
+            const review = d.stat?.reviewCount ?? 0
             const h = total ? Math.max(6, Math.round((total / maxTotal) * 100)) : 2
+            // 旧存档只有 total：整根按新学算，避免柱子凭空矮一截
+            const freshShare = total ? ((fresh || total) / total) * 100 : 100
+            const reviewShare = total && review ? (review / total) * 100 : 0
             return (
               <div key={d.key} className="flex-1 flex flex-col items-center justify-end h-full">
                 <div className="text-[10px] text-dim mb-1">{total || ''}</div>
                 <div
                   title={t('stats.tooltip', { date: d.full, n: total })}
-                  className={`w-full rounded-t ${total ? 'bg-brand' : 'bg-surface2'}`}
+                  className="w-full flex flex-col justify-end rounded-t overflow-hidden"
                   style={{ height: `${h}%` }}
-                />
+                >
+                  {reviewShare > 0 && <div className="bg-brand/40" style={{ height: `${reviewShare}%` }} />}
+                  <div className={total ? 'bg-brand' : 'bg-surface2'} style={{ height: `${freshShare}%` }} />
+                </div>
                 <div className="text-[10px] text-dim mt-1">{d.label}</div>
               </div>
             )
           })}
+        </div>
+      </div>
+
+      <div className="rounded-2xl border border-line bg-surface p-5 mb-8">
+        <div className="text-sm font-medium mb-1">{t('stats.forecastTitle', { n: DAYS })}</div>
+        <div className="text-xs text-dim mb-5">{t('stats.forecastDesc')}</div>
+        <div className="flex items-end gap-1.5 h-32">
+          {forecast.map(f => (
+            <div key={f.key} className="flex-1 flex flex-col items-center justify-end h-full">
+              <div className="text-[10px] text-dim mb-1">{f.count || ''}</div>
+              <div
+                title={t('stats.tooltip', { date: f.full, n: f.count })}
+                className={`w-full rounded-t ${f.count ? 'bg-ok/70' : 'bg-surface2'}`}
+                style={{ height: f.count ? `${Math.max(6, Math.round((f.count / maxDue) * 100))}%` : '2%' }}
+              />
+              <div className="text-[10px] text-dim mt-1">{f.label}</div>
+            </div>
+          ))}
         </div>
       </div>
 
