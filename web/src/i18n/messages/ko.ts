@@ -175,6 +175,10 @@ export const ko: Messages = {
   },
 
   dicts: {
+
+  uploadMany: '여러 파일을 한 번에 선택할 수 있습니다',
+  importedMany: '{n}개 목록, {m}개 단어를 가져왔습니다',
+  importSkipped: '{n}개 건너뜀',
     title: '단어장',
     importPanel: '직접 만든 단어장 가져오기',
     importDesc:
@@ -231,6 +235,12 @@ export const ko: Messages = {
   },
 
   article: {
+
+  readHint: '문장을 듣고 소리 내어 읽으면 점수가 나옵니다.',
+  readAloud: '소리 내어 읽기',
+  reading: '듣는 중…',
+  readScore: '점수 {n}',
+  readFailed: '들리지 않았습니다 — 마이크를 확인하고 다시 시도하세요.',
     title: '지문 연습',
     continuePrev: '이어하기 ({title})',
     intro: '문장 단위로 입력합니다. 각 문장은 4~20자로 나뉘고 문장 부호는 건너뛰며 다음 문장이 자동으로 시작됩니다.',
@@ -275,6 +285,18 @@ export const ko: Messages = {
   },
 
   wrong: {
+
+  groupNone: '묶지 않음',
+  groupByCount: '오류 횟수별',
+  groupByTime: '마지막 오류별',
+  groupByDict: '목록별',
+  groupHard: '어려움(4회 이상)',
+  groupMedium: '보통(2–3회)',
+  groupLight: '한 번',
+  groupToday: '오늘',
+  groupWeek: '이번 주',
+  groupEarlier: '그 이전',
+  groupOther: '기타',
     tabWrong: '오답 ({n})',
     tabCollect: '즐겨찾기 ({n})',
     practiceWrong: '오답 연습 (최대 20)',
@@ -344,6 +366,8 @@ export const ko: Messages = {
     voice: 'TTS 목소리',
     voiceDesc: '브라우저에 내장된 중국어 목소리를 씁니다. 아무 소리도 안 나면 하나를 고르세요.',
     voiceDefault: '기본값',
+
+    voicePerLang: '인터페이스 언어별로 따로 기억합니다.',
     voiceLocal: ' (로컬)',
     voiceRemote: ' (온라인)',
     test: '시험',

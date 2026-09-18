@@ -60,27 +60,49 @@ export default function DictsPage() {
     }
   }
 
-  /** 上传 .json / .csv / .txt 直接建库；名称没填就用文件名 */
-  const onFile = async (file: File) => {
+  /**
+   * 上传 .json / .csv / .txt 直接建库，一次可以选多个文件（每个文件一个词库）。
+   * 名称只在「单选且填了名字」时生效，多选一律用文件名，免得几个词库撞名。
+   */
+  const onFiles = async (files: File[]) => {
+    if (!files.length) return
     setImporting(true)
     setMsg('')
+    let count = 0
+    let words = 0
+    let lastName = ''
+    let failed = 0
     try {
-      const entries = parseDictFile(await file.text(), file.name)
-      if (!entries.length) {
-        setMsg(t('errors.noEntries'))
-        return
+      for (const file of files) {
+        try {
+          const entries = parseDictFile(await file.text(), file.name)
+          if (!entries.length) {
+            failed++
+            continue
+          }
+          const dictName =
+            files.length === 1 && name.trim()
+              ? name.trim()
+              : file.name.replace(/\.(json|csv|txt)$/i, '')
+          const dict = await buildCustomDictFromEntries(dictName, entries, dictMeta)
+          base.addCustomDict(dict)
+          count++
+          words += dict.words.length
+          lastName = dict.name
+        } catch {
+          // 单个文件坏了不拖累其它文件
+          failed++
+        }
       }
-      const dict = await buildCustomDictFromEntries(
-        name || file.name.replace(/\.(json|csv|txt)$/i, ''),
-        entries,
-        dictMeta
-      )
-      base.addCustomDict(dict)
-      setMsg(t('errors.imported', { name: dict.name, n: dict.words.length }))
+      if (!count) setMsg(t('errors.noEntries'))
+      else if (count > 1)
+        setMsg(
+          t('dicts.importedMany', { n: count, m: words }) +
+            (failed ? ` ${t('dicts.importSkipped', { n: failed })}` : '')
+        )
+      else setMsg(t('errors.imported', { name: lastName, n: words }))
       setName('')
       setText('')
-    } catch {
-      setMsg(t('errors.parseFailed'))
     } finally {
       setImporting(false)
     }
@@ -140,11 +162,12 @@ export default function DictsPage() {
             <input
               ref={fileRef}
               type="file"
+              multiple
               accept=".json,.csv,.txt,application/json,text/csv,text/plain"
               className="hidden"
               onChange={e => {
-                const file = e.target.files?.[0]
-                if (file) void onFile(file)
+                const files = Array.from(e.target.files ?? [])
+                if (files.length) void onFiles(files)
                 e.target.value = ''
               }}
             />
@@ -155,6 +178,7 @@ export default function DictsPage() {
             >
               {t('dicts.upload')}
             </button>
+            <span className="text-xs text-dim">{t('dicts.uploadMany')}</span>
             {parsed > 0 && <span className="text-xs text-dim">{t('dicts.parsed', { n: parsed })}</span>}
             {msg && <span className="text-xs text-dim">{msg}</span>}
           </div>

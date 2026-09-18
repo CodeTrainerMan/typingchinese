@@ -21,6 +21,18 @@ export function listZhVoices(): Promise<SpeechSynthesisVoice[]> {
   })
 }
 
+/**
+ * 取实际要用的音色：界面语言单独记住的优先，其次是全局音色。
+ * 这样英文界面和中文界面可以各选一个音色（浏览器提供的中文音色质量差别很大）。
+ */
+export function resolveVoiceURI(
+  voiceURI: string,
+  voiceByLang: Record<string, string> | undefined,
+  lang: string
+): string {
+  return voiceByLang?.[lang] || voiceURI || ''
+}
+
 export interface SpeakOptions {
   rate?: number
   volume?: number

@@ -4,8 +4,9 @@ import { useEffect, useRef, useState } from 'react'
 import { useSettingStore } from '@/lib/store/setting'
 import { useBaseStore } from '@/lib/store/base'
 import { useHydrated } from '@/lib/useHydrated'
-import { listZhVoices, speak } from '@/lib/tts'
+import { listZhVoices } from '@/lib/tts'
 import { LOCALES, useI18n, type MessageKey } from '@/i18n'
+import VoicePicker from '@/components/VoicePicker'
 import type { InputMode, NextKey, PracticeMode, ReplayKey, ShortcutAction, ThemeMode, TypingMode } from '@/lib/types'
 
 export default function SettingPage() {
@@ -209,35 +210,16 @@ export default function SettingPage() {
           />
           <span className="ml-2 text-sm text-dim w-10 text-right">{setting.soundSpeed}x</span>
         </Row>
-        <Row label={t('setting.voice')} desc={t('setting.voiceDesc')}>
-          <div className="flex items-center gap-2">
-            <select
-              value={setting.voiceURI}
-              onChange={e => setting.patch({ voiceURI: e.target.value })}
-              className="h-9 rounded-lg border border-line bg-surface px-2 text-sm max-w-56"
-            >
-              <option value="">{t('setting.voiceDefault')}</option>
-              {voices.map(v => (
-                <option key={v.voiceURI} value={v.voiceURI}>
-                  {v.name}
-                  {v.localService ? t('setting.voiceLocal') : t('setting.voiceRemote')}
-                </option>
-              ))}
-            </select>
-            <button
-              onClick={() =>
-                // 试听内容固定为中文，否则听不出中文音色
-                speak(t('setting.testText'), {
-                  rate: setting.soundSpeed,
-                  volume: setting.soundVolume / 100,
-                  voiceURI: setting.voiceURI,
-                })
-              }
-              className="h-9 px-3 rounded-lg border border-line text-sm hover:bg-surface2"
-            >
-              {t('setting.test')}
-            </button>
-          </div>
+        <Row label={t('setting.voice')} desc={`${t('setting.voiceDesc')} ${t('setting.voicePerLang')}`}>
+          {/* 音色按界面语言分别记住：换语言不丢自己的选择 */}
+          <VoicePicker
+            value={setting.voiceByLang[setting.lang] ?? ''}
+            onChange={voiceURI =>
+              setting.patch({ voiceByLang: { ...setting.voiceByLang, [setting.lang]: voiceURI } })
+            }
+            rate={setting.soundSpeed}
+            volume={setting.soundVolume / 100}
+          />
         </Row>
         {voices.length === 0 && <p className="text-xs text-warn -mt-2">{t('setting.noVoice')}</p>}
       </Section>

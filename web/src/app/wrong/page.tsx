@@ -1,13 +1,16 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useBaseStore } from '@/lib/store/base'
 import { useSettingStore } from '@/lib/store/setting'
 import { useHydrated } from '@/lib/useHydrated'
 import { useI18n } from '@/i18n'
-import { speak } from '@/lib/tts'
-import type { CnWord } from '@/lib/types'
+import { resolveVoiceURI, speak } from '@/lib/tts'
+import type { CnWord, WrongRecord } from '@/lib/types'
+
+/** 错词本的分组方式 */
+type GroupMode = 'none' | 'count' | 'time' | 'dict'
 
 export default function WrongPage() {
   const hydrated = useHydrated()
@@ -16,6 +19,14 @@ export default function WrongPage() {
   const router = useRouter()
   const { t } = useI18n()
   const [tab, setTab] = useState<'wrong' | 'collect'>('wrong')
+  // 默认按错误次数分组：一眼看出哪些词最该先练
+  const [group, setGroup] = useState<GroupMode>('count')
+  // 时间分组需要“现在”；渲染期间不能调 Date.now()，挂载后再取
+  const [now, setNow] = useState(0)
+  useEffect(() => {
+    const id = window.setTimeout(() => setNow(Date.now()), 0)
+    return () => window.clearTimeout(id)
+  }, [])
 
   if (!hydrated) return <div className="mx-auto max-w-4xl px-4 py-16 text-dim">{t('common.loading')}</div>
 
@@ -31,7 +42,11 @@ export default function WrongPage() {
   }
 
   const play = (word: string) =>
-    speak(word, { rate: setting.soundSpeed, volume: setting.soundVolume / 100, voiceURI: setting.voiceURI })
+    speak(word, {
+      rate: setting.soundSpeed,
+      volume: setting.soundVolume / 100,
+      voiceURI: resolveVoiceURI(setting.voiceURI, setting.voiceByLang, setting.lang),
+    })
 
   const exportWrong = () => {
     const lines = records.map(r => {
@@ -55,6 +70,43 @@ export default function WrongPage() {
   const tabCls = (active: boolean) => `h-9 px-4 text-sm ${active ? 'bg-brand text-white' : 'hover:bg-surface2'}`
   const btnCls = 'h-9 px-4 rounded-lg border border-line text-sm hover:bg-surface2'
 
+  /** 词条属于哪个词库；找不到的归到「其它」（比如词库已删） */
+  const dictNameOf = (word: string) =>
+    base.dicts.find(d => d.words.some(w => w.word === word))?.name ?? t('wrong.groupOther')
+
+  const makeGroups = (): { label: string; rows: WrongRecord[] }[] => {
+    if (group === 'none') return [{ label: '', rows: records }]
+    if (group === 'count')
+      return [
+        { label: t('wrong.groupHard'), rows: records.filter(r => r.count >= 4) },
+        { label: t('wrong.groupMedium'), rows: records.filter(r => r.count >= 2 && r.count < 4) },
+        { label: t('wrong.groupLight'), rows: records.filter(r => r.count < 2) },
+      ].filter(g => g.rows.length)
+
+    const day = 86_400_000
+    // now 还是 0 说明挂载后的取值还没到，先不分组
+    if (group === 'time' && !now) return [{ label: '', rows: records }]
+    if (group === 'time')
+      return [
+        { label: t('wrong.groupToday'), rows: records.filter(r => now - r.lastWrongAt < day) },
+        {
+          label: t('wrong.groupWeek'),
+          rows: records.filter(r => now - r.lastWrongAt >= day && now - r.lastWrongAt < 7 * day),
+        },
+        { label: t('wrong.groupEarlier'), rows: records.filter(r => now - r.lastWrongAt >= 7 * day) },
+      ].filter(g => g.rows.length)
+
+    const byDict = new Map<string, WrongRecord[]>()
+    for (const r of records) {
+      const key = dictNameOf(r.word)
+      byDict.set(key, [...(byDict.get(key) ?? []), r])
+    }
+    return [...byDict.entries()]
+      .map(([label, rows]) => ({ label, rows }))
+      .sort((a, b) => b.rows.length - a.rows.length)
+  }
+  const groups = makeGroups()
+
   return (
     <div className="mx-auto max-w-4xl px-4 py-10">
       <div className="flex items-center justify-between gap-4 flex-wrap mb-6">
@@ -66,6 +118,19 @@ export default function WrongPage() {
             {t('wrong.tabCollect', { n: collectWords.length })}
           </button>
         </div>
+
+        {tab === 'wrong' && records.length > 0 && (
+          <select
+            value={group}
+            onChange={e => setGroup(e.target.value as GroupMode)}
+            className="h-9 rounded-lg border border-line bg-surface px-2 text-sm"
+          >
+            <option value="none">{t('wrong.groupNone')}</option>
+            <option value="count">{t('wrong.groupByCount')}</option>
+            <option value="time">{t('wrong.groupByTime')}</option>
+            <option value="dict">{t('wrong.groupByDict')}</option>
+          </select>
+        )}
 
         {tab === 'wrong' && records.length > 0 && (
           <div className="flex gap-2">
@@ -107,42 +172,18 @@ export default function WrongPage() {
         records.length === 0 ? (
           <p className="text-dim">{t('wrong.emptyWrong')}</p>
         ) : (
-          <div className="rounded-2xl border border-line bg-surface overflow-hidden">
-            <table className="w-full text-sm">
-              <thead className="bg-surface2 text-dim">
-                <tr>
-                  <th className="text-left px-4 py-3 font-normal">{t('common.wordCol')}</th>
-                  <th className="text-left px-4 py-3 font-normal">{t('common.pinyinCol')}</th>
-                  <th className="text-left px-4 py-3 font-normal">{t('common.meaningCol')}</th>
-                  <th className="text-right px-4 py-3 font-normal">{t('wrong.wrongCount')}</th>
-                  <th className="px-4 py-3"></th>
-                </tr>
-              </thead>
-              <tbody>
-                {records.map(r => {
-                  const word = findWord(r.word)
-                  return (
-                    <tr key={r.word} className="border-t border-line">
-                      <td className="px-4 py-3 text-base tracking-widest">{r.word}</td>
-                      <td className="px-4 py-3 font-mono text-dim">{word?.flatSpaced ?? '-'}</td>
-                      <td className="px-4 py-3 text-dim">{word?.trans ?? '-'}</td>
-                      <td className="px-4 py-3 text-right text-err">{r.count}</td>
-                      <td className="px-4 py-3 text-right whitespace-nowrap">
-                        <button onClick={() => play(r.word)} className="px-2 py-1 rounded-md border border-line text-xs hover:bg-surface2">
-                          {t('common.play')}
-                        </button>
-                        <button
-                          onClick={() => base.removeWrong(r.word)}
-                          className="ml-2 px-2 py-1 rounded-md border border-line text-xs hover:bg-surface2"
-                        >
-                          {t('common.remove')}
-                        </button>
-                      </td>
-                    </tr>
-                  )
-                })}
-              </tbody>
-            </table>
+          <div className="space-y-6">
+            {groups.map(g => (
+              <div key={g.label || 'all'}>
+                {g.label && (
+                  <div className="flex items-center gap-2 mb-2">
+                    <span className="text-sm font-medium">{g.label}</span>
+                    <span className="text-xs text-dim">{t('common.words', { n: g.rows.length })}</span>
+                  </div>
+                )}
+                <WrongTable rows={g.rows} findWord={findWord} onPlay={play} onRemove={base.removeWrong} />
+              </div>
+            ))}
           </div>
         )
       ) : collectWords.length === 0 ? (
@@ -184,6 +225,63 @@ export default function WrongPage() {
           </table>
         </div>
       )}
+    </div>
+  )
+}
+
+/** 错词表格：分组后每组各渲染一张 */
+function WrongTable({
+  rows,
+  findWord,
+  onPlay,
+  onRemove,
+}: {
+  rows: WrongRecord[]
+  findWord: (word: string) => CnWord | undefined
+  onPlay: (word: string) => void
+  onRemove: (word: string) => void
+}) {
+  const { t } = useI18n()
+  return (
+    <div className="rounded-2xl border border-line bg-surface overflow-hidden">
+      <table className="w-full text-sm">
+        <thead className="bg-surface2 text-dim">
+          <tr>
+            <th className="text-left px-4 py-3 font-normal">{t('common.wordCol')}</th>
+            <th className="text-left px-4 py-3 font-normal">{t('common.pinyinCol')}</th>
+            <th className="text-left px-4 py-3 font-normal">{t('common.meaningCol')}</th>
+            <th className="text-right px-4 py-3 font-normal">{t('wrong.wrongCount')}</th>
+            <th className="px-4 py-3"></th>
+          </tr>
+        </thead>
+        <tbody>
+          {rows.map(r => {
+            const word = findWord(r.word)
+            return (
+              <tr key={r.word} className="border-t border-line">
+                <td className="px-4 py-3 text-base tracking-widest">{r.word}</td>
+                <td className="px-4 py-3 font-mono text-dim">{word?.flatSpaced ?? '-'}</td>
+                <td className="px-4 py-3 text-dim">{word?.trans ?? '-'}</td>
+                <td className="px-4 py-3 text-right text-err">{r.count}</td>
+                <td className="px-4 py-3 text-right whitespace-nowrap">
+                  <button
+                    onClick={() => onPlay(r.word)}
+                    className="px-2 py-1 rounded-md border border-line text-xs hover:bg-surface2"
+                  >
+                    {t('common.play')}
+                  </button>
+                  <button
+                    onClick={() => onRemove(r.word)}
+                    className="ml-2 px-2 py-1 rounded-md border border-line text-xs hover:bg-surface2"
+                  >
+                    {t('common.remove')}
+                  </button>
+                </td>
+              </tr>
+            )
+          })}
+        </tbody>
+      </table>
     </div>
   )
 }

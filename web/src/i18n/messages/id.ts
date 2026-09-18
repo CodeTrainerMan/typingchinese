@@ -175,6 +175,10 @@ export const id: Messages = {
   },
 
   dicts: {
+
+  uploadMany: 'Kamu bisa memilih beberapa file sekaligus',
+  importedMany: '{n} daftar diimpor, {m} kata',
+  importSkipped: '{n} dilewati',
     title: 'Daftar kata',
     importPanel: 'Impor daftar sendiri',
     importDesc:
@@ -231,6 +235,12 @@ export const id: Messages = {
   },
 
   article: {
+
+  readHint: 'Dengarkan satu baris, lalu bacakan dengan lantang untuk mendapat skor.',
+  readAloud: 'Baca lantang',
+  reading: 'Mendengarkan…',
+  readScore: 'Skor {n}',
+  readFailed: 'Tidak terdengar — periksa mikrofon dan coba lagi.',
     title: 'Latihan artikel',
     continuePrev: 'Lanjutkan ({title})',
     intro: 'Ketik kalimat demi kalimat: tiap kalimat dipotong 4–20 huruf, tanda baca dilewati, dan kalimat berikutnya mulai otomatis.',
@@ -275,6 +285,18 @@ export const id: Messages = {
   },
 
   wrong: {
+
+  groupNone: 'Tanpa pengelompokan',
+  groupByCount: 'Menurut jumlah salah',
+  groupByTime: 'Menurut kesalahan terakhir',
+  groupByDict: 'Menurut daftar',
+  groupHard: 'Sulit (4+ salah)',
+  groupMedium: 'Sedang (2–3 salah)',
+  groupLight: 'Salah sekali',
+  groupToday: 'Hari ini',
+  groupWeek: 'Minggu ini',
+  groupEarlier: 'Lebih lama',
+  groupOther: 'Lainnya',
     tabWrong: 'Kesalahan ({n})',
     tabCollect: 'Favorit ({n})',
     practiceWrong: 'Latih kesalahan (maks 20)',
@@ -344,6 +366,8 @@ export const id: Messages = {
     voice: 'Suara TTS',
     voiceDesc: 'Menggunakan suara Mandarin bawaan browser; pilih salah satu jika tidak terdengar apa-apa.',
     voiceDefault: 'Bawaan',
+
+    voicePerLang: 'Diingat terpisah untuk setiap bahasa antarmuka.',
     voiceLocal: ' (lokal)',
     voiceRemote: ' (daring)',
     test: 'Uji',

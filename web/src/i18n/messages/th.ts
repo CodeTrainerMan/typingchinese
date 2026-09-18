@@ -175,6 +175,10 @@ export const th: Messages = {
   },
 
   dicts: {
+
+  uploadMany: 'เลือกหลายไฟล์ได้ในครั้งเดียว',
+  importedMany: 'นำเข้า {n} รายการคำ รวม {m} คำ',
+  importSkipped: 'ข้าม {n} ไฟล์',
     title: 'รายการคำ',
     importPanel: 'นำเข้ารายการของคุณเอง',
     importDesc:
@@ -231,6 +235,12 @@ export const th: Messages = {
   },
 
   article: {
+
+  readHint: 'ฟังหนึ่งประโยคแล้วอ่านออกเสียงเพื่อรับคะแนน',
+  readAloud: 'อ่านออกเสียง',
+  reading: 'กำลังฟัง…',
+  readScore: 'คะแนน {n}',
+  readFailed: 'ไม่ได้ยินเสียง — ตรวจสอบไมโครโฟนแล้วลองใหม่',
     title: 'ฝึกพิมพ์บทความ',
     continuePrev: 'ทำต่อ ({title})',
     intro: 'พิมพ์ทีละประโยค: แต่ละประโยคถูกแบ่งเป็นช่วงละ 4–20 ตัวอักษร ข้ามเครื่องหมายวรรคตอน และประโยคถัดไปเริ่มเอง',
@@ -275,6 +285,18 @@ export const th: Messages = {
   },
 
   wrong: {
+
+  groupNone: 'ไม่จัดกลุ่ม',
+  groupByCount: 'ตามจำนวนครั้งที่ผิด',
+  groupByTime: 'ตามครั้งล่าสุดที่ผิด',
+  groupByDict: 'ตามรายการคำ',
+  groupHard: 'ยาก (ผิด 4+ ครั้ง)',
+  groupMedium: 'ปานกลาง (ผิด 2–3 ครั้ง)',
+  groupLight: 'ผิดครั้งเดียว',
+  groupToday: 'วันนี้',
+  groupWeek: 'สัปดาห์นี้',
+  groupEarlier: 'ก่อนหน้า',
+  groupOther: 'อื่นๆ',
     tabWrong: 'คำผิด ({n})',
     tabCollect: 'รายการโปรด ({n})',
     practiceWrong: 'ฝึกคำผิด (สูงสุด 20)',
@@ -344,6 +366,8 @@ export const th: Messages = {
     voice: 'เสียง TTS',
     voiceDesc: 'ใช้เสียงภาษาจีนในเบราว์เซอร์ เลือกหนึ่งเสียงหากไม่ได้ยินอะไรเลย',
     voiceDefault: 'ค่าเริ่มต้น',
+
+    voicePerLang: 'จำแยกตามภาษาของอินเทอร์เฟซ',
     voiceLocal: ' (ในเครื่อง)',
     voiceRemote: ' (ออนไลน์)',
     test: 'ทดสอบ',

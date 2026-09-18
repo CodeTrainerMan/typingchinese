@@ -175,6 +175,10 @@ export const ja: Messages = {
   },
 
   dicts: {
+
+  uploadMany: '複数のファイルを一度に選べます',
+  importedMany: '{n} 件のリスト、{m} 語を読み込みました',
+  importSkipped: '{n} 件をスキップ',
     title: '単語リスト',
     importPanel: '自作リストを取り込む',
     importDesc:
@@ -231,6 +235,12 @@ export const ja: Messages = {
   },
 
   article: {
+
+  readHint: '行を再生してから声に出して読むと採点されます。',
+  readAloud: '音読',
+  reading: '聞き取り中…',
+  readScore: 'スコア {n}',
+  readFailed: '聞き取れませんでした — マイクを確認して再試行してください。',
     title: '文章練習',
     continuePrev: '続ける（{title}）',
     intro: '文ごとに入力します。各文は 4〜20 字に分割され、句読点は不要、次の文へは自動で進みます。',
@@ -275,6 +285,18 @@ export const ja: Messages = {
   },
 
   wrong: {
+
+  groupNone: 'グループなし',
+  groupByCount: '間違い回数別',
+  groupByTime: '最後の間違い別',
+  groupByDict: 'リスト別',
+  groupHard: '苦手（4 回以上）',
+  groupMedium: '普通（2〜3 回）',
+  groupLight: '1 回だけ',
+  groupToday: '今日',
+  groupWeek: '今週',
+  groupEarlier: 'それ以前',
+  groupOther: 'その他',
     tabWrong: '間違い ({n})',
     tabCollect: 'お気に入り ({n})',
     practiceWrong: '間違いを練習（最大 20）',
@@ -344,6 +366,8 @@ export const ja: Messages = {
     voice: 'TTS の声',
     voiceDesc: 'ブラウザ内蔵の中国語音声を使用します。何も聞こえない場合は選んでください。',
     voiceDefault: '既定',
+
+    voicePerLang: 'インターフェースの言語ごとに別々に記憶されます。',
     voiceLocal: '（ローカル）',
     voiceRemote: '（オンライン）',
     test: '試聴',

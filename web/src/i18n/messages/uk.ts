@@ -175,6 +175,10 @@ export const uk: Messages = {
   },
 
   dicts: {
+
+  uploadMany: 'Можна вибрати кілька файлів одразу',
+  importedMany: 'Імпортовано списків: {n}, слів: {m}',
+  importSkipped: 'пропущено: {n}',
     title: 'Списки слів',
     importPanel: 'Імпорт свого списку',
     importDesc:
@@ -231,6 +235,12 @@ export const uk: Messages = {
   },
 
   article: {
+
+  readHint: 'Прослухайте рядок, потім прочитайте його вголос, щоб отримати оцінку.',
+  readAloud: 'Читати вголос',
+  reading: 'Слухаю…',
+  readScore: 'Оцінка {n}',
+  readFailed: 'Нічого не почув — перевірте мікрофон і спробуйте ще раз.',
     title: 'Практика на текстах',
     continuePrev: 'Продовжити ({title})',
     intro: 'Друкуйте по реченнях: кожне розбите на частини по 4–20 ієрогліфів, розділові знаки пропускаються, наступне речення починається саме.',
@@ -275,6 +285,18 @@ export const uk: Messages = {
   },
 
   wrong: {
+
+  groupNone: 'Без групування',
+  groupByCount: 'За кількістю помилок',
+  groupByTime: 'За часом останньої помилки',
+  groupByDict: 'За списком',
+  groupHard: 'Складні (4+ помилки)',
+  groupMedium: 'Середні (2–3 помилки)',
+  groupLight: 'Одна помилка',
+  groupToday: 'Сьогодні',
+  groupWeek: 'Цього тижня',
+  groupEarlier: 'Раніше',
+  groupOther: 'Інші',
     tabWrong: 'Помилки ({n})',
     tabCollect: 'Обране ({n})',
     practiceWrong: 'Практика помилок (до 20)',
@@ -344,6 +366,8 @@ export const uk: Messages = {
     voice: 'Голос TTS',
     voiceDesc: 'Використовуються китайські голоси браузера; виберіть один, якщо нічого не чути.',
     voiceDefault: 'За замовчуванням',
+
+    voicePerLang: 'Запам’ятовується окремо для кожної мови інтерфейсу.',
     voiceLocal: ' (локальний)',
     voiceRemote: ' (мережевий)',
     test: 'Перевірити',

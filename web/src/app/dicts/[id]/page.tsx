@@ -14,7 +14,7 @@ import {
   RICH_KEYS,
   type RawEntry,
 } from '@/lib/customDict'
-import { speak } from '@/lib/tts'
+import { resolveVoiceURI, speak } from '@/lib/tts'
 import { currentRetention, isDue, reviveCard } from '@/lib/fsrs'
 import { useI18n, type MessageKey } from '@/i18n'
 import type { CnWord, RichField } from '@/lib/types'
@@ -167,7 +167,11 @@ export default function DictDetailPage() {
   }
 
   const play = (word: string) =>
-    speak(word, { rate: setting.soundSpeed, volume: setting.soundVolume / 100, voiceURI: setting.voiceURI })
+    speak(word, {
+      rate: setting.soundSpeed,
+      volume: setting.soundVolume / 100,
+      voiceURI: resolveVoiceURI(setting.voiceURI, setting.voiceByLang, setting.lang),
+    })
 
   const current = base.currentDictId === dict.id
 

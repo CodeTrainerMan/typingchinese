@@ -175,6 +175,10 @@ export const pt: Messages = {
   },
 
   dicts: {
+
+  uploadMany: 'Você pode escolher vários arquivos de uma vez',
+  importedMany: '{n} listas importadas, {m} palavras',
+  importSkipped: '{n} ignorados',
     title: 'Listas de palavras',
     importPanel: 'Importar uma lista própria',
     importDesc:
@@ -231,6 +235,12 @@ export const pt: Messages = {
   },
 
   article: {
+
+  readHint: 'Ouça uma frase e depois leia em voz alta para receber uma nota.',
+  readAloud: 'Ler em voz alta',
+  reading: 'Ouvindo…',
+  readScore: 'Nota {n}',
+  readFailed: 'Não ouvi nada — verifique o microfone e tente de novo.',
     title: 'Prática de textos',
     continuePrev: 'Continuar ({title})',
     intro: 'Digite frase por frase: cada uma é dividida em trechos de 4–20 caracteres, a pontuação é ignorada e a próxima começa sozinha.',
@@ -275,6 +285,18 @@ export const pt: Messages = {
   },
 
   wrong: {
+
+  groupNone: 'Sem agrupar',
+  groupByCount: 'Por erros',
+  groupByTime: 'Por último erro',
+  groupByDict: 'Por lista',
+  groupHard: 'Difíceis (4+ erros)',
+  groupMedium: 'Médios (2–3 erros)',
+  groupLight: 'Um erro',
+  groupToday: 'Hoje',
+  groupWeek: 'Esta semana',
+  groupEarlier: 'Antes',
+  groupOther: 'Outros',
     tabWrong: 'Erros ({n})',
     tabCollect: 'Favoritos ({n})',
     practiceWrong: 'Praticar erros (até 20)',
@@ -344,6 +366,8 @@ export const pt: Messages = {
     voice: 'Voz TTS',
     voiceDesc: 'Usa as vozes chinesas do navegador; escolha uma se não ouvir nada.',
     voiceDefault: 'Padrão',
+
+    voicePerLang: 'Lembrado separadamente para cada idioma da interface.',
     voiceLocal: ' (local)',
     voiceRemote: ' (online)',
     test: 'Testar',

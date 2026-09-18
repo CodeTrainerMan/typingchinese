@@ -175,6 +175,10 @@ export const zhTW: Messages = {
   },
 
   dicts: {
+
+  uploadMany: '一次可選多個檔案',
+  importedMany: '已匯入 {n} 個詞庫，共 {m} 個詞',
+  importSkipped: '{n} 個檔案被略過',
     title: '词库',
     importPanel: '汇入自订词库',
     importDesc:
@@ -231,6 +235,12 @@ export const zhTW: Messages = {
   },
 
   article: {
+
+  readHint: '點一行先聽示範，再跟讀得分',
+  readAloud: '跟讀',
+  reading: '正在聽…',
+  readScore: '得分 {n}',
+  readFailed: '沒聽到聲音 — 檢查麥克風後重試',
     title: '文章练习',
     continuePrev: '继续上一篇（{title}）',
     intro: '按句跟打：每句切成 4~20 字的片段，标点不用打，打完一句自动进入下一句。',
@@ -275,6 +285,18 @@ export const zhTW: Messages = {
   },
 
   wrong: {
+
+  groupNone: '不分組',
+  groupByCount: '按錯誤次數',
+  groupByTime: '按最近錯誤時間',
+  groupByDict: '按詞庫',
+  groupHard: '高頻（錯 4 次以上）',
+  groupMedium: '中頻（錯 2–3 次）',
+  groupLight: '只錯一次',
+  groupToday: '今天',
+  groupWeek: '本週',
+  groupEarlier: '更早',
+  groupOther: '其它',
     tabWrong: '错词本（{n}）',
     tabCollect: '收藏本（{n}）',
     practiceWrong: '练习错词（最多 20）',
@@ -344,6 +366,8 @@ export const zhTW: Messages = {
     voice: 'TTS 音色',
     voiceDesc: '浏览器内建中文语音；若无声请选择一个音色',
     voiceDefault: '预设',
+
+    voicePerLang: '每種介面語言分別記住',
     voiceLocal: '（本地）',
     voiceRemote: '（联网）',
     test: '试听',

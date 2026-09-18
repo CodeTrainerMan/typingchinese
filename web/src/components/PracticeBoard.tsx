@@ -7,6 +7,7 @@ import type { SettingState } from '@/lib/store/setting'
 import { useTypingSession } from '@/lib/useTypingSession'
 import { isAudioStep, isMaskedStep, showsPinyinStep } from '@/lib/practice/flow'
 import { currentRetention, reviveCard } from '@/lib/fsrs'
+import { resolveVoiceURI } from '@/lib/tts'
 import { downloadShareCard } from '@/lib/shareCard'
 import { getTarget, getTargetSyllables } from '@/lib/pinyin'
 import { accuracy, speed } from '@/lib/typing'
@@ -125,7 +126,7 @@ export default function PracticeBoard({
       dictation: isAudioStep(mode),
       soundVolume: setting.soundVolume,
       soundSpeed: setting.soundSpeed,
-      voiceURI: setting.voiceURI,
+      voiceURI: resolveVoiceURI(setting.voiceURI, setting.voiceByLang, setting.lang),
       allowDigits: setting.typingMode === 'tone',
       inputMode: setting.inputMode,
       replayKey: setting.replayKey,

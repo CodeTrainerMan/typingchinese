@@ -40,6 +40,8 @@ export interface SettingState {
   soundVolume: number
   soundSpeed: number
   voiceURI: string
+  /** 每种界面语言单独记住的音色；为空则回落到 voiceURI */
+  voiceByLang: Record<string, string>
   keyboardSound: boolean
   effectSound: boolean
   /** 显示屏幕虚拟键盘（手机/触屏可用，触屏设备会自动开启） */
@@ -80,6 +82,7 @@ export const DEFAULT_SETTING = {
   soundVolume: 100,
   soundSpeed: 1,
   voiceURI: '',
+  voiceByLang: {},
   keyboardSound: false,
   effectSound: true,
   virtualKeyboard: false,
@@ -112,7 +115,8 @@ export const useSettingStore = create<SettingState>()(
       name: 'cn-type-setting-v1',
       // v0 会按浏览器语言自动写入 lang，现已改为固定英文默认，旧数据统一回到英文
       // v2 新增 shortcuts：旧存档没有该字段，必须与默认值合并，否则解出来是 undefined
-      version: 2,
+      // v3 新增 voiceByLang：同上，按语言记忆的音色
+      version: 3,
       migrate: (persisted, version) => {
         const old = (persisted ?? {}) as Partial<SettingState>
         const next = { ...DEFAULT_SETTING, ...old }
@@ -120,6 +124,7 @@ export const useSettingStore = create<SettingState>()(
           ...next,
           lang: version < 1 ? 'en' : next.lang,
           shortcuts: { ...DEFAULT_SETTING.shortcuts, ...(old.shortcuts ?? {}) },
+          voiceByLang: { ...(old.voiceByLang ?? {}) },
         }
       },
     }

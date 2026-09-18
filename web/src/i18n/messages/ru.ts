@@ -175,6 +175,10 @@ export const ru: Messages = {
   },
 
   dicts: {
+
+  uploadMany: 'Можно выбрать несколько файлов сразу',
+  importedMany: 'Импортировано списков: {n}, слов: {m}',
+  importSkipped: 'пропущено: {n}',
     title: 'Списки слов',
     importPanel: 'Импорт своего списка',
     importDesc:
@@ -231,6 +235,12 @@ export const ru: Messages = {
   },
 
   article: {
+
+  readHint: 'Прослушайте строку, затем прочитайте её вслух, чтобы получить оценку.',
+  readAloud: 'Читать вслух',
+  reading: 'Слушаю…',
+  readScore: 'Оценка {n}',
+  readFailed: 'Ничего не услышал — проверьте микрофон и попробуйте снова.',
     title: 'Практика на текстах',
     continuePrev: 'Продолжить ({title})',
     intro: 'Печатайте по предложениям: каждое разбито на отрывки по 4–20 иероглифов, знаки препинания пропускаются, следующее предложение начинается само.',
@@ -275,6 +285,18 @@ export const ru: Messages = {
   },
 
   wrong: {
+
+  groupNone: 'Без группировки',
+  groupByCount: 'По числу ошибок',
+  groupByTime: 'По времени последней ошибки',
+  groupByDict: 'По списку',
+  groupHard: 'Сложные (4+ ошибок)',
+  groupMedium: 'Средние (2–3 ошибки)',
+  groupLight: 'Одна ошибка',
+  groupToday: 'Сегодня',
+  groupWeek: 'На этой неделе',
+  groupEarlier: 'Раньше',
+  groupOther: 'Прочие',
     tabWrong: 'Ошибки ({n})',
     tabCollect: 'Избранное ({n})',
     practiceWrong: 'Практика ошибок (до 20)',
@@ -344,6 +366,8 @@ export const ru: Messages = {
     voice: 'Голос TTS',
     voiceDesc: 'Используются китайские голоса браузера; выберите один, если ничего не слышно.',
     voiceDefault: 'По умолчанию',
+
+    voicePerLang: 'Запоминается отдельно для каждого языка интерфейса.',
     voiceLocal: ' (локальный)',
     voiceRemote: ' (сетевой)',
     test: 'Проверить',

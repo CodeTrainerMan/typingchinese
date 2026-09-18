@@ -175,6 +175,10 @@ export const vi: Messages = {
   },
 
   dicts: {
+
+  uploadMany: 'Bạn có thể chọn nhiều tệp cùng lúc',
+  importedMany: 'Đã nhập {n} danh sách, {m} từ',
+  importSkipped: 'Bỏ qua {n}',
     title: 'Danh sách từ',
     importPanel: 'Nhập danh sách tự tạo',
     importDesc:
@@ -231,6 +235,12 @@ export const vi: Messages = {
   },
 
   article: {
+
+  readHint: 'Nghe một câu rồi đọc to để nhận điểm.',
+  readAloud: 'Đọc to',
+  reading: 'Đang nghe…',
+  readScore: 'Điểm {n}',
+  readFailed: 'Không nghe thấy — kiểm tra mic rồi thử lại.',
     title: 'Luyện bài đọc',
     continuePrev: 'Tiếp tục ({title})',
     intro: 'Gõ từng câu: mỗi câu được chia thành đoạn 4–20 chữ, bỏ qua dấu câu và câu tiếp theo tự bắt đầu.',
@@ -275,6 +285,18 @@ export const vi: Messages = {
   },
 
   wrong: {
+
+  groupNone: 'Không nhóm',
+  groupByCount: 'Theo số lần sai',
+  groupByTime: 'Theo lần sai gần nhất',
+  groupByDict: 'Theo danh sách',
+  groupHard: 'Khó (4+ lần sai)',
+  groupMedium: 'Trung bình (2–3 lần sai)',
+  groupLight: 'Sai một lần',
+  groupToday: 'Hôm nay',
+  groupWeek: 'Tuần này',
+  groupEarlier: 'Trước đó',
+  groupOther: 'Khác',
     tabWrong: 'Lỗi ({n})',
     tabCollect: 'Yêu thích ({n})',
     practiceWrong: 'Luyện lỗi (tối đa 20)',
@@ -344,6 +366,8 @@ export const vi: Messages = {
     voice: 'Giọng TTS',
     voiceDesc: 'Dùng giọng tiếng Trung có sẵn trong trình duyệt; chọn một giọng nếu bạn không nghe thấy gì.',
     voiceDefault: 'Mặc định',
+
+    voicePerLang: 'Được nhớ riêng cho từng ngôn ngữ giao diện.',
     voiceLocal: ' (cục bộ)',
     voiceRemote: ' (trực tuyến)',
     test: 'Thử',

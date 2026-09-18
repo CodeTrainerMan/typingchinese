@@ -3,13 +3,18 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useBaseStore } from '@/lib/store/base'
+import { useSettingStore } from '@/lib/store/setting'
 import { useHydrated } from '@/lib/useHydrated'
 import { buildArticleWords, splitSentences, type ArticleResource } from '@/lib/article'
+import { isSpeechRecognitionSupported, listenOnce, scoreRead } from '@/lib/speechScore'
+import { speak } from '@/lib/tts'
+import VoicePicker from '@/components/VoicePicker'
 import { useI18n } from '@/i18n'
 
 export default function ArticlePage() {
   const hydrated = useHydrated()
   const base = useBaseStore()
+  const setting = useSettingStore()
   const router = useRouter()
   const { t } = useI18n()
   const [articles, setArticles] = useState<ArticleResource[]>([])
@@ -18,12 +23,47 @@ export default function ArticlePage() {
   const [busy, setBusy] = useState(false)
   const [msg, setMsg] = useState('')
 
+  // 跟读打分：句子序号 → 得分与识别到的内容
+  const [scores, setScores] = useState<Record<number, { score: number; heard: string }>>({})
+  const [readingIdx, setReadingIdx] = useState<number | null>(null)
+  const [asrSupported, setAsrSupported] = useState(false)
+
   useEffect(() => {
     fetch('/articles/list.json')
       .then(r => r.json())
       .then((data: ArticleResource[]) => setArticles(data))
       .finally(() => setLoading(false))
+    // 语音识别能力只能在挂载后探测；放到下一个 tick，避免首屏（SSR）渲染与客户端不一致
+    const id = window.setTimeout(() => setAsrSupported(isSpeechRecognitionSupported()), 0)
+    return () => window.clearTimeout(id)
   }, [])
+
+  // 音色按界面语言分别记住，和设置页是同一份配置
+  const voice = setting.voiceByLang[setting.lang] ?? ''
+  const setVoice = (voiceURI: string) =>
+    setting.patch({ voiceByLang: { ...setting.voiceByLang, [setting.lang]: voiceURI } })
+
+  /** 先听示范朗读，再开麦跟读并打分；朗读与识别串着来，免得自己听见自己 */
+  const readAloud = async (index: number, sentence: string) => {
+    setReadingIdx(index)
+    setMsg('')
+    try {
+      await new Promise<void>(resolve => {
+        speak(sentence, {
+          rate: setting.soundSpeed,
+          volume: setting.soundVolume / 100,
+          voiceURI: voice,
+          onEnd: resolve,
+        })
+      })
+      const heard = await listenOnce('zh-CN', 8000)
+      setScores(s => ({ ...s, [index]: { score: scoreRead(sentence, heard), heard } }))
+    } catch {
+      setMsg(t('article.readFailed'))
+    } finally {
+      setReadingIdx(null)
+    }
+  }
 
   if (!hydrated) return <div className="mx-auto max-w-4xl px-4 py-16 text-dim">{t('common.loading')}</div>
 
@@ -59,7 +99,17 @@ export default function ArticlePage() {
         )}
       </div>
 
-      <p className="text-sm text-dim mb-6">{t('article.intro')}</p>
+      <p className="text-sm text-dim mb-3">{t('article.intro')}</p>
+
+      <div className="flex items-center gap-3 mb-6 flex-wrap">
+        <span className="text-sm text-dim">{t('setting.voice')}</span>
+        <VoicePicker
+          value={voice}
+          onChange={setVoice}
+          rate={setting.soundSpeed}
+          volume={setting.soundVolume / 100}
+        />
+      </div>
 
       {loading && <p className="text-dim">{t('article.loading')}</p>}
       {msg && <p className="text-sm text-err mb-4">{msg}</p>}
@@ -83,6 +133,34 @@ export default function ArticlePage() {
               <div className="mt-4 text-sm text-dim leading-relaxed">
                 {open ? a.text.split('\n').map((line, i) => <p key={i}>{line}</p>) : <p>{sentences[0]}…</p>}
               </div>
+
+              {open && asrSupported && (
+                <div className="mt-4 pt-4 border-t border-line space-y-2">
+                  <div className="text-xs text-dim">{t('article.readHint')}</div>
+                  {sentences.map((sentence, i) => (
+                    <div key={i} className="flex items-start gap-2">
+                      <button
+                        onClick={() => void readAloud(i, sentence)}
+                        disabled={readingIdx !== null}
+                        className="px-2 py-1 rounded-md border border-line text-xs whitespace-nowrap hover:bg-surface2 disabled:opacity-50"
+                      >
+                        {readingIdx === i ? t('article.reading') : t('article.readAloud')}
+                      </button>
+                      <div className="flex-1">
+                        <div className="text-sm">{sentence}</div>
+                        {scores[i] && (
+                          <div className="text-xs mt-0.5">
+                            <span className="text-brand font-medium">
+                              {t('article.readScore', { n: scores[i].score })}
+                            </span>
+                            {scores[i].heard && <span className="text-dim ml-2">{scores[i].heard}</span>}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
 
               <div className="flex gap-2 mt-5">
                 <button

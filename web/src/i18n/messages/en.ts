@@ -184,6 +184,10 @@ export const en = {
   },
 
   dicts: {
+
+  uploadMany: 'Pick several files at once',
+  importedMany: '{n} lists imported, {m} words',
+  importSkipped: '{n} skipped',
     title: 'Word Lists',
     importPanel: 'Import a custom list',
     importDesc:
@@ -240,6 +244,12 @@ export const en = {
   },
 
   article: {
+
+  readHint: 'Play a line, then read it out loud to get a score.',
+  readAloud: 'Read aloud',
+  reading: 'Listening…',
+  readScore: 'Score {n}',
+  readFailed: 'Nothing heard — check the microphone and try again.',
     title: 'Article Practice',
     continuePrev: 'Continue ({title})',
     intro: 'Type sentence by sentence: each one is split into 4–20 character chunks, punctuation is skipped, and the next sentence starts automatically.',
@@ -284,6 +294,18 @@ export const en = {
   },
 
   wrong: {
+
+  groupNone: 'No grouping',
+  groupByCount: 'Group by misses',
+  groupByTime: 'Group by last miss',
+  groupByDict: 'Group by list',
+  groupHard: 'Hard (4+ misses)',
+  groupMedium: 'Medium (2–3 misses)',
+  groupLight: 'Missed once',
+  groupToday: 'Today',
+  groupWeek: 'This week',
+  groupEarlier: 'Earlier',
+  groupOther: 'Other',
     tabWrong: 'Mistakes ({n})',
     tabCollect: 'Favorites ({n})',
     practiceWrong: 'Practice mistakes (up to 20)',
@@ -353,6 +375,8 @@ export const en = {
     voice: 'TTS voice',
     voiceDesc: 'Uses your browser’s built-in Chinese voices; pick one if you hear nothing.',
     voiceDefault: 'Default',
+
+    voicePerLang: 'Remembered separately for each interface language.',
     voiceLocal: ' (local)',
     voiceRemote: ' (online)',
     test: 'Test',
