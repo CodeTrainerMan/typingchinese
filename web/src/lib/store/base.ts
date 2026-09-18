@@ -1,8 +1,9 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
-import type { CardRecord, CnWord, DictResource, LearningDict, Statistics, WrongRecord } from '../types'
+import type { CardRecord, CnWord, DictResource, LearningDict, Statistics, StepType, WrongRecord } from '../types'
 import { DEFAULT_SETTING, useSettingStore } from './setting'
 import { gradeByWrongTimes, isDue, reviveCard, reviewCard, serializeCard } from '../fsrs'
+import { stepsOf } from '../practice/flow'
 
 /**
  * 备份导入结果：ok 表示已写入，code 是语言包里 errors.* 的 key 后缀。
@@ -33,6 +34,16 @@ export interface StudySession {
   title?: string
   /** 临时词条：文章练习等不来自词库的会话，直接携带词条内容 */
   words?: CnWord[]
+  /** 本组要跑的步骤（流程编排）；旧存档没有该字段时按单步处理 */
+  steps?: StepType[]
+  /** 当前步骤索引 */
+  stepIndex?: number
+  /** 当前步骤是「错词补练」轮 */
+  patch?: boolean
+  /** 当前步骤的词表，index 指向它；步骤推进时重新生成 */
+  stepWords?: string[]
+  /** 当前步骤打错的词，步骤结束时用于补练 */
+  stepWrong?: string[]
 }
 
 interface BaseState {
@@ -143,7 +154,7 @@ function makeSession(
   wordIds: string[],
   kind: NonNullable<StudySession['kind']>,
   dictId: string,
-  extra?: Partial<StudySession>
+  extra?: Partial<StudySession> & { steps?: StepType[] }
 ): StudySession {
   return {
     dictId,
@@ -155,7 +166,61 @@ function makeSession(
     startedAt: Date.now(),
     flushedMs: 0,
     flushedKeys: 0,
+    steps: extra?.steps ?? ['spell'],
+    stepIndex: 0,
+    stepWords: wordIds,
+    stepWrong: [],
     ...extra,
+  }
+}
+
+/**
+ * 当前步骤跑完后决定下一个步骤（对齐参考项目的 wrongWordClear）：
+ * 1. 本步有错词且开了「错词补练」→ 用这批错词再跑一轮跟写（每个步骤只补一次）
+ * 2. 否则进入流程的下一个步骤，重新跑整组词
+ * 3. 没有下一步了 → 整组结束
+ */
+function nextStep(
+  session: StudySession,
+  stepWrong: string[],
+  wrongWordClear: boolean
+): { stepIndex: number; patch: boolean; stepWords: string[] } | null {
+  const steps = session.steps ?? ['spell']
+  const cur = session.stepIndex ?? 0
+  if (wrongWordClear && !session.patch && stepWrong.length) {
+    return { stepIndex: cur, patch: true, stepWords: stepWrong }
+  }
+  const next = cur + 1
+  if (next >= steps.length) return null
+  return { stepIndex: next, patch: false, stepWords: session.wordIds }
+}
+
+/** 提交一个词后推进会话：同一步骤内前进一个词，步骤跑完则切到下一步骤或结束 */
+function advanceSession(
+  session: StudySession,
+  word: string,
+  wrongTimes: number,
+  stepWrong: string[],
+  wrongWordClear: boolean
+): StudySession {
+  const base: StudySession = {
+    ...session,
+    wrongTimes: { ...session.wrongTimes, [word]: wrongTimes },
+    keystrokes: 0,
+    stepWrong,
+  }
+  const stepWords = session.stepWords ?? session.wordIds
+  if (session.index + 1 < stepWords.length) return { ...base, index: session.index + 1 }
+
+  const next = nextStep(session, stepWrong, wrongWordClear)
+  if (!next) return { ...base, index: session.index + 1, done: true }
+  return {
+    ...base,
+    index: 0,
+    stepIndex: next.stepIndex,
+    patch: next.patch,
+    stepWords: next.stepWords,
+    stepWrong: [],
   }
 }
 
@@ -220,7 +285,8 @@ export const useBaseStore = create<BaseState>()(
         const dict = get().dicts.find(d => d.id === dictId)
         if (!dict || !dict.words.length) return
         const { fsrsData, session, knownWords } = get()
-        if (session && session.dictId === dictId && !session.done && session.index < session.wordIds.length) return
+        const sessionIds = session?.stepWords ?? session?.wordIds ?? []
+        if (session && session.dictId === dictId && !session.done && session.index < sessionIds.length) return
 
         const known = new Set(knownWords)
 
@@ -246,18 +312,23 @@ export const useBaseStore = create<BaseState>()(
 
         // 打散顺序，避免永远「先新词后复习」
         const list = shuffle([...newWords, ...review])
+        const wordIds = list.map(w => w.word)
         set({
           fsrsData: cards,
           session: {
             dictId,
             kind: 'dict',
-            wordIds: list.map(w => w.word),
+            wordIds,
             index: 0,
             wrongTimes: {},
             keystrokes: 0,
             startedAt: Date.now(),
             flushedMs: 0,
             flushedKeys: 0,
+            steps: stepsOf(useSettingStore.getState().practiceMode),
+            stepIndex: 0,
+            stepWords: wordIds,
+            stepWrong: [],
           },
         })
       },
@@ -274,7 +345,11 @@ export const useBaseStore = create<BaseState>()(
         if (!ids.length) return false
 
         const owner = dicts.find(d => d.words.some(w => w.word === ids[0])) ?? dicts[0]
-        set({ session: makeSession(ids, 'wrong', owner?.id ?? '') })
+        set({
+          session: makeSession(ids, 'wrong', owner?.id ?? '', {
+            steps: stepsOf(useSettingStore.getState().practiceMode, true),
+          }),
+        })
         return true
       },
 
@@ -285,7 +360,14 @@ export const useBaseStore = create<BaseState>()(
         if (!ids.length) return false
 
         const owner = dicts.find(d => d.words.some(w => w.word === ids[0])) ?? dicts[0]
-        set({ session: { ...makeSession(ids, 'collect', owner?.id ?? ''), title } })
+        set({
+          session: {
+            ...makeSession(ids, 'collect', owner?.id ?? '', {
+              steps: stepsOf(useSettingStore.getState().practiceMode, true),
+            }),
+            title,
+          },
+        })
         return true
       },
 
@@ -305,7 +387,7 @@ export const useBaseStore = create<BaseState>()(
         set({ session: null })
       },
 
-      /** 回到本组第 1 词重练，并清零已落盘的统计基准 */
+      /** 回到本组第 1 个步骤的第 1 词重练，并清零已落盘的统计基准 */
       restartSession() {
         const s = get().session
         if (!s) return
@@ -313,6 +395,10 @@ export const useBaseStore = create<BaseState>()(
           session: {
             ...s,
             index: 0,
+            stepIndex: 0,
+            patch: false,
+            stepWords: s.wordIds,
+            stepWrong: [],
             wrongTimes: {},
             keystrokes: 0,
             startedAt: Date.now(),
@@ -326,10 +412,12 @@ export const useBaseStore = create<BaseState>()(
       getSessionWords() {
         const { session, dicts } = get()
         if (!session) return []
+        // 当前步骤的词表（错词补练时是子集）
+        const ids = session.stepWords ?? session.wordIds
         // 文章练习等临时会话自带词条
         if (session.words?.length) {
           const byWord = new Map(session.words.map(w => [w.word, w]))
-          return session.wordIds.map(id => byWord.get(id)).filter((w): w is CnWord => Boolean(w))
+          return ids.map(id => byWord.get(id)).filter((w): w is CnWord => Boolean(w))
         }
         const owner = dicts.find(d => d.id === session.dictId)
         // 错词练习可能跨词库，先在本库找，找不到再全库找
@@ -342,7 +430,7 @@ export const useBaseStore = create<BaseState>()(
           }
           return undefined
         }
-        return session.wordIds.map(find).filter((w): w is CnWord => Boolean(w))
+        return ids.map(find).filter((w): w is CnWord => Boolean(w))
       },
 
       addSessionStat(spendMs, keystrokes, startedAt) {
@@ -381,59 +469,57 @@ export const useBaseStore = create<BaseState>()(
       finishSession(spendMs, keystrokes) {
         get().addSessionStat(spendMs, keystrokes)
         const session = get().session
-        if (session) set({ session: { ...session, done: true } })
+        if (!session) return
+        // 流程编排：commitWord 已经把会话切到下一步（index 归零）时，这一批跑完不算整组结束
+        const moreSteps = !session.done && session.index === 0
+        if (!moreSteps) set({ session: { ...session, done: true } })
       },
 
       commitWord(word, wrongTimes) {
         const state = get()
         const session = state.session
+        if (!session) return
 
-        // 当日统计：所有会话都要记
-        const date = today()
-        const statistics = state.statistics.slice()
-        const idx = statistics.findIndex(s => s.date === date)
-        const entry: Statistics = statistics[idx] ?? {
-          date,
-          spend: 0,
-          total: 0,
-          correct: 0,
-          wrong: 0,
-          keystrokes: 0,
+        // 记忆曲线与「今日完成」只在首轮计一次：同一个词在后续步骤会重复出现，
+        // 否则一组 20 词在三步流程里会被记成 60 个，每日目标也会瞬间达成
+        const firstRound = (session.stepIndex ?? 0) === 0 && !session.patch
+
+        let statistics = state.statistics
+        if (firstRound) {
+          const date = today()
+          statistics = statistics.slice()
+          const idx = statistics.findIndex(s => s.date === date)
+          const entry: Statistics = statistics[idx] ?? {
+            date,
+            spend: 0,
+            total: 0,
+            correct: 0,
+            wrong: 0,
+            keystrokes: 0,
+          }
+          entry.total += 1
+          entry.wrong += wrongTimes
+          entry.correct += wrongTimes === 0 ? 1 : 0
+          if (idx >= 0) statistics[idx] = entry
+          else statistics.push(entry)
         }
-        entry.total += 1
-        entry.wrong += wrongTimes
-        entry.correct += wrongTimes === 0 ? 1 : 0
-        if (idx >= 0) statistics[idx] = entry
-        else statistics.push(entry)
 
-        /** 落盘并把会话推进到下一个词 */
-        const advance = (extra: Partial<BaseState>) =>
-          set({
-            ...extra,
-            statistics,
-            session: session
-              ? {
-                  ...session,
-                  index: session.index + 1,
-                  wrongTimes: { ...session.wrongTimes, [word.word]: wrongTimes },
-                  keystrokes: 0,
-                }
-              : null,
-          })
+        // 本步骤打错的词，步骤结束时用来补练
+        const prevWrong = session.stepWrong ?? []
+        const stepWrong =
+          wrongTimes > 0 && !prevWrong.includes(word.word) ? [...prevWrong, word.word] : prevWrong
+
+        const { wrongWordClear } = useSettingStore.getState()
+        const nextSession = advanceSession(session, word.word, wrongTimes, stepWrong, wrongWordClear)
 
         const dict = state.dicts.find(d => d.id === (session?.dictId ?? state.currentDictId))
         // 文章练习只统计，不进记忆曲线与错词本；找不到归属词库时至少别卡住进度
-        if (!dict || session?.kind === 'article') {
-          advance({})
+        if (!dict || session.kind === 'article') {
+          set({ statistics, session: nextSession })
           return
         }
 
-        const isNew = !state.fsrsData[word.word]
-        const { fsrsLimits, fsrsParams } = useSettingStore.getState()
-        const grade = gradeByWrongTimes(wrongTimes, fsrsLimits)
-        const nextCard = reviewCard(reviveCard(state.fsrsData[word.word]), grade, fsrsParams)
-
-        const fsrsData = { ...state.fsrsData, [word.word]: serializeCard(nextCard) }
+        // 错词本每一步都更新
         const wrongWords = { ...state.wrongWords }
         if (wrongTimes > 0) {
           const prev = wrongWords[word.word]
@@ -448,12 +534,20 @@ export const useBaseStore = create<BaseState>()(
           if (wrongWords[word.word].count === 0) delete wrongWords[word.word]
         }
 
-        // 新词推进学习指针
-        const dicts = state.dicts.map(d =>
-          d.id === dict.id ? { ...d, lastLearnIndex: isNew ? d.lastLearnIndex + 1 : d.lastLearnIndex } : d
-        )
+        const extra: Partial<BaseState> = { wrongWords }
+        if (firstRound) {
+          const isNew = !state.fsrsData[word.word]
+          const { fsrsLimits, fsrsParams } = useSettingStore.getState()
+          const grade = gradeByWrongTimes(wrongTimes, fsrsLimits)
+          const nextCard = reviewCard(reviveCard(state.fsrsData[word.word]), grade, fsrsParams)
+          extra.fsrsData = { ...state.fsrsData, [word.word]: serializeCard(nextCard) }
+          // 新词推进学习指针
+          extra.dicts = state.dicts.map(d =>
+            d.id === dict.id ? { ...d, lastLearnIndex: isNew ? d.lastLearnIndex + 1 : d.lastLearnIndex } : d
+          )
+        }
 
-        advance({ fsrsData, wrongWords, dicts })
+        set({ ...extra, statistics, session: nextSession })
       },
 
       toggleKnown(word) {

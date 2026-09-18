@@ -2,12 +2,13 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import Link from 'next/link'
-import type { CnWord, LearningDict } from '@/lib/types'
+import type { CnWord, LearningDict, Statistics, StepType } from '@/lib/types'
 import type { SettingState } from '@/lib/store/setting'
 import { useTypingSession } from '@/lib/useTypingSession'
+import { isAudioStep, isMaskedStep, showsPinyinStep } from '@/lib/practice/flow'
 import { getTarget, getTargetSyllables } from '@/lib/pinyin'
 import { accuracy, speed } from '@/lib/typing'
-import { useI18n } from '@/i18n'
+import { useI18n, type MessageKey } from '@/i18n'
 import PinyinDisplay from './PinyinDisplay'
 import HanziInput from './HanziInput'
 import VirtualKeyboard from './VirtualKeyboard'
@@ -20,9 +21,12 @@ interface Props {
   title?: string
   words: CnWord[]
   setting: SettingState
+  /** 当前步骤（流程编排）：决定遮罩、发音与提示显示 */
+  step: { index: number; total: number; mode: StepType; patch: boolean }
   knownWords: string[]
   onCommit: (word: CnWord, wrongTimes: number) => void
-  onFinish: (spendMs: number, keys: number) => void
+  /** 整组结束时返回 true；多步骤流程里还有步骤时返回 false */
+  onFinish: (spendMs: number, keys: number) => boolean
   /** 中途离开 / 切后台时把已产生的用时与击键数落盘（可重复调用，内部按增量累加） */
   onFlush: (spendMs: number, keys: number, startedAt: number) => void
   /** 本组会话标识，用于落盘时校验会话未变 */
@@ -30,6 +34,8 @@ interface Props {
   onToggleKnown: (word: string) => void
   onToggleCollect: (word: string) => void
   collect: string[]
+  /** 当日统计（结算页的本周打卡用） */
+  statistics: Statistics[]
   /** 再来一组：重新选题 */
   onRestartSession: () => void
   /** 重新开始：回到本组第 1 词 */
@@ -41,6 +47,7 @@ export default function PracticeBoard({
   title,
   words,
   setting,
+  step,
   knownWords,
   onCommit,
   onFinish,
@@ -49,6 +56,7 @@ export default function PracticeBoard({
   onToggleKnown,
   onToggleCollect,
   collect,
+  statistics,
   onRestartSession,
   onResetSession,
 }: Props) {
@@ -72,8 +80,9 @@ export default function PracticeBoard({
   const composingRef = useRef(false)
 
   const hanziMode = setting.inputMode === 'hanzi'
-  // 非跟写模式一律遮住「答案」：卡片上的汉字、输入区上方的汉字、底部拼音提示
-  const masked = setting.practiceMode !== 'spell'
+  // 当前步骤决定遮罩：只有跟写步骤给出「答案」（汉字与拼音提示）
+  const mode = step.mode
+  const masked = isMaskedStep(mode)
   // 汉字模式下目标串就是汉字本身，一个汉字算一个「音节」
   const getTargetFn = useCallback(
     (w: CnWord) => (hanziMode ? w.word : getTarget(w, setting.typingMode)),
@@ -94,7 +103,7 @@ export default function PracticeBoard({
       keyboardSound: setting.keyboardSound,
       effectSound: setting.effectSound,
       autoSound: setting.autoSound,
-      dictation: setting.practiceMode === 'dictation',
+      dictation: isAudioStep(mode),
       soundVolume: setting.soundVolume,
       soundSpeed: setting.soundSpeed,
       voiceURI: setting.voiceURI,
@@ -111,6 +120,7 @@ export default function PracticeBoard({
     getTarget: getTargetFn,
     getSyllables: getSyllablesFn,
     config,
+    resetKey: `${step.index}-${step.patch}`,
     onWordDone: onCommit,
     onFinish: ({ spendMs, keys }) => onFinish(spendMs, keys),
   })
@@ -154,6 +164,20 @@ export default function PracticeBoard({
     lastWrongRef.current = session.wrongTimes
   }, [session.wrongTimes])
 
+  // 功能键快捷键：F3 切换拼音提示 / F4 标记掌握 / F8 收藏（避开 F5 刷新等浏览器占用键）
+  useEffect(() => {
+    if (session.finished || !session.word) return
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key !== 'F3' && e.key !== 'F4' && e.key !== 'F8') return
+      e.preventDefault()
+      if (e.key === 'F3') setting.patch({ showPinyin: !setting.showPinyin })
+      else if (e.key === 'F4') onToggleKnown(session.word!.word)
+      else onToggleCollect(session.word!.word)
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [session.finished, session.word, setting, onToggleKnown, onToggleCollect])
+
   // 移动端：保持隐藏输入框聚焦，软键盘才不会收起
   useEffect(() => {
     if (!showKeyboard || session.finished) return
@@ -184,6 +208,18 @@ export default function PracticeBoard({
   const acc = accuracy(session.stats.keys - session.stats.wrong, session.stats.keys)
   const sp = speed(session.stats.keys, session.progress.index, spend)
 
+  // 最近 7 天的打卡情况：当天有完成记录或练习时长即算打卡
+  const week = useMemo(() => {
+    const days: { date: string; active: boolean }[] = []
+    for (let i = 6; i >= 0; i--) {
+      const d = new Date()
+      d.setDate(d.getDate() - i)
+      const date = d.toISOString().slice(0, 10)
+      days.push({ date, active: statistics.some(s => s.date === date && (s.total > 0 || s.spend > 0)) })
+    }
+    return days
+  }, [statistics])
+
   if (session.finished) {
     return (
       <div className="mx-auto max-w-3xl px-4 py-16">
@@ -198,6 +234,21 @@ export default function PracticeBoard({
             />
             <Stat label={t('board.time')} value={`${Math.round(spend / 1000)}s`} />
           </div>
+          <div className="flex items-center justify-center gap-1.5 mb-6">
+            <span className="text-xs text-dim mr-1">{t('board.week')}</span>
+            {week.map(d => (
+              <span
+                key={d.date}
+                title={d.date}
+                className={`h-6 w-6 flex items-center justify-center rounded-md border text-[10px] ${
+                  d.active ? 'bg-brand text-white border-brand' : 'border-line text-dim'
+                }`}
+              >
+                {new Date(d.date).getDate()}
+              </span>
+            ))}
+          </div>
+          <p className="text-sm text-dim mb-8">{acc >= 90 ? t('board.cheerHigh') : t('board.cheerLow')}</p>
           <div className="flex justify-center gap-3">
             <button
               onClick={() => {
@@ -223,6 +274,12 @@ export default function PracticeBoard({
       <div className="flex items-center justify-between text-sm text-dim mb-4">
         <div>
           {boardTitle} · {session.progress.index + 1}/{session.progress.total}
+          {step.total > 1 && (
+            <span className="ml-2">
+              {t('board.step', { i: step.index + 1, n: step.total })} · {t(MODE_LABEL[mode])}
+            </span>
+          )}
+          {step.patch && <span className="ml-2 px-1.5 py-0.5 rounded-md bg-surface2">{t('board.wrongPractice')}</span>}
           {session.repeatLabel && <span className="ml-2">{t('board.repeat', { n: session.repeatLabel })}</span>}
         </div>
         <div className="flex gap-4">
@@ -245,7 +302,7 @@ export default function PracticeBoard({
         <WordCard
           word={session.word}
           typingMode={setting.typingMode}
-          showPinyin={setting.showPinyin && (setting.practiceMode === 'spell' || setting.practiceMode === 'test')}
+          showPinyin={setting.showPinyin && showsPinyinStep(mode)}
           showTrans={setting.showTrans}
           masked={masked}
           onPlay={session.playCurrent}
@@ -262,7 +319,7 @@ export default function PracticeBoard({
             word={session.word}
             input={session.input}
             shakeKey={shakeKey}
-            showTarget={setting.practiceMode === 'spell'}
+            showTarget={!isMaskedStep(mode)}
             onType={ch => session.type(ch)}
             onBackspace={() => session.type('Backspace')}
           />
@@ -327,6 +384,9 @@ export default function PracticeBoard({
       <div className="mt-10 flex flex-wrap justify-center items-center gap-2 text-xs text-dim">
         <Key>{setting.replayKey === 'f2' ? t('board.keyReplayF2') : t('board.keyReplayTab')}</Key>
         <Key>{t('board.keySkip')}</Key>
+        <Key>{t('board.keyToggleHint')}</Key>
+        <Key>{t('board.keyKnown')}</Key>
+        <Key>{t('board.keyCollect')}</Key>
         <Key>{hanziMode ? t('board.keyBackspaceHanzi') : t('board.keyBackspacePinyin')}</Key>
         <button onClick={session.skip} className="px-3 py-1.5 rounded-lg border border-line hover:bg-surface2">
           {t('board.skip')}
@@ -352,6 +412,14 @@ export default function PracticeBoard({
       )}
     </div>
   )
+}
+
+/** 步骤名直接复用设置页的模式文案，避免多一套翻译 */
+const MODE_LABEL: Record<StepType, MessageKey> = {
+  spell: 'setting.modeSpell',
+  dictation: 'setting.modeDictation',
+  test: 'setting.modeTest',
+  write: 'setting.modeWrite',
 }
 
 function Stat({ label, value }: { label: string; value: string }) {

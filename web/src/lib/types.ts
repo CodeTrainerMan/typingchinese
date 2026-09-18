@@ -42,13 +42,17 @@ export type TypingMode = 'full' | 'initials' | 'tone'
 export type InputMode = 'pinyin' | 'hanzi'
 
 /**
- * 练习模式：
+ * 学习模式（对齐参考项目 TypeWords 的流程编排）：
+ * - smart 智能：跟写 → 听写 → 默写 三步，每步打错的词自动补练一轮
  * - spell 跟写：看汉字打拼音
  * - dictation 听写：只听发音，不显示汉字与拼音
  * - test 自测：只给拼音，写出对应的汉字或拼音
  * - write 默写：只给释义，写出词语
  */
-export type PracticeMode = 'spell' | 'dictation' | 'test' | 'write'
+export type PracticeMode = 'smart' | 'spell' | 'dictation' | 'test' | 'write'
+
+/** 流程中的一个步骤类型（smart 模式由多个步骤编排而成） */
+export type StepType = Exclude<PracticeMode, 'smart'>
 
 /** 主题：跟随系统 / 浅色 / 深色 */
 export type ThemeMode = 'system' | 'light' | 'dark'

@@ -45,17 +45,19 @@ export default function SettingPage() {
       </Section>
 
       <Section title={t('setting.sectionPractice')}>
+        {/* 模式多了一个「智能」（三步编排），下拉比分段按钮更省地方 */}
         <Row label={t('setting.practiceMode')} desc={t('setting.practiceModeDesc')}>
-          <Segmented
+          <select
             value={setting.practiceMode}
-            options={[
-              { value: 'spell', label: t('setting.modeSpell') },
-              { value: 'dictation', label: t('setting.modeDictation') },
-              { value: 'test', label: t('setting.modeTest') },
-              { value: 'write', label: t('setting.modeWrite') },
-            ]}
-            onChange={v => setting.patch({ practiceMode: v as PracticeMode })}
-          />
+            onChange={e => setting.patch({ practiceMode: e.target.value as PracticeMode })}
+            className="h-9 min-w-[10rem] rounded-lg border border-line bg-surface px-3 text-sm"
+          >
+            <option value="smart">{t('setting.modeSmart')}</option>
+            <option value="spell">{t('setting.modeSpell')}</option>
+            <option value="dictation">{t('setting.modeDictation')}</option>
+            <option value="test">{t('setting.modeTest')}</option>
+            <option value="write">{t('setting.modeWrite')}</option>
+          </select>
         </Row>
         <Row label={t('setting.typingMode')} desc={t('setting.typingModeDesc')}>
           <Segmented
@@ -96,6 +98,9 @@ export default function SettingPage() {
         </Row>
         <Row label={t('setting.inputWrongClear')}>
           <Toggle checked={setting.inputWrongClear} onChange={v => setting.patch({ inputWrongClear: v })} />
+        </Row>
+        <Row label={t('setting.wrongWordClear')} desc={t('setting.wrongWordClearDesc')}>
+          <Toggle checked={setting.wrongWordClear} onChange={v => setting.patch({ wrongWordClear: v })} />
         </Row>
         <Row label={t('setting.perDay')}>
           <NumberInput

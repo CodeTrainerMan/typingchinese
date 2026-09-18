@@ -62,8 +62,14 @@ interface Options {
   getTarget: (word: CnWord) => string
   getSyllables: (word: CnWord) => string[]
   config: TypingSessionConfig
+  /**
+   * 变化即重置输入状态：除了词表本身，还要带上步骤序号，
+   * 否则「下一步用同一批词」时词表没变，进度会卡在越界位置。
+   */
+  resetKey?: string
   onWordDone: (word: CnWord, wrongTimes: number) => void
-  onFinish: (stats: { spendMs: number; keys: number }) => void
+  /** 返回 false 表示后面还有步骤，本组不算结束（流程编排用） */
+  onFinish: (stats: { spendMs: number; keys: number }) => boolean
 }
 
 interface Snapshot {
@@ -74,6 +80,11 @@ interface Snapshot {
   waitingNext: boolean
   finished: boolean
 }
+
+/** 整词打错后先亮红再清空，给用户看清错在哪（对齐参考项目的 500ms 反馈） */
+const WRONG_CLEAR_DELAY = 500
+/** 完成后一小段时间内忽略「下一个」键，避免最后一个字母后多敲的空格直接跳词 */
+const NEXT_COOLDOWN = 300
 
 const initialSnapshot = (): Snapshot => ({
   index: 0,
@@ -89,6 +100,7 @@ export function useTypingSession({
   getTarget,
   getSyllables,
   config,
+  resetKey,
   onWordDone,
   onFinish,
 }: Options): TypingSessionHandle {
@@ -97,12 +109,25 @@ export function useTypingSession({
   const [imeDetected, setImeDetected] = useState(false)
 
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const wrongTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const waitingSinceRef = useRef(0)
   const snapshotRef = useRef<Snapshot>(snapshot)
   const startedAtRef = useRef(0)
+  // 一个步骤跑完换下一批词（比如错词补练）时，把输入状态归零
+  const wordsKey = words.map(w => w.word).join('|')
+  const batchKey = `${resetKey ?? ''}|${wordsKey}`
 
   useEffect(() => {
     startedAtRef.current = Date.now()
   }, [])
+
+  useEffect(() => {
+    const next = initialSnapshot()
+    snapshotRef.current = next
+    waitingSinceRef.current = 0
+    setSnapshot(next)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [batchKey])
 
   // 渲染后同步快照引用，供键盘事件回调读取最新状态
   useEffect(() => {
@@ -117,6 +142,7 @@ export function useTypingSession({
   useEffect(() => {
     return () => {
       clearTimer()
+      if (wrongTimerRef.current) clearTimeout(wrongTimerRef.current)
       cancelSpeak()
     }
   }, [clearTimer])
@@ -147,10 +173,17 @@ export function useTypingSession({
     if (cur) onWordDone(cur, snapshotRef.current.wrongTimes)
 
     if (snapshotRef.current.index + 1 >= words.length) {
+      // 后面还有步骤时由外部切批，这里先停在「等待下一批」而不结算
+      const allDone = onFinish({ spendMs: Date.now() - startedAtRef.current, keys: stats.keys })
+      if (!allDone) {
+        const next: Snapshot = { ...snapshotRef.current, index: snapshotRef.current.index + 1, waitingNext: true }
+        snapshotRef.current = next
+        setSnapshot(next)
+        return
+      }
       const next: Snapshot = { ...snapshotRef.current, finished: true }
       snapshotRef.current = next
       setSnapshot(next)
-      onFinish({ spendMs: Date.now() - startedAtRef.current, keys: stats.keys })
       return
     }
 
@@ -184,8 +217,9 @@ export function useTypingSession({
         return
       }
 
-      // 等待进入下一词时，按设置的继续键前进
+      // 等待进入下一词时，按设置的继续键前进（刚完成的一瞬间先忽略，防误触）
       if (s.waitingNext) {
+        if (Date.now() - waitingSinceRef.current < NEXT_COOLDOWN) return
         if (isNextKey(key, config.nextKey)) gotoNext()
         return
       }
@@ -230,6 +264,7 @@ export function useTypingSession({
 
       if (isCorrect(nextInput, target)) {
         if (config.effectSound) playCorrectSound()
+        waitingSinceRef.current = Date.now()
         const nextRepeat = s.repeat + 1
         if (nextRepeat < config.repeatCount) {
           const next: Snapshot = { ...s, input: '', repeat: nextRepeat, wrongTimes: s.wrongTimes }
@@ -255,14 +290,22 @@ export function useTypingSession({
         return
       }
 
-      // 整词打错：按设置清空或保留供退格
+      // 整词打错：先把打错的内容亮出来，再按设置清空或保留供退格
       const next: Snapshot = {
         ...s,
-        input: config.inputWrongClear ? '' : nextInput,
+        input: nextInput,
         wrongTimes: s.wrongTimes + 1,
       }
       snapshotRef.current = next
       setSnapshot(next)
+      if (config.inputWrongClear) {
+        if (wrongTimerRef.current) clearTimeout(wrongTimerRef.current)
+        wrongTimerRef.current = setTimeout(() => {
+          const cleared: Snapshot = { ...snapshotRef.current, input: '' }
+          snapshotRef.current = cleared
+          setSnapshot(cleared)
+        }, WRONG_CLEAR_DELAY)
+      }
     },
     [word, target, config, gotoNext, clearTimer, skip, playCurrent]
   )
@@ -309,6 +352,8 @@ export function useTypingSession({
 
   const restart = useCallback(() => {
     clearTimer()
+    if (wrongTimerRef.current) clearTimeout(wrongTimerRef.current)
+    waitingSinceRef.current = 0
     const next = initialSnapshot()
     snapshotRef.current = next
     startedAtRef.current = Date.now()

@@ -8,7 +8,7 @@ import { useSettingStore } from '@/lib/store/setting'
 import { useHydrated } from '@/lib/useHydrated'
 import PracticeBoard from '@/components/PracticeBoard'
 import { useI18n } from '@/i18n'
-import type { CnWord } from '@/lib/types'
+import type { CnWord, StepType } from '@/lib/types'
 
 export default function PracticePage() {
   const hydrated = useHydrated()
@@ -40,8 +40,23 @@ export default function PracticePage() {
 
   const words = useMemo<CnWord[]>(() => (session ? base.getSessionWords() : []), [session, base.dicts]) // eslint-disable-line react-hooks/exhaustive-deps
 
+  // 当前步骤（流程编排）：旧存档没有 steps 时按单步处理
+  const steps = session?.steps ?? ['spell']
+  const stepIndex = session?.stepIndex ?? 0
+  const step = {
+    index: stepIndex,
+    // 错词补练一律用最基础的跟写（看见答案再打一遍），符合参考项目的 wrongWordClear
+    mode: (session?.patch ? 'spell' : (steps[stepIndex] ?? 'spell')) as StepType,
+    total: steps.length,
+    patch: Boolean(session?.patch),
+  }
+
   const commit = useCallback((word: CnWord, wrongTimes: number) => base.commitWord(word, wrongTimes), [base])
-  const finish = useCallback((spendMs: number, keys: number) => base.finishSession(spendMs, keys), [base])
+  // 流程编排：一批词跑完后由 store 判断是否还有后续步骤，返回 false 表示继续下一批
+  const finish = useCallback((spendMs: number, keys: number) => {
+    base.finishSession(spendMs, keys)
+    return Boolean(useBaseStore.getState().session?.done)
+  }, [base])
   const flush = useCallback(
     (spendMs: number, keys: number, startedAt: number) => base.addSessionStat(spendMs, keys, startedAt),
     [base]
@@ -138,8 +153,10 @@ export default function PracticePage() {
       title={sessionTitle}
       words={words}
       setting={setting}
+      step={step}
       knownWords={base.knownWords}
       collect={base.collect}
+      statistics={base.statistics}
       onCommit={commit}
       onFinish={finish}
       onFlush={flush}

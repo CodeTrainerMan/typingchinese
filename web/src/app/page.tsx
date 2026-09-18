@@ -16,7 +16,9 @@ export default function HomePage() {
   const today = new Date().toISOString().slice(0, 10)
   const stat = base.statistics.find(s => s.date === today)
   const wrongCount = Object.keys(base.wrongWords).length
-  const remaining = base.session && !base.session.done ? base.session.wordIds.length - base.session.index : 0
+  // 多步骤流程里当前步骤的词表才是剩余量（错词补练时是子集）
+  const sessionIds = base.session?.stepWords ?? base.session?.wordIds ?? []
+  const remaining = base.session && !base.session.done ? sessionIds.length - base.session.index : 0
   const doneToday = stat?.total ?? 0
   const goal = Math.max(1, setting.dailyGoal)
   const goalPct = Math.min(100, Math.round((doneToday / goal) * 100))

@@ -20,6 +20,8 @@ export interface SettingState {
   autoNext: boolean
   /** 整词打错后自动清空重来 */
   inputWrongClear: boolean
+  /** 错词补练：每个步骤打错的词，在步骤结束后自动再走一轮跟写 */
+  wrongWordClear: boolean
   /** 每日学习量 */
   perDayStudyNumber: number
   /** 每日目标（完成词条数） */
@@ -50,7 +52,8 @@ export interface SettingState {
 }
 
 export const DEFAULT_SETTING = {
-  practiceMode: 'spell' as PracticeMode,
+  // 智能模式：跟写 → 听写 → 默写 三步编排，并对错词自动补练（对齐参考项目）
+  practiceMode: 'smart' as PracticeMode,
   typingMode: 'full' as TypingMode,
   inputMode: 'pinyin' as InputMode,
   showPinyin: true,
@@ -59,6 +62,7 @@ export const DEFAULT_SETTING = {
   waitTime: 300,
   autoNext: true,
   inputWrongClear: true,
+  wrongWordClear: true,
   perDayStudyNumber: 20,
   dailyGoal: 20,
   autoSound: true,
