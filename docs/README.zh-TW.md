@@ -23,7 +23,7 @@
 
 ## 線上存取
 
-<https://typingchinese.vercel.app>
+<https://www.typingchinese.club>
 
 ## 功能列表
 

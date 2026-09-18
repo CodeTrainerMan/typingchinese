@@ -23,7 +23,7 @@
 
 ## 在线访问
 
-<https://typingchinese.vercel.app>
+<https://www.typingchinese.club>
 
 ## 功能列表
 

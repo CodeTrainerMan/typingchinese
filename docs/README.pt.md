@@ -23,7 +23,7 @@
 
 ## Demonstração online
 
-<https://typingchinese.vercel.app>
+<https://www.typingchinese.club>
 
 ## Funcionalidades
 
