@@ -23,7 +23,7 @@ export default function PinyinDisplay({ hanzi, groups, cursor, shakeKey, masked 
         const chars = [...group.plain]
         return (
           <div key={gi} className="flex flex-col items-center min-w-10 sm:min-w-12">
-            <div className="font-hanzi text-3xl sm:text-5xl font-medium tracking-[0.2em] mb-2">
+            <div className="font-hanzi text-3xl sm:text-5xl font-normal tracking-[0.2em] mb-2">
               {masked ? '·' : ([...hanzi][gi] ?? '')}
             </div>
             <div className="flex">

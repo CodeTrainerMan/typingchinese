@@ -43,14 +43,14 @@ export default function WordCard({
         <div className="flex flex-wrap items-center justify-end gap-2">
           <button
             onClick={onPlay}
-            className="h-8 px-2.5 rounded-lg border border-line text-xs whitespace-nowrap hover:bg-hover transition-colors"
+            className="h-8 px-3 rounded-lg border border-line text-xs whitespace-nowrap hover:bg-hover transition-colors"
             title={t('wordCard.playTitle')}
           >
             {t('wordCard.playBtn')}
           </button>
           <button
             onClick={onToggleKnown}
-            className={`h-8 px-2.5 rounded-lg border text-xs whitespace-nowrap transition-colors ${
+            className={`h-8 px-3 rounded-lg border text-xs whitespace-nowrap transition-colors ${
             known ? 'border-ok text-ok' : 'border-line text-dim hover:bg-hover'
             }`}
             title={t('wordCard.knownTitle')}
@@ -59,7 +59,7 @@ export default function WordCard({
           </button>
           <button
             onClick={onToggleCollect}
-            className={`h-8 px-2.5 rounded-lg border text-xs whitespace-nowrap transition-colors ${
+            className={`h-8 px-3 rounded-lg border text-xs whitespace-nowrap transition-colors ${
             collected ? 'border-warn text-warn' : 'border-line text-dim hover:bg-hover'
             }`}
             title={t('wordCard.collectTitle')}
@@ -133,7 +133,7 @@ export function RichInfo({ word }: { word: CnWord }) {
     <div className="mt-4 space-y-2 text-sm">
       {(word.pos || word.traditional || word.radical) && (
         <div className="flex flex-wrap items-center gap-2 text-xs">
-          {word.pos && <span className="px-2 py-0.5 rounded-md bg-surface2 text-dim">{word.pos}</span>}
+          {word.pos && <span className="px-2 py-1 rounded-sm bg-surface2 text-dim">{word.pos}</span>}
           {word.traditional && (
             <span className="text-dim">
               {t('dictDetail.colTraditional')} {word.traditional}
@@ -156,10 +156,10 @@ export function RichInfo({ word }: { word: CnWord }) {
 
       {groups.map(([label, list]) =>
         list.length ? (
-          <div key={label} className="flex flex-wrap items-center gap-1.5 text-xs">
+          <div key={label} className="flex flex-wrap items-center gap-2 text-xs">
             <span className="text-dim">{label}</span>
             {list.map(x => (
-              <span key={x} className="px-1.5 py-0.5 rounded-md border border-line text-dim">
+              <span key={x} className="px-2 py-1 rounded-sm border border-line text-dim">
                 {x}
               </span>
             ))}

@@ -35,12 +35,12 @@ export default function DictBook({
       <span className="pointer-events-none absolute left-0 top-0 h-full w-1.5 rounded-l-lg bg-gradient-to-b from-brand to-brand/40" />
 
       {current && (
-        <span className="absolute right-2 top-2 rounded-md bg-brand px-1.5 py-0.5 text-[10px] font-medium text-white">
+        <span className="absolute right-2 top-2 rounded-sm bg-brand px-2 py-1 text-xs font-medium text-white">
           {t('common.current')}
         </span>
       )}
 
-      <div className="line-clamp-4 pt-1 text-sm font-medium leading-snug text-ink">{name}</div>
+      <div className="line-clamp-4 pt-1 text-sm font-semibold leading-snug text-ink">{name}</div>
 
       <div className="text-xs text-dim">
         {learned > 0 && <span className="text-ink2">{learned}/</span>}
@@ -60,7 +60,7 @@ export function DictBookAdd() {
   return (
     <Link
       href="/dicts"
-      className="flex h-[13.44rem] w-[9.6rem] shrink-0 items-center justify-center rounded-md border border-dashed border-line bg-surface2 text-2xl text-dim transition-colors duration-300 hover:border-brand hover:bg-active hover:text-brand"
+      className="flex h-[13.44rem] w-[9.6rem] shrink-0 items-center justify-center rounded-lg border border-dashed border-line bg-surface2 text-2xl text-dim transition-colors duration-300 hover:border-brand hover:bg-active hover:text-brand"
       title={t('dicts.addLearning')}
     >
       +

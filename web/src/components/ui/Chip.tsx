@@ -16,7 +16,7 @@ export default function Chip({
         : 'border-line bg-surface2 text-dim'
   return (
     <span
-      className={`inline-flex items-center gap-1 rounded-md border px-2 py-0.5 text-xs tabular-nums ${toneCls} ${className}`}
+      className={`inline-flex items-center gap-1 rounded-sm border px-2 py-1 text-xs tabular-nums ${toneCls} ${className}`}
     >
       {children}
     </span>

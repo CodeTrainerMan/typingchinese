@@ -48,8 +48,12 @@ export interface TypingSessionHandle {
   stats: { keys: number; wrong: number }
   /** 检测到中文输入法激活（按键被 IME 吞掉），需要提示用户切英文键盘 */
   imeDetected: boolean
-  /** 从本组开始到现在的真实用时（毫秒），用于统计落盘 */
+  /** 从本组开始到现在的真实用时（毫秒），用于统计落盘；暂停期间不计时 */
   elapsed: () => number
+  /** 计时是否已暂停（对标 TypeWords 的 statStore.timerPaused） */
+  paused: boolean
+  /** 暂停 / 恢复计时：点时间那一列切换，不影响打字 */
+  togglePause: () => void
   /** 直接喂一个按键（虚拟键盘 / 软键盘输入用） */
   type: (key: string) => void
   skip: () => void
@@ -109,12 +113,16 @@ export function useTypingSession({
   const [snapshot, setSnapshot] = useState<Snapshot>(initialSnapshot)
   const [stats, setStats] = useState({ keys: 0, wrong: 0 })
   const [imeDetected, setImeDetected] = useState(false)
+  const [paused, setPaused] = useState(false)
 
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const wrongTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const waitingSinceRef = useRef(0)
   const snapshotRef = useRef<Snapshot>(snapshot)
   const startedAtRef = useRef(0)
+  // 暂停计时：pausedTotal 是历史累计时长，pausedAt 是本次暂停起点（0 = 没在暂停）
+  const pausedTotalRef = useRef(0)
+  const pausedAtRef = useRef(0)
   // 一个步骤跑完换下一批词（比如错词补练）时，把输入状态归零
   const wordsKey = words.map(w => w.word).join('|')
   const batchKey = `${resetKey ?? ''}|${wordsKey}`
@@ -213,7 +221,23 @@ export function useTypingSession({
     setSnapshot(next)
   }, [clearTimer])
 
-  const elapsed = useCallback(() => Date.now() - startedAtRef.current, [])
+  const elapsed = useCallback(() => {
+    const total = Date.now() - startedAtRef.current - pausedTotalRef.current
+    // 暂停中还要再扣掉本次已暂停的时长
+    return pausedAtRef.current ? total - (Date.now() - pausedAtRef.current) : total
+  }, [])
+
+  // 以 pausedAtRef 为真值来源，避免在 setState updater 里改 ref（StrictMode 会跑两次）
+  const togglePause = useCallback(() => {
+    if (pausedAtRef.current) {
+      pausedTotalRef.current += Date.now() - pausedAtRef.current
+      pausedAtRef.current = 0
+      setPaused(false)
+    } else {
+      pausedAtRef.current = Date.now()
+      setPaused(true)
+    }
+  }, [])
 
   const handleKey = useCallback(
     (key: string) => {
@@ -370,6 +394,9 @@ export function useTypingSession({
     const next = initialSnapshot()
     snapshotRef.current = next
     startedAtRef.current = Date.now()
+    pausedTotalRef.current = 0
+    pausedAtRef.current = 0
+    setPaused(false)
     setSnapshot(next)
     setStats({ keys: 0, wrong: 0 })
   }, [clearTimer])
@@ -388,6 +415,8 @@ export function useTypingSession({
     stats,
     imeDetected,
     elapsed,
+    paused,
+    togglePause,
     type: handleKey,
     skip,
     prev,

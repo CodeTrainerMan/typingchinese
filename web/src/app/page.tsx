@@ -63,7 +63,7 @@ export default function HomePage() {
               <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-solid">
                 <NavIcon name="book" className="h-5 w-5 text-brand" />
               </div>
-              <Link href="/dicts" className="truncate text-2xl font-bold text-ink hover:text-brand">
+              <Link href="/dicts" className="truncate text-2xl font-semibold text-ink hover:text-brand">
                 {dict?.name ?? t('home.noDictTitle')}
               </Link>
             </div>
@@ -108,11 +108,11 @@ export default function HomePage() {
                 <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-solid">
                   <NavIcon name="star" className="h-5 w-5 text-warn" />
                 </div>
-                <span className="text-xl font-bold text-ink">{t('home.todayGoal')}</span>
+                <span className="text-xl font-semibold text-ink">{t('home.todayGoal')}</span>
               </div>
-              <div className="flex items-center gap-1.5 text-sm text-dim">
+              <div className="flex items-center gap-2 text-sm text-dim">
                 {t('home.goalHint', { n: goal })}
-                <span className="flex h-10 items-center rounded bg-purple px-3 text-2xl font-bold text-white">
+                <span className="flex h-10 items-center rounded-sm bg-purple px-3 text-2xl font-bold text-white">
                   {goal}
                 </span>
               </div>
@@ -139,7 +139,7 @@ export default function HomePage() {
 
             <Link
               href="/practice"
-              className="inline-flex h-12 w-full items-center justify-center rounded-xl bg-brand px-6 font-medium text-white sm:w-auto"
+              className="inline-flex h-12 w-full items-center justify-center rounded-lg bg-brand px-6 font-medium text-white sm:w-auto"
             >
               {remaining > 0 ? t('home.continuePractice') : t('home.startPractice')}
             </Link>
@@ -161,12 +161,12 @@ export default function HomePage() {
 
         <div className="mt-6">
           <div className="mb-2 text-xs text-dim">{t('board.week')}</div>
-          <div className="flex items-center gap-1.5">
+          <div className="flex items-center gap-2">
             {week.map(d => (
               <span
                 key={d.date}
                 title={`${d.date} · ${d.n}`}
-                className={`flex h-8 w-8 items-center justify-center rounded-md border text-[11px] tabular-nums ${
+                className={`flex h-8 w-8 items-center justify-center rounded-lg border text-xs tabular-nums ${
                   d.active ? 'border-brand bg-brand text-white' : 'border-line text-dim'
                 }`}
               >
@@ -207,7 +207,7 @@ export default function HomePage() {
 
       {/* 第四张卡：四个玩法说明 */}
       <Panel title={t('home.featFsrsTitle')}>
-        <div className="grid gap-5 sm:grid-cols-2">
+        <div className="grid gap-6 sm:grid-cols-2">
           <Feat title={t('home.featSpellTitle')} desc={t('home.featSpellDesc')} />
           <Feat title={t('home.featDictationTitle')} desc={t('home.featDictationDesc')} />
           <Feat title={t('home.featFsrsTitle')} desc={t('home.featFsrsDesc')} />
@@ -221,7 +221,7 @@ export default function HomePage() {
 function Feat({ title, desc }: { title: string; desc: string }) {
   return (
     <div>
-      <div className="font-medium text-ink">{title}</div>
+      <div className="font-semibold text-ink">{title}</div>
       <p className="mt-1 text-sm text-dim">{desc}</p>
     </div>
   )

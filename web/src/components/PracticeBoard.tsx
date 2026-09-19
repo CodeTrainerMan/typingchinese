@@ -14,7 +14,7 @@ import { accuracy, speed } from '@/lib/typing'
 import { useI18n, type MessageKey } from '@/i18n'
 import Page from './ui/Page'
 import Panel from './ui/Panel'
-import ProgressBar from './ui/ProgressBar'
+import StageProgress from './ui/StageProgress'
 import StatCard from './ui/StatCard'
 import Chip from './ui/Chip'
 import PinyinDisplay from './PinyinDisplay'
@@ -288,12 +288,12 @@ export default function PracticeBoard({
 
             <div className="mt-8">
               <div className="mb-2 text-xs text-dim">{t('board.week')}</div>
-              <div className="flex items-center justify-center gap-1.5">
+              <div className="flex items-center justify-center gap-2">
                 {week.map(d => (
                   <span
                     key={d.date}
                     title={d.date}
-                    className={`flex h-7 w-7 items-center justify-center rounded-md border text-[11px] tabular-nums ${
+                    className={`flex h-7 w-7 items-center justify-center rounded-lg border text-xs tabular-nums ${
                       d.active ? 'border-brand bg-brand text-white' : 'border-line text-dim'
                     }`}
                   >
@@ -313,7 +313,7 @@ export default function PracticeBoard({
                   onRestartSession()
                   session.restart()
                 }}
-                className="h-10 rounded-xl bg-brand px-5 text-white"
+                className="h-11 md:h-10 rounded-lg bg-brand px-5 text-white"
               >
                 {t('board.again')}
               </button>
@@ -329,11 +329,11 @@ export default function PracticeBoard({
                   })
                   setShareMsg(ok ? t('board.shareOk') : t('board.shareFail'))
                 }}
-                className="h-10 rounded-xl border border-line px-5"
+                className="h-11 md:h-10 rounded-lg border border-line px-5"
               >
                 {t('board.share')}
               </button>
-              <Link href="/" className="inline-flex h-10 items-center rounded-xl border border-line px-5">
+              <Link href="/" className="inline-flex h-11 md:h-10 items-center rounded-lg border border-line px-5">
                 {t('common.backHome')}
               </Link>
             </div>
@@ -348,6 +348,19 @@ export default function PracticeBoard({
   const doneCount = session.progress.index + (session.waitingNext ? 1 : 0)
   const progressPct = session.progress.total ? (doneCount / session.progress.total) * 100 : 0
 
+  // 分段进度条：每个步骤一段等宽；已完成的步骤填满，当前步骤按词序走，未开始的为 0
+  // 对标 TypeWords practice-flow-display.ts:62-82
+  const stageCount = Math.max(1, step.total)
+  const stages = Array.from({ length: stageCount }, (_, i) => ({
+    name: t('board.step', { i: i + 1, n: stageCount }),
+    ratio: 100 / stageCount,
+    percentage: i < step.index ? 100 : i === step.index ? progressPct : 0,
+    active: i === step.index,
+  }))
+
+  // 工具条第一列的名称：错词补练盖过步骤名，等价于 TypeWords 的 status
+  const status = step.patch ? t('board.wrongPractice') : t(MODE_LABEL[mode])
+
   return (
     <Page width="sm">
       {/* 进度区：与词卡同一层皮（白卡片），上面「在练什么 + 实时数据」，中间粗进度条，下面两端对齐说明 */}
@@ -355,8 +368,8 @@ export default function PracticeBoard({
         <div className="flex flex-wrap items-start justify-between gap-x-4 gap-y-2">
           <div className="min-w-0">
             {/* 词典名：对标 TypeWords 的 text-2xl font-bold */}
-            <div className="truncate text-xl font-bold sm:text-2xl">{boardTitle}</div>
-            <div className="mt-1 flex flex-wrap items-center gap-1.5">
+            <div className="truncate text-xl font-semibold sm:text-2xl">{boardTitle}</div>
+            <div className="mt-1 flex flex-wrap items-center gap-2">
               {step.total > 1 && (
                 <Chip>
                   {t('board.step', { i: step.index + 1, n: step.total })} · {t(MODE_LABEL[mode])}
@@ -373,7 +386,7 @@ export default function PracticeBoard({
               )}
             </div>
           </div>
-          <div className="flex shrink-0 flex-wrap items-center gap-1.5">
+          <div className="flex shrink-0 flex-wrap items-center gap-2">
             {/* 连对 3 个以上才亮出来，避免每词都闪 */}
             {combo >= 3 && (
               <Chip key={combo} tone="brand" className="pop font-semibold">
@@ -388,13 +401,53 @@ export default function PracticeBoard({
           </div>
         </div>
 
-        <ProgressBar className="mt-3" size="lg" value={progressPct} />
+        <StageProgress className="mt-4" stages={stages} />
 
-        <div className="mt-1.5 flex items-center justify-between text-xs text-dim">
-          <span>
-            {t('common.progress', { a: doneCount, b: session.progress.total })}
-          </span>
-          <span className="tabular-nums">{Math.round(progressPct)}%</span>
+        {/* 三列统计：对标 TypeWords Footer 的 .stat > .row —— 「数值 / 分隔线 / 名称」，纯文本不带进度条
+            用 flex 而非 grid：窄屏隐藏第 3 列后前两列能平分剩余宽度（参考 480px 以下同样砍掉第 3 列） */}
+        <div className="mt-3 flex gap-4">
+          <div className="flex min-w-0 flex-1 flex-col gap-1">
+            <div className="flex min-h-11 items-center md:min-h-0">
+              <span className="truncate text-sm font-semibold text-ink tabular-nums">
+                {doneCount} / <span className="text-err">{session.stats.wrong}</span> / {session.progress.total}
+              </span>
+            </div>
+            <div className="h-px w-full bg-line" />
+            <div className="truncate text-xs text-dim">{status}</div>
+          </div>
+
+          {/* 点时间那一行暂停 / 恢复计时，对标 TypeWords Footer 的 onTimerRowClick */}
+          <div className="flex min-w-0 flex-1 flex-col gap-1">
+            <button
+              type="button"
+              onClick={session.togglePause}
+              title={session.paused ? t('board.resumeTimer') : t('board.pauseTimer')}
+              aria-label={session.paused ? t('board.resumeTimer') : t('board.pauseTimer')}
+              className="flex min-h-11 items-center md:min-h-0"
+            >
+              <span
+                className={`truncate text-sm font-semibold tabular-nums ${
+                  session.paused ? 'text-dim' : 'text-ink'
+                }`}
+              >
+                {t('common.minutes', { n: Math.floor(spend / 60000) })}
+              </span>
+            </button>
+            <div className="h-px w-full bg-line" />
+            <div className="truncate text-xs text-dim">
+              {session.paused ? t('board.paused') : t('board.time')}
+            </div>
+          </div>
+
+          <div className="flex min-w-0 flex-1 flex-col gap-1 max-[480px]:hidden">
+            <div className="flex min-h-11 items-center md:min-h-0">
+              <span className="truncate text-sm font-semibold text-ink tabular-nums">
+                {dict ? `${dict.lastLearnIndex} | ${dict.length}` : '-'}
+              </span>
+            </div>
+            <div className="h-px w-full bg-line" />
+            <div className="truncate text-xs text-dim">{t('dictDetail.statWords')}</div>
+          </div>
         </div>
       </div>
 
@@ -519,7 +572,7 @@ export default function PracticeBoard({
         </div>
 
         {/* 键位提示：触屏按不到功能键，小屏直接不显示；末尾给出改键入口 */}
-        <div className="mt-3 hidden flex-wrap items-center justify-center gap-1.5 sm:flex">
+        <div className="mt-3 hidden flex-wrap items-center justify-center gap-2 sm:flex">
           <Key>{setting.replayKey === 'f2' ? t('board.keyReplayF2') : t('board.keyReplayTab')}</Key>
           {SHORTCUT_ACTIONS.map(action => {
             const key = setting.shortcuts?.[action]
@@ -531,7 +584,7 @@ export default function PracticeBoard({
             )
           })}
           <Key>{hanziMode ? t('board.keyBackspaceHanzi') : t('board.keyBackspacePinyin')}</Key>
-          <Link href="/setting" className="text-[11px] text-dim underline decoration-dotted hover:text-brand">
+          <Link href="/setting" className="text-xs text-dim underline decoration-dotted hover:text-brand">
             {t('nav.setting')}
           </Link>
         </div>
@@ -604,7 +657,10 @@ function WordDetail({
             <div className="text-2xl tracking-widest">{word.word}</div>
             <div className="text-brand text-sm mt-1">{word.pinyin.join(' ')}</div>
           </div>
-          <button onClick={onClose} className="px-2 py-1 rounded-md border border-line text-xs">
+          <button
+            onClick={onClose}
+            className="rounded-lg border border-line px-3 py-2 text-xs min-h-11 md:min-h-8"
+          >
             {t('common.cancel')}
           </button>
         </div>
@@ -625,18 +681,18 @@ function WordDetail({
         </div>
 
         <div className="flex flex-wrap gap-2 mt-5 text-xs">
-          <button onClick={onPlay} className="px-3 py-1.5 rounded-lg border border-line hover:bg-surface2">
+          <button onClick={onPlay} className="px-3 py-2 rounded-lg border border-line hover:bg-surface2">
             {t('common.play')}
           </button>
-          <button onClick={onToggleKnown} className="px-3 py-1.5 rounded-lg border border-line hover:bg-surface2">
+          <button onClick={onToggleKnown} className="px-3 py-2 rounded-lg border border-line hover:bg-surface2">
             {known ? t('wordCard.known') : t('wordCard.markKnown')}
           </button>
-          <button onClick={onToggleCollect} className="px-3 py-1.5 rounded-lg border border-line hover:bg-surface2">
+          <button onClick={onToggleCollect} className="px-3 py-2 rounded-lg border border-line hover:bg-surface2">
             {collected ? t('wordCard.collected') : t('wordCard.collect')}
           </button>
           <button
             onClick={onToggleIgnore}
-            className="px-3 py-1.5 rounded-lg border border-line hover:bg-surface2"
+            className="px-3 py-2 rounded-lg border border-line hover:bg-surface2"
           >
             {ignored ? t('board.ignored') : t('board.ignore')}
           </button>
@@ -650,7 +706,7 @@ function MiniStat({ label, value }: { label: string; value: string }) {
   return (
     <div className="rounded-lg border border-line px-2 py-2">
       <div className="text-dim truncate">{label}</div>
-      <div className="font-medium mt-0.5 truncate">{value}</div>
+      <div className="font-semibold mt-1 truncate">{value}</div>
     </div>
   )
 }
@@ -678,7 +734,7 @@ const MODE_LABEL: Record<StepType, MessageKey> = {
 
 function Key({ children }: { children: React.ReactNode }) {
   return (
-    <span className="rounded-md border border-line bg-surface2 px-1.5 py-0.5 text-[11px] text-dim">
+    <span className="rounded-sm border border-line bg-surface2 px-2 py-1 text-xs text-dim">
       {children}
     </span>
   )

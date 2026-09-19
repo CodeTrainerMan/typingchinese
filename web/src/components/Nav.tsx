@@ -34,7 +34,7 @@ export default function Nav() {
     <>
       <aside className="group fixed left-0 top-0 z-30 hidden h-screen w-[4.5rem] flex-col justify-between overflow-hidden border-r border-line bg-surface2 shadow-[var(--shadow-sm)] transition-[width] duration-300 hover:w-56 md:flex">
         <div className="flex flex-col p-2">
-          <div className="flex items-center gap-2.5 p-2">
+          <div className="flex items-center gap-3 p-2">
             <BrandMark className="h-7 w-7 shrink-0 text-ink" />
             <span className="whitespace-nowrap text-sm font-semibold text-ink opacity-0 transition-opacity duration-300 group-hover:opacity-100">
               {t('nav.brandA')}
@@ -46,8 +46,10 @@ export default function Nav() {
               key={item.href}
               href={item.href}
               title={t(`nav.${item.key}`)}
-              className={`relative my-0.5 flex shrink-0 items-center gap-2.5 rounded-md p-2 text-ink transition-colors duration-300 hover:bg-hover ${
-                isActive(pathname, item.href) ? 'bg-hover' : ''
+              className={`relative my-1 flex shrink-0 items-center gap-3 rounded-lg p-2 text-ink transition-colors duration-300 hover:bg-hover ${
+                isActive(pathname, item.href)
+                  ? 'bg-hover text-brand after:absolute after:left-0 after:top-1/2 after:h-5 after:w-[3px] after:-translate-y-1/2 after:rounded-full after:bg-brand after:content-[""]'
+                  : ''
               }`}
             >
               <NavIcon name={item.icon} className="h-5 w-5 shrink-0" />
@@ -61,8 +63,10 @@ export default function Nav() {
           <Link
             href={FOOTER.href}
             title={t('nav.setting')}
-            className={`flex shrink-0 items-center gap-2.5 rounded-md p-2 text-ink transition-colors duration-300 hover:bg-hover ${
-              isActive(pathname, FOOTER.href) ? 'bg-hover' : ''
+            className={`flex shrink-0 items-center gap-3 rounded-lg p-2 text-ink transition-colors duration-300 hover:bg-hover ${
+              isActive(pathname, FOOTER.href)
+                ? 'bg-hover text-brand after:absolute after:left-0 after:top-1/2 after:h-5 after:w-[3px] after:-translate-y-1/2 after:rounded-full after:bg-brand after:content-[""]'
+                : ''
             }`}
           >
             <NavIcon name={FOOTER.icon} className="h-5 w-5 shrink-0" />
@@ -85,15 +89,17 @@ export function MobileNav() {
 
   return (
     <header className="sticky top-0 z-20 flex h-14 items-center gap-1 overflow-x-auto border-b border-line bg-surface px-2 md:hidden">
-      <Link href="/" className="mr-1 inline-flex shrink-0 items-center px-1.5">
+      <Link href="/" className="mr-1 inline-flex shrink-0 items-center px-2">
         <BrandMark className="h-6 w-6 text-ink" />
       </Link>
       {[...ITEMS.slice(1), FOOTER].map(item => (
         <Link
           key={item.href}
           href={item.href}
-          className={`inline-flex h-9 shrink-0 items-center gap-1.5 rounded-md px-2.5 text-sm transition-colors ${
-            isActive(pathname, item.href) ? 'bg-hover text-ink' : 'text-dim'
+          className={`relative inline-flex h-11 shrink-0 items-center gap-2 rounded-lg px-3 text-sm transition-colors ${
+            isActive(pathname, item.href)
+              ? 'bg-hover text-brand after:absolute after:bottom-1 after:left-1/2 after:h-[3px] after:w-5 after:-translate-x-1/2 after:rounded-full after:bg-brand after:content-[""]'
+              : 'text-dim'
           }`}
         >
           <NavIcon name={item.icon} className="h-4 w-4" />

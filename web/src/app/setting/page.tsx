@@ -89,7 +89,7 @@ export default function SettingPage() {
             onChange={v => setting.patch({ typingMode: v as TypingMode })}
           />
         </Row>
-        {setting.typingMode === 'tone' && <p className="text-xs text-dim -mt-2">{t('setting.toneExample')}</p>}
+        {setting.typingMode === 'tone' && <p className="text-xs text-dim mt-2">{t('setting.toneExample')}</p>}
         <Row label={t('setting.inputMode')} desc={t('setting.inputModeDesc')}>
           <Segmented
             value={setting.inputMode}
@@ -142,7 +142,7 @@ export default function SettingPage() {
       </Section>
 
       <Section title={t('setting.sectionFsrs')}>
-        <p className="text-xs text-dim -mt-2">{t('setting.fsrsIntro')}</p>
+        <p className="text-xs text-dim mt-2">{t('setting.fsrsIntro')}</p>
         <Row label={t('setting.easyLimit')} desc={t('setting.easyLimitDesc')}>
           <NumberInput
             value={setting.fsrsLimits.easy}
@@ -229,7 +229,7 @@ export default function SettingPage() {
             volume={setting.soundVolume / 100}
           />
         </Row>
-        {voices.length === 0 && <p className="text-xs text-warn -mt-2">{t('setting.noVoice')}</p>}
+        {voices.length === 0 && <p className="text-xs text-warn mt-2">{t('setting.noVoice')}</p>}
       </Section>
 
       <Section title={t('setting.sectionEffect')}>
@@ -269,7 +269,7 @@ export default function SettingPage() {
       </Section>
 
       <Section title={t('setting.sectionShortcut')}>
-        <p className="text-xs text-dim -mt-2">{t('setting.shortcutHint')}</p>
+        <p className="text-xs text-dim mt-2">{t('setting.shortcutHint')}</p>
         {SHORTCUT_ROWS.map(([action, label]) => (
           <Row key={action} label={t(label)}>
             <select
@@ -288,7 +288,7 @@ export default function SettingPage() {
             </select>
           </Row>
         ))}
-        {conflict && <p className="text-xs text-warn -mt-2">{t('setting.shortcutConflict')}</p>}
+        {conflict && <p className="text-xs text-warn mt-2">{t('setting.shortcutConflict')}</p>}
       </Section>
 
       <Section title={t('setting.sectionAppearance')}>
@@ -308,7 +308,7 @@ export default function SettingPage() {
       <Section title={t('setting.sectionData')}>
         {importMsg && (
           <div
-            className={`text-sm px-4 py-3 rounded-xl border ${
+            className={`text-sm px-4 py-3 rounded-lg border ${
               importMsg.ok ? 'border-ok/50 bg-ok/10 text-ok' : 'border-err/50 bg-err/10 text-err'
             }`}
           >
@@ -403,7 +403,7 @@ function Row({ label, desc, children }: { label: string; desc?: string; children
     <div className="flex flex-wrap items-center justify-between gap-4">
       <div className="min-w-0">
         <div className="text-sm">{label}</div>
-        {desc && <div className="text-xs text-dim mt-0.5">{desc}</div>}
+        {desc && <div className="text-xs text-dim mt-1">{desc}</div>}
       </div>
       <div className="flex items-center">{children}</div>
     </div>

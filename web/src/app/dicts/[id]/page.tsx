@@ -64,7 +64,7 @@ export default function DictDetailPage() {
           <p className="text-dim">{t('dictDetail.notFound')}</p>
           <Link
             href="/dicts"
-            className="mt-6 inline-flex h-10 items-center rounded-xl bg-brand px-5 text-white"
+            className="mt-6 inline-flex h-11 md:h-10 items-center rounded-lg bg-brand px-5 text-white"
           >
             {t('dictDetail.backToDicts')}
           </Link>
@@ -260,7 +260,7 @@ export default function DictDetailPage() {
       </div>
 
       <div className="rounded-xl border border-line bg-surface p-5 mb-6">
-        <div className="font-medium mb-1">{t('dictDetail.addWords')}</div>
+        <div className="font-semibold mb-1">{t('dictDetail.addWords')}</div>
         <p className="text-xs text-dim mb-3">{t('dictDetail.addWordsDesc')}</p>
         <textarea
           value={adding}
@@ -329,10 +329,14 @@ export default function DictDetailPage() {
       <div className="rounded-xl border border-line bg-surface overflow-x-auto">
         <table className="w-full text-sm min-w-[560px]">
           <thead className="bg-surface2 text-dim">
-            <tr>
-              <th className="text-left px-4 py-3 font-normal w-28">{t('common.wordCol')}</th>
-              <th className="text-left px-4 py-3 font-normal w-40">{t('common.pinyinCol')}</th>
-              <th className="text-left px-4 py-3 font-normal">{t('dictDetail.meaningEditable')}</th>
+            <tr className="border-b border-line">
+              <th className="text-left px-4 py-3 text-xs font-semibold w-28">{t('common.wordCol')}</th>
+              <th className="text-left px-4 py-3 text-xs font-semibold w-40">
+                {t('common.pinyinCol')}
+              </th>
+              <th className="text-left px-4 py-3 text-xs font-semibold">
+                {t('dictDetail.meaningEditable')}
+              </th>
               <th className="px-4 py-3 w-32"></th>
             </tr>
           </thead>
@@ -347,25 +351,25 @@ export default function DictDetailPage() {
                       value={w.trans}
                       onChange={e => updateTrans(w.id, e.target.value)}
                       placeholder={t('dictDetail.meaningPlaceholder')}
-                      className="w-full h-8 px-2 rounded-md border border-line bg-surface2 text-sm"
+                      className="w-full h-11 md:h-8 px-2 rounded-sm border border-line bg-surface2 text-sm"
                     />
                   </td>
                   <td className="px-4 py-2 text-right whitespace-nowrap">
                     <button
                       onClick={() => setOpenId(openId === w.id ? '' : w.id)}
-                      className="px-2 py-1 rounded-md border border-line text-xs hover:bg-surface2"
+                      className="rounded-lg border border-line px-3 py-2 text-xs min-h-11 md:min-h-8 hover:bg-surface2"
                     >
                       {t('dictDetail.detailBtn')}
                     </button>
                     <button
                       onClick={() => play(w.word)}
-                      className="ml-2 px-2 py-1 rounded-md border border-line text-xs hover:bg-surface2"
+                      className="ml-2 rounded-lg border border-line px-3 py-2 text-xs min-h-11 md:min-h-8 hover:bg-surface2"
                     >
                       {t('common.play')}
                     </button>
                     <button
                       onClick={() => removeWord(w.id)}
-                      className="ml-2 px-2 py-1 rounded-md border border-line text-xs text-err hover:bg-surface2"
+                      className="ml-2 rounded-lg border border-line px-3 py-2 text-xs text-err min-h-11 md:min-h-8 hover:bg-surface2"
                     >
                       {t('common.delete')}
                     </button>
@@ -374,21 +378,21 @@ export default function DictDetailPage() {
                 {openId === w.id && (
                   <tr className="border-t border-line bg-surface2/40">
                     <td colSpan={4} className="px-4 py-3">
-                      <div className="text-xs font-medium mb-2">{t('dictDetail.richTitle')}</div>
+                      <div className="text-xs font-semibold mb-2">{t('dictDetail.richTitle')}</div>
                       <div className="grid gap-2 sm:grid-cols-2">
                         {RICH_KEYS.map(field => (
                           <label key={field} className="block">
-                            <span className="text-[11px] text-dim">{t(RICH_LABEL[field])}</span>
+                            <span className="text-xs text-faint">{t(RICH_LABEL[field])}</span>
                             <input
                               value={w[field] ?? ''}
                               onChange={e => updateRich(w.id, field, e.target.value)}
                               placeholder={t(RICH_LABEL[field])}
-                              className="mt-1 w-full h-8 px-2 rounded-md border border-line bg-surface2 text-sm"
+                              className="mt-1 w-full h-11 md:h-8 px-2 rounded-sm border border-line bg-surface2 text-sm"
                             />
                           </label>
                         ))}
                       </div>
-                      <p className="text-[11px] text-dim mt-2">{t('dictDetail.richHint')}</p>
+                      <p className="text-xs text-faint mt-2">{t('dictDetail.richHint')}</p>
                     </td>
                   </tr>
                 )}

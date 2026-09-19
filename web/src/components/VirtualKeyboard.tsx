@@ -56,7 +56,7 @@ function Kbd({ children, onClick, className = '' }: { children: ReactNode; onCli
   return (
     <button
       onClick={onClick}
-      className={`h-9 min-w-7 rounded-lg border border-line bg-surface2 px-1.5 text-sm active:bg-brand active:text-white sm:h-10 sm:min-w-8 sm:px-2 ${className}`}
+      className={`h-9 min-w-7 rounded-lg border border-line bg-surface2 px-2 text-sm active:bg-brand active:text-white sm:h-10 sm:min-w-8 sm:px-2 ${className}`}
     >
       {children}
     </button>

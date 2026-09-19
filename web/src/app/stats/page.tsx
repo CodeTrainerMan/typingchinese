@@ -13,6 +13,7 @@ import PageHeader from '@/components/ui/PageHeader'
 import Panel from '@/components/ui/Panel'
 import StatCard from '@/components/ui/StatCard'
 import Chip from '@/components/ui/Chip'
+import EmptyState from '@/components/ui/EmptyState'
 import type { Statistics } from '@/lib/types'
 
 const DAYS = 14
@@ -157,7 +158,7 @@ export default function StatsPage() {
             </span>
           </div>
           <div className="flex h-40 items-end gap-1">
-            {days.map(d => {
+            {days.map((d, i) => {
               const total = d.stat?.total ?? 0
               const fresh = d.stat?.newCount ?? 0
               const review = d.stat?.reviewCount ?? 0
@@ -166,8 +167,11 @@ export default function StatsPage() {
               const freshShare = total ? ((fresh || total) / total) * 100 : 100
               const reviewShare = total && review ? (review / total) * 100 : 0
               return (
-                <div key={d.key} className="flex h-full flex-1 flex-col items-center justify-end">
-                  <div className="mb-1 text-[10px] text-dim">{total || ''}</div>
+                <div
+                  key={d.key}
+                  className="flex h-full min-w-0 flex-1 flex-col items-center justify-end"
+                >
+                  <div className="mb-1 text-xs text-dim">{total || ''}</div>
                   <div
                     title={t('stats.tooltip', { date: d.full, n: total })}
                     className="flex w-full flex-col justify-end overflow-hidden rounded-t"
@@ -181,7 +185,10 @@ export default function StatsPage() {
                       style={{ height: `${freshShare}%` }}
                     />
                   </div>
-                  <div className="mt-1 text-[10px] text-dim">{d.label}</div>
+                  {/* 14 天全标会把窄屏撑出横向滚动，隔一根标一次日期，完整日期走 title */}
+                  <div className="mt-1 whitespace-nowrap text-xs text-dim">
+                    {i % 2 === 0 ? d.label : '\u00a0'}
+                  </div>
                 </div>
               )
             })}
@@ -190,9 +197,9 @@ export default function StatsPage() {
 
         <Panel title={t('stats.forecastTitle', { n: DAYS })} desc={t('stats.forecastDesc')}>
           <div className="flex h-32 items-end gap-1">
-            {forecast.map(f => (
-              <div key={f.key} className="flex h-full flex-1 flex-col items-center justify-end">
-                <div className="mb-1 text-[10px] text-dim">{f.count || ''}</div>
+            {forecast.map((f, i) => (
+              <div key={f.key} className="flex h-full min-w-0 flex-1 flex-col items-center justify-end">
+                <div className="mb-1 text-xs text-dim">{f.count || ''}</div>
                 <div
                   title={t('stats.tooltip', { date: f.full, n: f.count })}
                   className={`w-full rounded-t ${f.count ? 'bg-ok/70' : 'bg-surface2'}`}
@@ -200,7 +207,9 @@ export default function StatsPage() {
                     height: f.count ? `${Math.max(6, Math.round((f.count / maxDue) * 100))}%` : '2%',
                   }}
                 />
-                <div className="mt-1 text-[10px] text-dim">{f.label}</div>
+                <div className="mt-1 whitespace-nowrap text-xs text-dim">
+                  {i % 2 === 0 ? f.label : '\u00a0'}
+                </div>
               </div>
             ))}
           </div>
@@ -263,7 +272,7 @@ export default function StatsPage() {
             reads.length > 0 ? (
               <button
                 onClick={extra.clearReadRecords}
-                className="h-8 rounded-lg border border-line px-3 text-xs text-err hover:bg-surface2"
+                className="h-11 md:h-8 rounded-lg border border-line px-3 text-xs text-err hover:bg-surface2"
               >
                 {t('stats.readClear')}
               </button>
@@ -271,7 +280,7 @@ export default function StatsPage() {
           }
         >
           {reads.length === 0 ? (
-            <p className="text-sm text-dim">{t('stats.readEmpty')}</p>
+            <EmptyState variant="plain" icon="article" title={t('stats.readEmpty')} />
           ) : (
             <div className="space-y-4">
               <div className="grid gap-4 sm:grid-cols-3">
@@ -282,10 +291,10 @@ export default function StatsPage() {
 
               <div>
                 <div className="mb-2 text-xs text-dim">{t('stats.readRecent')}</div>
-                <div className="space-y-1.5">
+                <div className="space-y-2">
                   {reads.slice(0, 8).map(r => (
                     <div key={r.id} className="flex items-center gap-3 text-sm">
-                      <span className="w-14 shrink-0 font-medium tabular-nums text-brand">
+                      <span className="w-14 shrink-0 font-semibold tabular-nums text-brand">
                         {t('article.readScore', { n: r.score })}
                       </span>
                       <span className="flex-1 truncate">{r.sentence}</span>
@@ -309,7 +318,7 @@ export default function StatsPage() {
                   key={g.key}
                   onClick={() => setPickArticle(g.key)}
                   title={g.title}
-                  className={`inline-flex h-8 max-w-[14rem] items-center gap-1.5 rounded-lg border px-3 text-xs ${
+                  className={`inline-flex h-11 md:h-8 max-w-[14rem] items-center gap-2 rounded-lg border px-3 text-xs ${
                     g.key === current.key
                       ? 'border-brand bg-brand-soft text-brand'
                       : 'border-line text-dim hover:bg-surface2'
@@ -350,17 +359,17 @@ export default function StatsPage() {
         )}
 
       {activeDays === 0 ? (
-        <p className="text-dim">{t('stats.empty')}</p>
+        <EmptyState icon="stats" title={t('stats.empty')} />
       ) : (
         <div className="overflow-hidden rounded-xl border border-line bg-surface">
           <table className="w-full text-sm">
             <thead className="bg-surface2 text-dim">
-              <tr>
-                <th className="text-left px-4 py-3 font-normal">{t('stats.thDate')}</th>
-                <th className="text-right px-4 py-3 font-normal">{t('stats.thWords')}</th>
-                <th className="text-right px-4 py-3 font-normal">{t('stats.thAcc')}</th>
-                <th className="text-right px-4 py-3 font-normal">{t('stats.thTime')}</th>
-                <th className="text-right px-4 py-3 font-normal">{t('stats.thKeys')}</th>
+              <tr className="border-b border-line">
+                <th className="text-left px-4 py-3 text-xs font-semibold">{t('stats.thDate')}</th>
+                <th className="text-right px-4 py-3 text-xs font-semibold">{t('stats.thWords')}</th>
+                <th className="text-right px-4 py-3 text-xs font-semibold">{t('stats.thAcc')}</th>
+                <th className="text-right px-4 py-3 text-xs font-semibold">{t('stats.thTime')}</th>
+                <th className="text-right px-4 py-3 text-xs font-semibold">{t('stats.thKeys')}</th>
               </tr>
             </thead>
             <tbody>

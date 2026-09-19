@@ -8,6 +8,7 @@ import { useSettingStore } from '@/lib/store/setting'
 import { useHydrated } from '@/lib/useHydrated'
 import PracticeBoard from '@/components/PracticeBoard'
 import Page from '@/components/ui/Page'
+import EmptyState from '@/components/ui/EmptyState'
 import { useI18n } from '@/i18n'
 import type { CnWord, StepType } from '@/lib/types'
 
@@ -110,15 +111,18 @@ export default function PracticePage() {
   if (!dict && !isArticleSession) {
     return (
       <Page width="sm">
-        <div className="py-16 text-center">
-          <p className="text-dim">{t('practice.noDictMsg')}</p>
-          <Link
-            href="/dicts"
-            className="mt-6 inline-flex h-10 items-center rounded-xl bg-brand px-5 text-white"
-          >
-            {t('practice.chooseDict')}
-          </Link>
-        </div>
+        <EmptyState
+          icon="book"
+          title={t('practice.noDictMsg')}
+          action={
+            <Link
+              href="/dicts"
+              className="inline-flex h-11 md:h-10 items-center rounded-lg bg-brand px-5 text-white"
+            >
+              {t('practice.chooseDict')}
+            </Link>
+          }
+        />
       </Page>
     )
   }
@@ -126,38 +130,39 @@ export default function PracticePage() {
   if (!session || !words.length) {
     return (
       <Page width="sm">
-        <div className="py-16 text-center">
-          <p className="text-dim">
-            {isWrongSession
+        <EmptyState
+          icon={isWrongSession ? 'wrong' : 'keyboard'}
+          title={
+            isWrongSession
               ? t('practice.emptyWrong')
               : allKnown
                 ? t('practice.allKnown')
-                : t('practice.emptyGeneric')}
-          </p>
-          <p className="mt-2 text-xs text-dim">
-            {isWrongSession ? t('practice.emptyWrongHint') : t('practice.allKnownHint')}
-          </p>
-          <div className="mt-6 flex justify-center gap-3">
-            {!isWrongSession && dict && (
-              <button
-                onClick={() => {
-                  base.clearKnown()
-                  base.clearSession()
-                  base.startSession(dict.id, setting.perDayStudyNumber)
-                }}
-                className="inline-flex h-10 items-center rounded-xl bg-brand px-5 text-white"
+                : t('practice.emptyGeneric')
+          }
+          desc={isWrongSession ? t('practice.emptyWrongHint') : t('practice.allKnownHint')}
+          action={
+            <>
+              {!isWrongSession && dict && (
+                <button
+                  onClick={() => {
+                    base.clearKnown()
+                    base.clearSession()
+                    base.startSession(dict.id, setting.perDayStudyNumber)
+                  }}
+                  className="inline-flex h-11 md:h-10 items-center rounded-lg bg-brand px-5 text-white"
+                >
+                  {t('practice.clearKnownRestart')}
+                </button>
+              )}
+              <Link
+                href={isWrongSession ? '/' : '/dicts'}
+                className="inline-flex h-11 md:h-10 items-center rounded-lg border border-line px-5"
               >
-                {t('practice.clearKnownRestart')}
-              </button>
-            )}
-            <Link
-              href={isWrongSession ? '/' : '/dicts'}
-              className="inline-flex h-10 items-center rounded-xl border border-line px-5"
-            >
-              {isWrongSession ? t('common.backHome') : t('practice.switchDict')}
-            </Link>
-          </div>
-        </div>
+                {isWrongSession ? t('common.backHome') : t('practice.switchDict')}
+              </Link>
+            </>
+          }
+        />
       </Page>
     )
   }

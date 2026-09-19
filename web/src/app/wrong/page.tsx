@@ -8,6 +8,7 @@ import { useHydrated } from '@/lib/useHydrated'
 import Page from '@/components/ui/Page'
 import PageHeader from '@/components/ui/PageHeader'
 import Panel from '@/components/ui/Panel'
+import EmptyState from '@/components/ui/EmptyState'
 import { useI18n } from '@/i18n'
 import { resolveVoiceURI, speak } from '@/lib/tts'
 import type { CnWord, WrongRecord } from '@/lib/types'
@@ -224,7 +225,7 @@ export default function WrongPage() {
 
       {tab === 'wrong' ? (
         records.length === 0 ? (
-          <p className="text-dim">{t('wrong.emptyWrong')}</p>
+          <EmptyState icon="wrong" title={t('wrong.emptyWrong')} />
         ) : (
           <div className="space-y-4">
             {groups.map(g => (
@@ -238,7 +239,7 @@ export default function WrongPage() {
                     onClick={() => {
                       if (base.startWordsSession(g.rows.map(r => r.word), g.label)) router.push('/practice')
                     }}
-                    className="inline-flex h-8 items-center rounded-lg border border-line px-2 text-xs hover:bg-surface2"
+                    className="inline-flex h-11 md:h-8 items-center rounded-lg border border-line px-2 text-xs hover:bg-surface2"
                   >
                     {t('wrong.practiceGroup')}
                   </button>
@@ -250,15 +251,15 @@ export default function WrongPage() {
           </div>
         )
       ) : collectWords.length === 0 ? (
-        <p className="text-dim">{t('wrong.emptyCollect')}</p>
+        <EmptyState icon="star" title={t('wrong.emptyCollect')} />
       ) : (
         <Panel flush>
           <table className="w-full text-sm">
             <thead className="bg-surface2 text-dim">
-              <tr>
-                <th className="text-left px-4 py-3 font-normal">{t('common.wordCol')}</th>
-                <th className="text-left px-4 py-3 font-normal">{t('common.pinyinCol')}</th>
-                <th className="text-left px-4 py-3 font-normal">{t('common.meaningCol')}</th>
+              <tr className="border-b border-line">
+                <th className="text-left px-4 py-3 text-xs font-semibold">{t('common.wordCol')}</th>
+                <th className="text-left px-4 py-3 text-xs font-semibold">{t('common.pinyinCol')}</th>
+                <th className="text-left px-4 py-3 text-xs font-semibold">{t('common.meaningCol')}</th>
                 <th className="px-4 py-3"></th>
               </tr>
             </thead>
@@ -273,13 +274,13 @@ export default function WrongPage() {
                     <td className="px-4 py-3 text-right whitespace-nowrap">
                       <button
                         onClick={() => play(w)}
-                        className="inline-flex h-8 items-center rounded-lg border border-line px-2 text-xs hover:bg-surface2"
+                        className="inline-flex h-11 md:h-8 items-center rounded-lg border border-line px-2 text-xs hover:bg-surface2"
                       >
                         {t('common.play')}
                       </button>
                       <button
                         onClick={() => base.toggleCollect(w)}
-                        className="ml-2 inline-flex h-8 items-center rounded-lg border border-line px-2 text-xs hover:bg-surface2"
+                        className="ml-2 inline-flex h-11 md:h-8 items-center rounded-lg border border-line px-2 text-xs hover:bg-surface2"
                       >
                         {t('wrong.uncollect')}
                       </button>
@@ -311,11 +312,11 @@ function WrongTable({
   return (
     <table className="w-full text-sm">
       <thead className="bg-surface2 text-dim">
-        <tr>
-          <th className="px-4 py-3 text-left font-normal">{t('common.wordCol')}</th>
-          <th className="px-4 py-3 text-left font-normal">{t('common.pinyinCol')}</th>
-          <th className="px-4 py-3 text-left font-normal">{t('common.meaningCol')}</th>
-          <th className="px-4 py-3 text-right font-normal">{t('wrong.wrongCount')}</th>
+        <tr className="border-b border-line">
+          <th className="px-4 py-3 text-left text-xs font-semibold">{t('common.wordCol')}</th>
+          <th className="px-4 py-3 text-left text-xs font-semibold">{t('common.pinyinCol')}</th>
+          <th className="px-4 py-3 text-left text-xs font-semibold">{t('common.meaningCol')}</th>
+          <th className="px-4 py-3 text-right text-xs font-semibold">{t('wrong.wrongCount')}</th>
           <th className="px-4 py-3"></th>
         </tr>
       </thead>
@@ -331,13 +332,13 @@ function WrongTable({
               <td className="whitespace-nowrap px-4 py-3 text-right">
                 <button
                   onClick={() => onPlay(r.word)}
-                  className="inline-flex h-8 items-center rounded-lg border border-line px-2 text-xs hover:bg-surface2"
+                  className="inline-flex h-11 md:h-8 items-center rounded-lg border border-line px-2 text-xs hover:bg-surface2"
                 >
                   {t('common.play')}
                 </button>
                 <button
                   onClick={() => onRemove(r.word)}
-                  className="ml-2 inline-flex h-8 items-center rounded-lg border border-line px-2 text-xs hover:bg-surface2"
+                  className="ml-2 inline-flex h-11 md:h-8 items-center rounded-lg border border-line px-2 text-xs hover:bg-surface2"
                 >
                   {t('common.remove')}
                 </button>

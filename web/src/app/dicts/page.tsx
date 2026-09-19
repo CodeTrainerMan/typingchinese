@@ -179,14 +179,14 @@ export default function DictsPage() {
           <>
             <button
               onClick={() => setOpenImport(v => !v)}
-              className="inline-flex h-9 items-center rounded-lg border border-line px-3 text-sm hover:bg-surface2"
+              className="inline-flex h-11 items-center rounded-lg md:h-9 border border-line px-3 text-sm hover:bg-surface2"
             >
               {openImport ? t('common.collapse') : t('dicts.importPanel')}
             </button>
             {base.dicts.length > 0 && (
               <Link
                 href="/practice"
-                className="inline-flex h-9 items-center rounded-lg bg-brand px-3 text-sm text-white"
+                className="inline-flex h-11 items-center rounded-lg md:h-9 bg-brand px-3 text-sm text-white"
               >
                 {t('common.goPractice')}
               </Link>
@@ -201,7 +201,7 @@ export default function DictsPage() {
             value={name}
             onChange={e => setName(e.target.value)}
             placeholder={t('dicts.namePlaceholder')}
-            className="h-10 w-full sm:w-64 px-3 rounded-lg border border-line bg-surface2 text-sm mb-3"
+            className="h-11 md:h-10 w-full sm:w-64 px-3 rounded-sm border border-line bg-surface2 text-sm mb-3"
           />
           <textarea
             value={text}
@@ -215,13 +215,13 @@ export default function DictsPage() {
             }}
             rows={6}
             placeholder={'中国,国家名称\n旅行 lv you\n安静=没有声音'}
-            className="w-full px-3 py-2 rounded-lg border border-line bg-surface2 text-sm font-mono"
+            className="w-full px-3 py-2 rounded-sm border border-line bg-surface2 text-sm font-mono"
           />
           <div className="flex items-center gap-3 mt-3">
             <button
               onClick={onImport}
               disabled={importing || !text.trim()}
-              className="h-9 px-4 rounded-lg bg-brand text-white text-sm disabled:opacity-50"
+              className="h-11 md:h-9 px-4 rounded-lg bg-brand text-white text-sm disabled:opacity-50"
             >
               {importing ? t('common.generating') : t('common.import')}
             </button>
@@ -240,7 +240,7 @@ export default function DictsPage() {
             <button
               onClick={() => fileRef.current?.click()}
               disabled={importing}
-              className="h-9 px-4 rounded-lg border border-line text-sm disabled:opacity-50 hover:bg-surface2"
+              className="h-11 md:h-9 px-4 rounded-lg border border-line text-sm disabled:opacity-50 hover:bg-surface2"
             >
               {t('dicts.upload')}
             </button>
@@ -253,12 +253,12 @@ export default function DictsPage() {
               value={shareInput}
               onChange={e => setShareInput(e.target.value)}
               placeholder={t('dicts.sharePlaceholder')}
-              className="h-9 flex-1 px-3 rounded-lg border border-line bg-surface2 text-sm"
+              className="h-11 md:h-9 flex-1 px-3 rounded-sm border border-line bg-surface2 text-sm"
             />
             <button
               onClick={() => void importShare(shareInput)}
               disabled={importing || !shareInput.trim()}
-              className="h-9 px-4 rounded-lg border border-line text-sm disabled:opacity-50 hover:bg-surface2"
+              className="h-11 md:h-9 px-4 rounded-lg border border-line text-sm disabled:opacity-50 hover:bg-surface2"
             >
               {t('dicts.shareImport')}
             </button>
@@ -282,7 +282,7 @@ export default function DictsPage() {
                 >
                   <div className="min-w-[12rem] flex-1">
                     <div className="flex flex-wrap items-center gap-2">
-                      <span className="font-medium text-ink">{dict.name}</span>
+                      <span className="font-semibold text-ink">{dict.name}</span>
                       {current && <Chip tone="brand">{t('common.current')}</Chip>}
                       <Chip>{t('common.words', { n: dict.length })}</Chip>
                     </div>
@@ -301,7 +301,7 @@ export default function DictsPage() {
                     <button
                       onClick={() => base.setCurrentDict(dict.id)}
                       disabled={current}
-                      className={`inline-flex h-8 items-center rounded-lg px-2.5 text-xs disabled:opacity-50 ${
+                      className={`inline-flex h-11 items-center rounded-lg md:h-8 px-3 text-xs disabled:opacity-50 ${
                         current ? 'border border-line hover:bg-surface2' : 'bg-brand text-white'
                       }`}
                     >
@@ -309,25 +309,25 @@ export default function DictsPage() {
                     </button>
                     <Link
                       href={`/dicts/${dict.id}`}
-                      className="inline-flex h-8 items-center rounded-lg border border-line px-2.5 text-xs hover:bg-surface2"
+                      className="inline-flex h-11 items-center rounded-lg md:h-8 border border-line px-3 text-xs hover:bg-surface2"
                     >
                       {t('common.edit')}
                     </Link>
                     <button
                       onClick={() => exportJson(dict)}
-                      className="inline-flex h-8 items-center rounded-lg border border-line px-2.5 text-xs hover:bg-surface2"
+                      className="inline-flex h-11 items-center rounded-lg md:h-8 border border-line px-3 text-xs hover:bg-surface2"
                     >
                       {t('dicts.export')}
                     </button>
                     <button
                       onClick={() => void copyShare(dict)}
-                      className="inline-flex h-8 items-center rounded-lg border border-line px-2.5 text-xs hover:bg-surface2"
+                      className="inline-flex h-11 items-center rounded-lg md:h-8 border border-line px-3 text-xs hover:bg-surface2"
                     >
                       {t('dicts.share')}
                     </button>
                     <button
                       onClick={() => base.removeDict(dict.id)}
-                      className="inline-flex h-8 items-center rounded-lg border border-line px-2.5 text-xs text-err hover:bg-surface2"
+                      className="inline-flex h-11 items-center rounded-lg md:h-8 border border-line px-3 text-xs text-err hover:bg-surface2"
                     >
                       {t('common.remove')}
                     </button>
@@ -355,12 +355,12 @@ export default function DictsPage() {
               >
                 <div className="min-w-[12rem] flex-1">
                   <div className="flex flex-wrap items-center gap-2">
-                    <span className="font-medium text-ink">{res.name}</span>
+                    <span className="font-semibold text-ink">{res.name}</span>
                     {current && <Chip tone="brand">{t('common.current')}</Chip>}
                     <Chip>{t('common.words', { n: res.length })}</Chip>
                   </div>
                   {res.description && <p className="mt-1 truncate text-xs text-dim">{res.description}</p>}
-                  <div className="mt-2 flex flex-wrap gap-1.5">
+                  <div className="mt-2 flex flex-wrap gap-2">
                     {res.tags.map(tag => (
                       <Chip key={tag}>{tag}</Chip>
                     ))}
@@ -388,7 +388,7 @@ export default function DictsPage() {
                       <button
                         onClick={() => base.setCurrentDict(res.id)}
                         disabled={current}
-                        className={`inline-flex h-8 items-center rounded-lg px-2.5 text-xs disabled:opacity-50 ${
+                        className={`inline-flex h-11 items-center rounded-lg md:h-8 px-3 text-xs disabled:opacity-50 ${
                           current ? 'border border-line hover:bg-surface2' : 'bg-brand text-white'
                         }`}
                       >
@@ -396,25 +396,25 @@ export default function DictsPage() {
                       </button>
                       <Link
                         href={`/dicts/${res.id}`}
-                        className="inline-flex h-8 items-center rounded-lg border border-line px-2.5 text-xs hover:bg-surface2"
+                        className="inline-flex h-11 items-center rounded-lg md:h-8 border border-line px-3 text-xs hover:bg-surface2"
                       >
                         {t('common.edit')}
                       </Link>
                       <button
                         onClick={() => exportJson(added)}
-                        className="inline-flex h-8 items-center rounded-lg border border-line px-2.5 text-xs hover:bg-surface2"
+                        className="inline-flex h-11 items-center rounded-lg md:h-8 border border-line px-3 text-xs hover:bg-surface2"
                       >
                         {t('dicts.export')}
                       </button>
                       <button
                         onClick={() => void copyShare(added)}
-                        className="inline-flex h-8 items-center rounded-lg border border-line px-2.5 text-xs hover:bg-surface2"
+                        className="inline-flex h-11 items-center rounded-lg md:h-8 border border-line px-3 text-xs hover:bg-surface2"
                       >
                         {t('dicts.share')}
                       </button>
                       <button
                         onClick={() => base.removeDict(res.id)}
-                        className="inline-flex h-8 items-center rounded-lg border border-line px-2.5 text-xs text-err hover:bg-surface2"
+                        className="inline-flex h-11 items-center rounded-lg md:h-8 border border-line px-3 text-xs text-err hover:bg-surface2"
                       >
                         {t('common.remove')}
                       </button>
@@ -422,7 +422,7 @@ export default function DictsPage() {
                   ) : (
                     <button
                       onClick={() => base.addDict(res)}
-                      className="inline-flex h-8 items-center rounded-lg bg-brand px-2.5 text-xs text-white"
+                      className="inline-flex h-11 items-center rounded-lg md:h-8 bg-brand px-3 text-xs text-white"
                     >
                       {t('dicts.addLearning')}
                     </button>

@@ -28,10 +28,10 @@ export default function StatCard({
     >
       <div className={`font-bold tabular-nums ${size === 'lg' ? 'text-4xl' : 'text-2xl'} ${valueCls}`}>
         {value}
-        {suffix && <span className="ml-0.5 text-base font-medium text-dim">{suffix}</span>}
+        {suffix && <span className="ml-1 text-base font-normal text-dim">{suffix}</span>}
       </div>
       <div className="mt-1 text-xs text-dim">{label}</div>
-      {hint && <div className="mt-0.5 text-[11px] text-dim">{hint}</div>}
+      {hint && <div className="mt-1 text-xs text-faint">{hint}</div>}
     </div>
   )
 }

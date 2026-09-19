@@ -205,13 +205,13 @@ export default function ArticlePage() {
                   <button
                     onClick={() => void startText(a.title, a.text)}
                     disabled={busy}
-                    className="inline-flex h-8 items-center rounded-lg bg-brand px-2.5 text-xs text-white disabled:opacity-50"
+                    className="inline-flex h-8 items-center rounded-lg bg-brand px-3 text-xs text-white disabled:opacity-50"
                   >
                     {t('article.start')}
                   </button>
                   <button
                     onClick={() => extra.removeArticle(a.id)}
-                    className="inline-flex h-8 items-center rounded-lg border border-line px-2.5 text-xs text-err hover:bg-surface2"
+                    className="inline-flex h-8 items-center rounded-lg border border-line px-3 text-xs text-err hover:bg-surface2"
                   >
                     {t('common.remove')}
                   </button>
@@ -253,15 +253,15 @@ export default function ArticlePage() {
                       <button
                         onClick={() => void readAloud(a, i, sentence)}
                         disabled={readingIdx !== null}
-                        className="px-2 py-1 rounded-md border border-line text-xs whitespace-nowrap hover:bg-surface2 disabled:opacity-50"
+                        className="rounded-lg border border-line px-3 py-2 text-xs whitespace-nowrap min-h-11 md:min-h-8 hover:bg-surface2 disabled:opacity-50"
                       >
                         {readingIdx === i ? t('article.reading') : t('article.readAloud')}
                       </button>
                       <div className="flex-1">
                         <div className="text-sm">{sentence}</div>
                         {scores[i] && (
-                          <div className="text-xs mt-0.5">
-                            <span className="text-brand font-medium">
+                          <div className="text-xs mt-1">
+                            <span className="text-brand font-semibold">
                               {t('article.readScore', { n: scores[i].score })}
                             </span>
                             {scores[i].heard && <span className="text-dim ml-2">{scores[i].heard}</span>}
@@ -275,7 +275,7 @@ export default function ArticlePage() {
 
               {prog && (
                 <div className="mt-4 border-t border-line pt-4">
-                  <div className="mb-1.5 flex flex-wrap items-center gap-2">
+                  <div className="mb-2 flex flex-wrap items-center gap-2">
                     <Chip>{t('stats.readLatest', { n: prog.latest })}</Chip>
                     <Chip>{prog.count} ×</Chip>
                     {prog.delta !== 0 && (
@@ -307,13 +307,13 @@ export default function ArticlePage() {
                 <button
                   onClick={() => void start(a)}
                   disabled={busy}
-                  className="inline-flex h-8 items-center rounded-lg bg-brand px-2.5 text-xs text-white disabled:opacity-50"
+                  className="inline-flex h-8 items-center rounded-lg bg-brand px-3 text-xs text-white disabled:opacity-50"
                 >
                   {busy ? t('common.generating') : t('article.start')}
                 </button>
                 <button
                   onClick={() => setOpenId(open ? null : a.id)}
-                  className="inline-flex h-8 items-center rounded-lg border border-line px-2.5 text-xs hover:bg-surface2"
+                  className="inline-flex h-8 items-center rounded-lg border border-line px-3 text-xs hover:bg-surface2"
                 >
                   {open ? t('common.collapse') : t('article.viewFull')}
                 </button>

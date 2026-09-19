@@ -68,7 +68,7 @@ export default function HanziInput({ word, input, shakeKey, showTarget, onType, 
 
       <input
         ref={ref}
-        className="mx-auto mt-6 block w-64 max-w-full h-12 px-3 text-center text-base rounded-xl border border-line bg-surface2 outline-none focus:border-brand"
+        className="mx-auto mt-6 block w-64 max-w-full h-12 px-3 text-center text-base rounded-lg border border-line bg-surface2 outline-none focus:border-brand"
         placeholder={t('hanziInput.placeholder')}
         aria-label={t('hanziInput.aria')}
         autoComplete="off"

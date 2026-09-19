@@ -1,32 +1,38 @@
 @import "tailwindcss";
 
 /**
- * 色板对齐 TypeWords：冷灰底 → 灰阶卡片 → 蓝色强调 → 浅橙选中。
+ * 令牌来源：docs/design/tokens.md（Notion 主干 + Apple 补充 + brand/spec.md 强调蓝）。
+ * 暖纸底 → 纯白卡片 → hairline → 多层微阴影；强调蓝只给动作与状态。
  * 组件只写语义类名（bg-surface / text-brand / border-line），换肤不用改组件。
  */
 :root {
-  --bg: #e6e8eb; /* 页面底 */
-  --surface: #f7f7f7; /* 卡片 */
-  --surface-2: #e4e6e8; /* 列表项 / 次级块 */
+  --bg: #f2f1ef; /* 页面底：暖纸，比卡片略深 */
+  --surface: #ffffff; /* 卡片 / 面板 */
+  --surface-2: #f7f6f4; /* 列表项 / 次级块 */
   --solid: #ffffff; /* 纯白块：统计数字块、输入框 */
-  --hover: #dadcde; /* 图标按钮 hover */
-  --active: #fdf6ec; /* 选中 / 激活：浅橙 */
-  --line: #e2e2e2;
-  --ink: #2e2e2e; /* 主文字 */
+  --hover: #eceae7; /* 图标按钮 / 行 hover */
+  --active: #fdf6ec; /* 选中 / 激活：浅橙（与品牌蓝分离） */
+  --line: #e6e4e1; /* hairline */
+  --ink: #2e2e2e; /* 主文字（不用纯黑，汉字太硬） */
   --ink-2: #5b5b5b; /* 正文 */
   --dim: #818181; /* 辅助 */
-  --brand: #409eff; /* 强调蓝：统计数字 / 进度条 */
-  --brand-soft: #e8f2ff;
+  --faint: #a8a29e; /* 最弱：placeholder / 元信息 */
+  --brand: #2563eb; /* 强调蓝（brand/spec.md accent） */
+  --brand-soft: #eaf0ff;
   --purple: #ac6ed1; /* 每日目标 */
   --ok: #16a34a;
   --err: #dc2626;
-  --warn: #f59e0b;
-  --track: #d1d5df;
-  --book: #e2e8f0;
-  --book-line: #e1d9d9;
-  --shadow-card: 0 6px 24px rgba(0, 0, 0, 0.12);
-  --shadow-lg: 0 12px 48px rgba(0, 0, 0, 0.11);
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.08);
+  --warn: #d97706;
+  --track: #e3e1dd;
+  --book: #eceae6;
+  --book-line: #e2dfda;
+  /* Notion 式多层微阴影：卡片像浮在纸面上，而不是掉下来 */
+  --shadow-card: rgba(0, 0, 0, 0.01) 0 0.175px 1.041px, rgba(0, 0, 0, 0.02) 0 0.8px 2.925px,
+    rgba(0, 0, 0, 0.027) 0 2.025px 7.847px, rgba(0, 0, 0, 0.04) 0 4px 18px;
+  --shadow-lg: rgba(0, 0, 0, 0.01) 0 0.175px 1.041px, rgba(0, 0, 0, 0.02) 0 0.8px 2.925px,
+    rgba(0, 0, 0, 0.027) 0 2.025px 7.847px, rgba(0, 0, 0, 0.04) 0 4px 18px,
+    rgba(0, 0, 0, 0.05) 0 23px 52px;
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.06);
 
   --font-ui: -apple-system, "PingFang SC", "Microsoft YaHei", "Hiragino Sans GB", "Noto Sans CJK SC", system-ui,
     "Segoe UI", sans-serif;
@@ -46,6 +52,7 @@
     --ink: rgba(255, 255, 255, 0.82);
     --ink-2: rgba(249, 250, 251, 0.8);
     --dim: #b8b8b8;
+    --faint: #8f8f8f;
     --brand: #93ade3;
     --brand-soft: #2a3a52;
     --purple: #c48ade;
@@ -55,9 +62,9 @@
     --track: #494d52;
     --book: #35373a;
     --book-line: #3a3d41;
-    --shadow-card: 0 6px 24px rgba(0, 0, 0, 0.35);
+    --shadow-card: 0 4px 20px rgba(0, 0, 0, 0.35);
     --shadow-lg: 0 12px 48px rgba(0, 0, 0, 0.45);
-    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.20);
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.2);
   }
 }
 
@@ -73,6 +80,7 @@
   --ink: rgba(255, 255, 255, 0.82);
   --ink-2: rgba(249, 250, 251, 0.8);
   --dim: #b8b8b8;
+  --faint: #8f8f8f;
   --brand: #93ade3;
   --brand-soft: #2a3a52;
   --purple: #c48ade;
@@ -82,32 +90,11 @@
   --track: #494d52;
   --shadow-card: 0 4px 20px rgba(0, 0, 0, 0.35);
   --shadow-lg: 0 12px 48px rgba(0, 0, 0, 0.45);
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.2);
 }
 
-/* 浅色：手动指定，压过系统深色 */
-:root[data-theme='light'] {
-  --bg: #e6e8eb;
-  --surface: #f7f7f7;
-  --surface-2: #e4e6e8;
-  --solid: #ffffff;
-  --hover: #dadcde;
-  --active: #fdf6ec;
-  --line: #e2e2e2;
-  --ink: #2e2e2e;
-  --ink-2: #5b5b5b;
-  --dim: #818181;
-  --brand: #409eff;
-  --brand-soft: #e8f2ff;
-  --purple: #ac6ed1;
-  --ok: #16a34a;
-  --err: #dc2626;
-  --warn: #d97706;
-  --track: #d1d5df;
-  --book: #e2e8f0;
-  --book-line: #e1d9d9;
-  --shadow-card: 0 6px 24px rgba(0, 0, 0, 0.12);
-  --shadow-lg: 0 12px 48px rgba(0, 0, 0, 0.11);
-}
+/* 浅色：手动指定时无需重复写一遍——上方深色块已用 :not([data-theme='light']) 排除，
+   手动浅色直接落到 :root 的浅色值，避免两处令牌各自漂移。 */
 
 @theme inline {
   --color-bg: var(--bg);
@@ -120,6 +107,7 @@
   --color-ink: var(--ink);
   --color-ink2: var(--ink-2);
   --color-dim: var(--dim);
+  --color-faint: var(--faint);
   --color-brand: var(--brand);
   --color-brand-soft: var(--brand-soft);
   --color-purple: var(--purple);
@@ -145,9 +133,20 @@ body {
   font-family: var(--font-ui);
 }
 
+/* 键盘焦点：全站统一 2px 品牌蓝环 + 2px 偏移（对齐 Apple 的可见焦点要求） */
+:where(a, button, input, select, textarea, [tabindex]):focus-visible {
+  outline: 2px solid var(--brand);
+  outline-offset: 2px;
+}
+
 /* 练习区禁止选中，避免快速打字误选文本 */
 .no-select {
   user-select: none;
+}
+
+/* 按压反馈：按钮按下轻微回弹，让点击「有落点」 */
+button:not(:disabled):active {
+  transform: scale(0.98);
 }
 
 @keyframes shake {
@@ -192,5 +191,10 @@ body {
   .shake,
   .pop {
     animation: none;
+  }
+
+  /* 按压回弹也属于动效，一并关掉 */
+  button:not(:disabled):active {
+    transform: none;
   }
 }
