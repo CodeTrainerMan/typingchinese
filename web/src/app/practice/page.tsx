@@ -1,5 +1,6 @@
 'use client'
 
+import { track } from '@vercel/analytics'
 import { useCallback, useEffect, useMemo, useRef } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
@@ -57,7 +58,10 @@ export default function PracticePage() {
   // 流程编排：一批词跑完后由 store 判断是否还有后续步骤，返回 false 表示继续下一批
   const finish = useCallback((spendMs: number, keys: number) => {
     base.finishSession(spendMs, keys)
-    return Boolean(useBaseStore.getState().session?.done)
+    const done = Boolean(useBaseStore.getState().session?.done)
+    // 整组（含多步骤流程）真正跑完才上报一次，用于渠道转化归因
+    if (done) track('practice_finished')
+    return done
   }, [base])
   const flush = useCallback(
     (spendMs: number, keys: number, startedAt: number) => base.addSessionStat(spendMs, keys, startedAt),

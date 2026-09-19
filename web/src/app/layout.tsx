@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { Analytics } from '@vercel/analytics/react'
 import './globals.css'
 import Nav, { MobileNav } from '@/components/Nav'
 import ThemeEffect from '@/components/ThemeEffect'
@@ -9,6 +10,24 @@ export const metadata: Metadata = {
   title: 'TypingChinese · Learn Chinese by Typing',
   description:
     'Type pinyin to learn Chinese: follow-typing and dictation, live per-letter feedback, spaced-repetition reviews, mistake notebook and progress stats.',
+  metadataBase: new URL('https://www.typingchinese.club'),
+  alternates: { canonical: '/' },
+  openGraph: {
+    type: 'website',
+    siteName: 'TypingChinese',
+    url: 'https://www.typingchinese.club',
+    title: 'TypingChinese · Learn Chinese by Typing',
+    description:
+      'Free, open-source, no-account pinyin typing practice for Chinese learners, with FSRS review for the words you miss.',
+    images: [{ url: '/og.png', width: 1200, height: 630, alt: 'TypingChinese practice board' }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'TypingChinese · Learn Chinese by Typing',
+    description:
+      'Free, open-source, no-account pinyin typing practice for Chinese learners, with FSRS review for the words you miss.',
+    images: ['/og.png'],
+  },
 }
 
 export default function RootLayout({ children }: LayoutProps<'/'>) {
@@ -24,6 +43,7 @@ export default function RootLayout({ children }: LayoutProps<'/'>) {
             <main className="min-w-0 flex-1">{children}</main>
           </div>
         </I18nProvider>
+        <Analytics />
       </body>
     </html>
   )
