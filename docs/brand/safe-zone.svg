@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-11.00 -11.00 122.00 122.00" width="122" height="122" role="img">
+<rect x="-11.00" y="-11.00" width="122.00" height="122.00" fill="#F3F0E8"/>
+<rect x="-11.00" y="-11.00" width="122.00" height="122.00" fill="none" stroke="#17181A" stroke-width="0.6" stroke-dasharray="3 2.5"/>
+<rect x="30.000" y="38.000" width="40.000" height="40.000" rx="8" fill="#17181A" stroke="none" stroke-width="2"/>
+<circle cx="42.000" cy="24.000" r="5.500" fill="#2563EB" stroke="none" stroke-width="2"/>
+<circle cx="58.000" cy="24.000" r="5.500" fill="#2563EB" stroke="none" stroke-width="2"/>
+<text x="50.00" y="-3.85" font-family="Helvetica,Arial,sans-serif" font-size="4" fill="#17181A" text-anchor="middle">clear space = X</text>
+</svg>

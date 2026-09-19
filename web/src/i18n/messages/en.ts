@@ -12,7 +12,7 @@
  */
 export const en = {
   app: {
-    title: 'Pinyin Type · Learn Chinese by Typing',
+    title: 'TypingChinese · Learn Chinese by Typing',
     desc: 'Type pinyin to learn Chinese: follow-typing and dictation, live per-letter feedback, spaced-repetition reviews, mistake notebook and progress stats.',
   },
 
@@ -24,8 +24,8 @@ export const en = {
     wrong: 'Mistakes',
     stats: 'Stats',
     setting: 'Settings',
-    brandA: 'Pinyin',
-    brandB: 'Type',
+    brandA: 'Typing',
+    brandB: 'Chinese',
   },
 
   common: {
@@ -291,6 +291,14 @@ export const en = {
   readRecent: 'Latest tries',
   readEmpty: 'No read-aloud yet — open an article and read a line out loud.',
   readClear: 'Clear records',
+    readByArticle: 'Progress by article',
+    readFirst: 'First {n}',
+    readLatest: 'Latest {n}',
+    readDeltaUp: '↑ {n}',
+    readDeltaDown: '↓ {n}',
+    readPointTip: 'Try {n} · {score} · {date}',
+    readAvgLine: 'avg',
+    readNeedMore: 'Read it once more to see the curve',
 
   legendNew: 'New',
   legendReview: 'Reviewed',

@@ -55,7 +55,7 @@ export async function downloadShareCard(data: ShareData): Promise<boolean> {
   ctx.textBaseline = 'alphabetic'
   ctx.fillStyle = BRAND
   ctx.font = `600 20px ${FONT}`
-  ctx.fillText('Pinyin Type', 40, 52)
+  ctx.fillText('TypingChinese', 40, 52)
 
   ctx.fillStyle = DIM
   ctx.font = `16px ${FONT}`
@@ -99,7 +99,7 @@ export async function downloadShareCard(data: ShareData): Promise<boolean> {
       const url = URL.createObjectURL(blob)
       const a = document.createElement('a')
       a.href = url
-      a.download = `pinyin-type-${data.date}.png`
+      a.download = `typingchinese-${data.date}.png`
       a.click()
       URL.revokeObjectURL(url)
       resolve(true)

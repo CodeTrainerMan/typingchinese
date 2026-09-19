@@ -3,7 +3,7 @@ import type { Messages } from './en'
 
 export const zhTW: Messages = {
   app: {
-    title: '拼音打字 · Pinyin Type',
+    title: '中文打字 · TypingChinese',
     desc: '中文拼音打字练习：跟打 / 听写，记忆曲线复习，错词本与学习统计',
   },
 
@@ -15,8 +15,8 @@ export const zhTW: Messages = {
     wrong: '错词本',
     stats: '统计',
     setting: '设置',
-    brandA: '拼',
-    brandB: '音打字',
+    brandA: '中文',
+    brandB: '打字',
   },
 
   common: {
@@ -282,6 +282,14 @@ export const zhTW: Messages = {
   readRecent: '最近跟讀',
   readEmpty: '還沒有跟讀記錄 — 去文章頁讀一句試試。',
   readClear: '清除跟讀記錄',
+    readByArticle: '按文章看進步',
+    readFirst: '首次 {n}',
+    readLatest: '最近 {n}',
+    readDeltaUp: '↑ {n}',
+    readDeltaDown: '↓ {n}',
+    readPointTip: '第 {n} 次 · {score} 分 · {date}',
+    readAvgLine: '本篇平均',
+    readNeedMore: '再跟讀一次就會出現曲線',
 
   legendNew: '新學',
   legendReview: '複習',

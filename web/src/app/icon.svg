@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="14 12 72 72" width="100" height="100" role="img" aria-label="Pinyin Type">
+  <style>
+    /* 键帽用结构色；深色标签栏下整块反白，蓝点始终保留 */
+    .key { fill: #17181A }
+    .dot { fill: #2563EB }
+    @media (prefers-color-scheme: dark) {
+      .key { fill: #FFFFFF }
+    }
+  </style>
+  <rect x="30" y="38" width="40" height="40" rx="8" class="key" />
+  <circle cx="42" cy="24" r="5.5" class="dot" />
+  <circle cx="58" cy="24" r="5.5" class="dot" />
+</svg>

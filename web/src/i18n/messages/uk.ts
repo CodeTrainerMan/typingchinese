@@ -3,7 +3,7 @@ import type { Messages } from './en'
 
 export const uk: Messages = {
   app: {
-    title: 'Pinyin Type · Вчіть китайську, друкуючи',
+    title: 'TypingChinese · Вчіть китайську, друкуючи',
     desc: 'Друкуйте піньїнь, щоб вчити китайську: списування і диктант, перевірка кожної літери, інтервальні повторення, зошит помилок і статистика.',
   },
 
@@ -15,8 +15,8 @@ export const uk: Messages = {
     wrong: 'Помилки',
     stats: 'Статистика',
     setting: 'Налаштування',
-    brandA: 'Pinyin',
-    brandB: 'Type',
+    brandA: 'Typing',
+    brandB: 'Chinese',
   },
 
   common: {
@@ -282,6 +282,14 @@ export const uk: Messages = {
   readRecent: 'Останні спроби',
   readEmpty: 'Ще немає записів — відкрийте статтю і прочитайте рядок вголос.',
   readClear: 'Очистити записи',
+    readByArticle: 'Прогрес за статтями',
+    readFirst: 'Перший {n}',
+    readLatest: 'Останній {n}',
+    readDeltaUp: '↑ {n}',
+    readDeltaDown: '↓ {n}',
+    readPointTip: 'Спроба {n} · {score} · {date}',
+    readAvgLine: 'середній',
+    readNeedMore: 'Прочитайте ще раз, щоб побачити графік',
 
   legendNew: 'Нові',
   legendReview: 'Повторення',

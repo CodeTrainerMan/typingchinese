@@ -3,7 +3,7 @@ import type { Messages } from './en'
 
 export const ja: Messages = {
   app: {
-    title: 'Pinyin Type · タイピングで学ぶ中国語',
+    title: 'TypingChinese · タイピングで学ぶ中国語',
     desc: 'ピンインを入力して中国語を学習：書き写しとディクテーション、1文字ごとの判定、分散復習、間違いノート、学習統計。',
   },
 
@@ -15,8 +15,8 @@ export const ja: Messages = {
     wrong: '間違い',
     stats: '統計',
     setting: '設定',
-    brandA: 'Pinyin',
-    brandB: 'Type',
+    brandA: 'Typing',
+    brandB: 'Chinese',
   },
 
   common: {
@@ -282,6 +282,14 @@ export const ja: Messages = {
   readRecent: '最近の挑戦',
   readEmpty: 'まだ音読記録がありません — 記事を開いて一行読んでみてください。',
   readClear: '記録を削除',
+    readByArticle: '記事ごとの上達',
+    readFirst: '初回 {n}',
+    readLatest: '最新 {n}',
+    readDeltaUp: '↑ {n}',
+    readDeltaDown: '↓ {n}',
+    readPointTip: '{n}回目 · {score}点 · {date}',
+    readAvgLine: '平均',
+    readNeedMore: 'もう一度読むと曲線が表示されます',
 
   legendNew: '新出',
   legendReview: '復習',

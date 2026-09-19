@@ -3,7 +3,7 @@ import type { Messages } from './en'
 
 export const ko: Messages = {
   app: {
-    title: 'Pinyin Type · 타이핑으로 배우는 중국어',
+    title: 'TypingChinese · 타이핑으로 배우는 중국어',
     desc: '병음을 입력해 중국어를 배우세요: 받아쓰기와 듣고 쓰기, 글자 단위 실시간 교정, 간격 반복 복습, 오답 노트, 학습 통계.',
   },
 
@@ -15,8 +15,8 @@ export const ko: Messages = {
     wrong: '오답',
     stats: '통계',
     setting: '설정',
-    brandA: 'Pinyin',
-    brandB: 'Type',
+    brandA: 'Typing',
+    brandB: 'Chinese',
   },
 
   common: {
@@ -282,6 +282,14 @@ export const ko: Messages = {
   readRecent: '최근 시도',
   readEmpty: '아직 기록이 없습니다 — 글을 열고 한 문장을 소리 내어 읽어 보세요.',
   readClear: '기록 삭제',
+    readByArticle: '글별 향상도',
+    readFirst: '첫 시도 {n}',
+    readLatest: '최근 {n}',
+    readDeltaUp: '↑ {n}',
+    readDeltaDown: '↓ {n}',
+    readPointTip: '{n}번째 · {score}점 · {date}',
+    readAvgLine: '평균',
+    readNeedMore: '한 번 더 읽으면 그래프가 보입니다',
 
   legendNew: '새 단어',
   legendReview: '복습',

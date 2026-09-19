@@ -57,7 +57,7 @@ export default function HanziInput({ word, input, shakeKey, showTarget, onType, 
             <div
               key={i}
               className={`w-12 h-16 sm:w-14 sm:h-20 inline-flex items-center justify-center border-b-2 ${
-                showTarget || typed !== undefined ? 'text-3xl sm:text-4xl' : 'text-lg'
+                showTarget || typed !== undefined ? 'font-hanzi text-3xl sm:text-4xl' : 'text-lg'
               } ${cls} ${isCursor && typed === undefined ? 'bg-brand-soft/40' : ''}`}
             >
               {content}

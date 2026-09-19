@@ -3,7 +3,7 @@ import type { Messages } from './en'
 
 export const de: Messages = {
   app: {
-    title: 'Pinyin Type · Chinesisch durch Tippen lernen',
+    title: 'TypingChinese · Chinesisch durch Tippen lernen',
     desc: 'Pinyin tippen, um Chinesisch zu lernen: Abschreiben und Diktat, Korrektur Buchstabe für Buchstabe, verteilte Wiederholung, Fehlerheft und Statistik.',
   },
 
@@ -15,8 +15,8 @@ export const de: Messages = {
     wrong: 'Fehler',
     stats: 'Statistik',
     setting: 'Einstellungen',
-    brandA: 'Pinyin',
-    brandB: 'Type',
+    brandA: 'Typing',
+    brandB: 'Chinese',
   },
 
   common: {
@@ -282,6 +282,14 @@ export const de: Messages = {
   readRecent: 'Letzte Versuche',
   readEmpty: 'Noch keine Aufnahmen — öffne einen Artikel und lies eine Zeile laut vor.',
   readClear: 'Aufnahmen löschen',
+    readByArticle: 'Fortschritt pro Artikel',
+    readFirst: 'Erster {n}',
+    readLatest: 'Letzter {n}',
+    readDeltaUp: '↑ {n}',
+    readDeltaDown: '↓ {n}',
+    readPointTip: 'Versuch {n} · {score} · {date}',
+    readAvgLine: 'Schnitt',
+    readNeedMore: 'Lies noch einmal, um die Kurve zu sehen',
 
   legendNew: 'Neu',
   legendReview: 'Wiederholt',

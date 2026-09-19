@@ -3,7 +3,7 @@ import type { Messages } from './en'
 
 export const vi: Messages = {
   app: {
-    title: 'Pinyin Type · Học tiếng Trung bằng cách gõ',
+    title: 'TypingChinese · Học tiếng Trung bằng cách gõ',
     desc: 'Gõ pinyin để học tiếng Trung: chép lại và nghe viết, sửa từng chữ cái, ôn tập ngắt quãng, sổ lỗi và thống kê.',
   },
 
@@ -15,8 +15,8 @@ export const vi: Messages = {
     wrong: 'Lỗi',
     stats: 'Thống kê',
     setting: 'Cài đặt',
-    brandA: 'Pinyin',
-    brandB: 'Type',
+    brandA: 'Typing',
+    brandB: 'Chinese',
   },
 
   common: {
@@ -282,6 +282,14 @@ export const vi: Messages = {
   readRecent: 'Lần gần nhất',
   readEmpty: 'Chưa có bản ghi — mở một bài và đọc to một câu.',
   readClear: 'Xóa bản ghi',
+    readByArticle: 'Tiến bộ theo bài',
+    readFirst: 'Lần đầu {n}',
+    readLatest: 'Gần nhất {n}',
+    readDeltaUp: '↑ {n}',
+    readDeltaDown: '↓ {n}',
+    readPointTip: 'Lần {n} · {score} · {date}',
+    readAvgLine: 'trung bình',
+    readNeedMore: 'Đọc thêm một lần nữa để thấy đường cong',
 
   legendNew: 'Từ mới',
   legendReview: 'Đã ôn',

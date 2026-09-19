@@ -5,6 +5,9 @@ import { useRouter } from 'next/navigation'
 import { useBaseStore } from '@/lib/store/base'
 import { useSettingStore } from '@/lib/store/setting'
 import { useHydrated } from '@/lib/useHydrated'
+import Page from '@/components/ui/Page'
+import PageHeader from '@/components/ui/PageHeader'
+import Panel from '@/components/ui/Panel'
 import { useI18n } from '@/i18n'
 import { resolveVoiceURI, speak } from '@/lib/tts'
 import type { CnWord, WrongRecord } from '@/lib/types'
@@ -75,7 +78,7 @@ export default function WrongPage() {
   }
 
   const tabCls = (active: boolean) => `h-9 px-4 text-sm ${active ? 'bg-brand text-white' : 'hover:bg-surface2'}`
-  const btnCls = 'h-9 px-4 rounded-lg border border-line text-sm hover:bg-surface2'
+  const btnCls = 'inline-flex h-9 items-center rounded-lg border border-line px-3 text-sm hover:bg-surface2'
 
   /** 词条属于哪个词库；找不到的归到「其它」（比如词库已删） */
   const dictNameOf = (word: string) =>
@@ -137,9 +140,65 @@ export default function WrongPage() {
   const groups = makeGroups()
 
   return (
-    <div className="mx-auto max-w-4xl px-4 py-10">
-      <div className="flex items-center justify-between gap-4 flex-wrap mb-6">
-        <div className="inline-flex rounded-lg border border-line overflow-hidden">
+    <Page>
+      {/* 动作固定在标题右侧，切 tab 时位置不跳 */}
+      <PageHeader
+        title={t('wrong.wrongBook')}
+        actions={
+          tab === 'wrong'
+            ? records.length > 0
+              ? (
+                  <>
+                    {dueRows.length > 0 && (
+                      <button
+                        onClick={() => {
+                          if (base.startWordsSession(dueRows.map(r => r.word), t('wrong.dueBook')))
+                            router.push('/practice')
+                        }}
+                        className="inline-flex h-9 items-center rounded-lg bg-brand px-3 text-sm text-white"
+                      >
+                        {t('wrong.practiceDue', { n: dueRows.length })}
+                      </button>
+                    )}
+                    <button
+                      onClick={() => {
+                        if (base.startWrongSession(20)) router.push('/practice')
+                      }}
+                      className={btnCls}
+                    >
+                      {t('wrong.practiceWrong')}
+                    </button>
+                    <button onClick={exportWrong} className={btnCls}>
+                      {t('common.export')}
+                    </button>
+                    <button onClick={() => base.resetWrong()} className={btnCls}>
+                      {t('wrong.clear')}
+                    </button>
+                  </>
+                )
+              : undefined
+            : collectWords.length > 0
+              ? (
+                  <>
+                    <button
+                      onClick={() => {
+                        if (base.startCollectSession(30, t('wrong.collectBook'))) router.push('/practice')
+                      }}
+                      className="inline-flex h-9 items-center rounded-lg bg-brand px-3 text-sm text-white"
+                    >
+                      {t('wrong.practiceCollect')}
+                    </button>
+                    <button onClick={() => base.clearCollect()} className={btnCls}>
+                      {t('wrong.clearCollect')}
+                    </button>
+                  </>
+                )
+              : undefined
+        }
+      />
+
+      <div className="mb-4 flex flex-wrap items-center gap-2">
+        <div className="inline-flex overflow-hidden rounded-lg border border-line">
           <button onClick={() => setTab('wrong')} className={tabCls(tab === 'wrong')}>
             {t('wrong.tabWrong', { n: records.length })}
           </button>
@@ -161,83 +220,39 @@ export default function WrongPage() {
             <option value="dict">{t('wrong.groupByDict')}</option>
           </select>
         )}
-
-        {tab === 'wrong' && records.length > 0 && (
-          <div className="flex gap-2">
-            {dueRows.length > 0 && (
-              <button
-                onClick={() => {
-                  if (base.startWordsSession(dueRows.map(r => r.word), t('wrong.dueBook'))) router.push('/practice')
-                }}
-                className="h-9 px-4 rounded-lg bg-brand text-white text-sm"
-              >
-                {t('wrong.practiceDue', { n: dueRows.length })}
-              </button>
-            )}
-            <button
-              onClick={() => {
-                if (base.startWrongSession(20)) router.push('/practice')
-              }}
-              className={btnCls}
-            >
-              {t('wrong.practiceWrong')}
-            </button>
-            <button onClick={exportWrong} className={btnCls}>
-              {t('common.export')}
-            </button>
-            <button onClick={() => base.resetWrong()} className={btnCls}>
-              {t('wrong.clear')}
-            </button>
-          </div>
-        )}
-
-        {tab === 'collect' && collectWords.length > 0 && (
-          <div className="flex gap-2">
-            <button
-              onClick={() => {
-                if (base.startCollectSession(30, t('wrong.collectBook'))) router.push('/practice')
-              }}
-              className="h-9 px-4 rounded-lg bg-brand text-white text-sm"
-            >
-              {t('wrong.practiceCollect')}
-            </button>
-            <button onClick={() => base.clearCollect()} className={btnCls}>
-              {t('wrong.clearCollect')}
-            </button>
-          </div>
-        )}
       </div>
 
       {tab === 'wrong' ? (
         records.length === 0 ? (
           <p className="text-dim">{t('wrong.emptyWrong')}</p>
         ) : (
-          <div className="space-y-6">
+          <div className="space-y-4">
             {groups.map(g => (
-              <div key={g.label || 'all'}>
-                {g.label && (
-                  <div className="flex items-center gap-2 mb-2">
-                    <span className="text-sm font-medium">{g.label}</span>
-                    <span className="text-xs text-dim">{t('common.words', { n: g.rows.length })}</span>
-                    <button
-                      onClick={() => {
-                        if (base.startWordsSession(g.rows.map(r => r.word), g.label)) router.push('/practice')
-                      }}
-                      className="ml-auto px-2 py-1 rounded-md border border-line text-xs hover:bg-surface2"
-                    >
-                      {t('wrong.practiceGroup')}
-                    </button>
-                  </div>
-                )}
+              <Panel
+                key={g.label || 'all'}
+                flush
+                title={g.label || t('wrong.groupNone')}
+                desc={t('common.words', { n: g.rows.length })}
+                actions={
+                  <button
+                    onClick={() => {
+                      if (base.startWordsSession(g.rows.map(r => r.word), g.label)) router.push('/practice')
+                    }}
+                    className="inline-flex h-8 items-center rounded-lg border border-line px-2 text-xs hover:bg-surface2"
+                  >
+                    {t('wrong.practiceGroup')}
+                  </button>
+                }
+              >
                 <WrongTable rows={g.rows} findWord={findWord} onPlay={play} onRemove={base.removeWrong} />
-              </div>
+              </Panel>
             ))}
           </div>
         )
       ) : collectWords.length === 0 ? (
         <p className="text-dim">{t('wrong.emptyCollect')}</p>
       ) : (
-        <div className="rounded-2xl border border-line bg-surface overflow-hidden">
+        <Panel flush>
           <table className="w-full text-sm">
             <thead className="bg-surface2 text-dim">
               <tr>
@@ -256,12 +271,15 @@ export default function WrongPage() {
                     <td className="px-4 py-3 font-mono text-dim">{word?.flatSpaced ?? '-'}</td>
                     <td className="px-4 py-3 text-dim">{word?.trans ?? '-'}</td>
                     <td className="px-4 py-3 text-right whitespace-nowrap">
-                      <button onClick={() => play(w)} className="px-2 py-1 rounded-md border border-line text-xs hover:bg-surface2">
+                      <button
+                        onClick={() => play(w)}
+                        className="inline-flex h-8 items-center rounded-lg border border-line px-2 text-xs hover:bg-surface2"
+                      >
                         {t('common.play')}
                       </button>
                       <button
                         onClick={() => base.toggleCollect(w)}
-                        className="ml-2 px-2 py-1 rounded-md border border-line text-xs hover:bg-surface2"
+                        className="ml-2 inline-flex h-8 items-center rounded-lg border border-line px-2 text-xs hover:bg-surface2"
                       >
                         {t('wrong.uncollect')}
                       </button>
@@ -271,9 +289,9 @@ export default function WrongPage() {
               })}
             </tbody>
           </table>
-        </div>
+        </Panel>
       )}
-    </div>
+    </Page>
   )
 }
 
@@ -291,45 +309,43 @@ function WrongTable({
 }) {
   const { t } = useI18n()
   return (
-    <div className="rounded-2xl border border-line bg-surface overflow-hidden">
-      <table className="w-full text-sm">
-        <thead className="bg-surface2 text-dim">
-          <tr>
-            <th className="text-left px-4 py-3 font-normal">{t('common.wordCol')}</th>
-            <th className="text-left px-4 py-3 font-normal">{t('common.pinyinCol')}</th>
-            <th className="text-left px-4 py-3 font-normal">{t('common.meaningCol')}</th>
-            <th className="text-right px-4 py-3 font-normal">{t('wrong.wrongCount')}</th>
-            <th className="px-4 py-3"></th>
-          </tr>
-        </thead>
+    <table className="w-full text-sm">
+      <thead className="bg-surface2 text-dim">
+        <tr>
+          <th className="px-4 py-3 text-left font-normal">{t('common.wordCol')}</th>
+          <th className="px-4 py-3 text-left font-normal">{t('common.pinyinCol')}</th>
+          <th className="px-4 py-3 text-left font-normal">{t('common.meaningCol')}</th>
+          <th className="px-4 py-3 text-right font-normal">{t('wrong.wrongCount')}</th>
+          <th className="px-4 py-3"></th>
+        </tr>
+      </thead>
         <tbody>
-          {rows.map(r => {
-            const word = findWord(r.word)
-            return (
-              <tr key={r.word} className="border-t border-line">
-                <td className="px-4 py-3 text-base tracking-widest">{r.word}</td>
-                <td className="px-4 py-3 font-mono text-dim">{word?.flatSpaced ?? '-'}</td>
-                <td className="px-4 py-3 text-dim">{word?.trans ?? '-'}</td>
-                <td className="px-4 py-3 text-right text-err">{r.count}</td>
-                <td className="px-4 py-3 text-right whitespace-nowrap">
-                  <button
-                    onClick={() => onPlay(r.word)}
-                    className="px-2 py-1 rounded-md border border-line text-xs hover:bg-surface2"
-                  >
-                    {t('common.play')}
-                  </button>
-                  <button
-                    onClick={() => onRemove(r.word)}
-                    className="ml-2 px-2 py-1 rounded-md border border-line text-xs hover:bg-surface2"
-                  >
-                    {t('common.remove')}
-                  </button>
-                </td>
-              </tr>
-            )
-          })}
-        </tbody>
-      </table>
-    </div>
+        {rows.map(r => {
+          const word = findWord(r.word)
+          return (
+            <tr key={r.word} className="border-t border-line">
+              <td className="px-4 py-3 text-base tracking-widest">{r.word}</td>
+              <td className="px-4 py-3 font-mono text-dim">{word?.flatSpaced ?? '-'}</td>
+              <td className="px-4 py-3 text-dim">{word?.trans ?? '-'}</td>
+              <td className="px-4 py-3 text-right tabular-nums text-err">{r.count}</td>
+              <td className="whitespace-nowrap px-4 py-3 text-right">
+                <button
+                  onClick={() => onPlay(r.word)}
+                  className="inline-flex h-8 items-center rounded-lg border border-line px-2 text-xs hover:bg-surface2"
+                >
+                  {t('common.play')}
+                </button>
+                <button
+                  onClick={() => onRemove(r.word)}
+                  className="ml-2 inline-flex h-8 items-center rounded-lg border border-line px-2 text-xs hover:bg-surface2"
+                >
+                  {t('common.remove')}
+                </button>
+              </td>
+            </tr>
+          )
+        })}
+      </tbody>
+    </table>
   )
 }

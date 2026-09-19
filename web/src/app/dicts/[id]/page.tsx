@@ -6,6 +6,9 @@ import { useParams, useRouter } from 'next/navigation'
 import { useBaseStore } from '@/lib/store/base'
 import { useSettingStore } from '@/lib/store/setting'
 import { useHydrated } from '@/lib/useHydrated'
+import Page from '@/components/ui/Page'
+import PageHeader from '@/components/ui/PageHeader'
+import Panel from '@/components/ui/Panel'
 import {
   buildWords,
   csvCell,
@@ -47,16 +50,26 @@ export default function DictDetailPage() {
     setDesc(dict.description)
   }
 
-  if (!hydrated) return <div className="mx-auto max-w-4xl px-4 py-16 text-dim">{t('common.loading')}</div>
+  if (!hydrated)
+    return (
+      <Page>
+        <p className="py-16 text-dim">{t('common.loading')}</p>
+      </Page>
+    )
 
   if (!dict) {
     return (
-      <div className="mx-auto max-w-4xl px-4 py-20 text-center">
-        <p className="text-dim mb-6">{t('dictDetail.notFound')}</p>
-        <Link href="/dicts" className="inline-flex h-10 px-5 items-center rounded-xl bg-brand text-white">
-          {t('dictDetail.backToDicts')}
-        </Link>
-      </div>
+      <Page>
+        <div className="py-16 text-center">
+          <p className="text-dim">{t('dictDetail.notFound')}</p>
+          <Link
+            href="/dicts"
+            className="mt-6 inline-flex h-10 items-center rounded-xl bg-brand px-5 text-white"
+          >
+            {t('dictDetail.backToDicts')}
+          </Link>
+        </div>
+      </Page>
     )
   }
 
@@ -187,26 +200,33 @@ export default function DictDetailPage() {
     : 0
 
   return (
-    <div className="mx-auto max-w-4xl px-4 py-10">
-      <div className="flex items-center justify-between gap-3 mb-6 flex-wrap">
-        <Link href="/dicts" className="text-sm text-dim hover:text-ink">
-          {t('dictDetail.back')}
-        </Link>
-        <div className="flex gap-2">
-          <button
-            onClick={() => base.setCurrentDict(dict.id)}
-            disabled={current}
-            className="h-9 px-4 rounded-lg border border-line text-sm disabled:opacity-50 hover:bg-surface2"
-          >
-            {current ? t('common.inUse') : t('common.setCurrent')}
-          </button>
-          <Link href="/practice" className="h-9 px-4 inline-flex items-center rounded-lg bg-brand text-white text-sm">
-            {t('common.goPractice')}
-          </Link>
-        </div>
-      </div>
+    <Page>
+      <Link href="/dicts" className="mb-4 inline-block text-sm text-dim hover:text-ink">
+        {t('dictDetail.back')}
+      </Link>
+      <PageHeader
+        title={dict.name}
+        desc={t('dictDetail.totalProgress', { n: dict.length, m: dict.lastLearnIndex })}
+        actions={
+          <>
+            <button
+              onClick={() => base.setCurrentDict(dict.id)}
+              disabled={current}
+              className="inline-flex h-9 items-center rounded-lg border border-line px-3 text-sm hover:bg-surface2 disabled:opacity-50"
+            >
+              {current ? t('common.inUse') : t('common.setCurrent')}
+            </button>
+            <Link
+              href="/practice"
+              className="inline-flex h-9 items-center rounded-lg bg-brand px-3 text-sm text-white"
+            >
+              {t('common.goPractice')}
+            </Link>
+          </>
+        }
+      />
 
-      <div className="rounded-2xl border border-line bg-surface p-5 mb-6">
+      <Panel className="mb-6">
         <div className="grid gap-3 sm:grid-cols-[1fr_2fr]">
           <input
             value={name}
@@ -221,16 +241,16 @@ export default function DictDetailPage() {
             className="h-10 px-3 rounded-lg border border-line bg-surface2 text-sm"
           />
         </div>
-        <div className="flex items-center gap-3 mt-3 flex-wrap">
-          <button onClick={saveMeta} className="h-9 px-4 rounded-lg bg-brand text-white text-sm">
+        <div className="mt-3 flex flex-wrap items-center gap-3">
+          <button
+            onClick={saveMeta}
+            className="inline-flex h-9 items-center rounded-lg bg-brand px-3 text-sm text-white"
+          >
             {t('dictDetail.saveMeta')}
           </button>
-          <span className="text-xs text-dim">
-            {t('dictDetail.totalProgress', { n: dict.length, m: dict.lastLearnIndex })}
-          </span>
           {msg && <span className="text-xs text-dim">{msg}</span>}
         </div>
-      </div>
+      </Panel>
 
       <div className="grid gap-4 sm:grid-cols-4 mb-6">
         <StatCard label={t('dictDetail.statWords')} value={`${dict.length}`} />
@@ -239,7 +259,7 @@ export default function DictDetailPage() {
         <StatCard label={t('dictDetail.statRetention')} value={`${retention}%`} />
       </div>
 
-      <div className="rounded-2xl border border-line bg-surface p-5 mb-6">
+      <div className="rounded-xl border border-line bg-surface p-5 mb-6">
         <div className="font-medium mb-1">{t('dictDetail.addWords')}</div>
         <p className="text-xs text-dim mb-3">{t('dictDetail.addWordsDesc')}</p>
         <textarea
@@ -306,7 +326,7 @@ export default function DictDetailPage() {
         />
       </div>
 
-      <div className="rounded-2xl border border-line bg-surface overflow-x-auto">
+      <div className="rounded-xl border border-line bg-surface overflow-x-auto">
         <table className="w-full text-sm min-w-[560px]">
           <thead className="bg-surface2 text-dim">
             <tr>
@@ -376,15 +396,15 @@ export default function DictDetailPage() {
             ))}
           </tbody>
         </table>
-        {visible.length === 0 && <p className="px-4 py-8 text-dim text-center">{t('common.noMatch')}</p>}
+        {visible.length === 0 && <p className="px-4 py-8 text-center text-dim">{t('common.noMatch')}</p>}
       </div>
-    </div>
+    </Page>
   )
 }
 
 function StatCard({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-2xl border border-line bg-surface p-4">
+    <div className="rounded-xl border border-line bg-surface p-4">
       <div className="text-xs text-dim">{label}</div>
       <div className="text-xl font-semibold mt-1">{value}</div>
     </div>

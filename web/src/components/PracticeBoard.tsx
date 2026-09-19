@@ -12,6 +12,11 @@ import { downloadShareCard } from '@/lib/shareCard'
 import { getTarget, getTargetSyllables } from '@/lib/pinyin'
 import { accuracy, speed } from '@/lib/typing'
 import { useI18n, type MessageKey } from '@/i18n'
+import Page from './ui/Page'
+import Panel from './ui/Panel'
+import ProgressBar from './ui/ProgressBar'
+import StatCard from './ui/StatCard'
+import Chip from './ui/Chip'
 import PinyinDisplay from './PinyinDisplay'
 import HanziInput from './HanziInput'
 import VirtualKeyboard from './VirtualKeyboard'
@@ -83,6 +88,8 @@ export default function PracticeBoard({
   /** 分享卡导出结果的提示 */
   const [shareMsg, setShareMsg] = useState('')
   const lastWrongRef = useRef(0)
+  /** 连对计数：整词一次打对才累加，中间出错就清零（纯视觉激励，不参与判定） */
+  const [combo, setCombo] = useState(0)
 
   // 触屏设备（手机 / 平板）默认给出屏幕键盘
   const [coarsePointer, setCoarsePointer] = useState(false)
@@ -141,7 +148,10 @@ export default function PracticeBoard({
     getSyllables: getSyllablesFn,
     config,
     resetKey: `${step.index}-${step.patch}`,
-    onWordDone: onCommit,
+    onWordDone: (word, wrongTimes) => {
+      setCombo(c => (wrongTimes === 0 ? c + 1 : 0))
+      onCommit(word, wrongTimes)
+    },
     onFinish: ({ spendMs, keys }) => onFinish(spendMs, keys),
   })
 
@@ -254,102 +264,138 @@ export default function PracticeBoard({
 
   if (session.finished) {
     return (
-      <div className="mx-auto max-w-3xl px-4 py-16">
-        <div className="rounded-2xl border border-line bg-surface p-8 text-center">
-          <div className="text-2xl font-semibold mb-2">{t('board.groupDone')}</div>
-          <p className="text-dim mb-8">{t('board.groupSummary', { title: boardTitle, n: words.length })}</p>
-          <div className="grid grid-cols-3 gap-4 mb-8">
-            <Stat label={t('board.accuracy')} value={`${acc}%`} />
-            <Stat
-              label={t('board.speed')}
-              value={`${sp.kpm} ${hanziMode ? t('board.charsPerMin') : t('board.keysPerMin')}`}
-            />
-            <Stat label={t('board.time')} value={`${Math.round(spend / 1000)}s`} />
-          </div>
-          {counts && counts.newCount + counts.reviewCount > 0 && (
-            <p className="text-xs text-dim -mt-4 mb-8">
-              {t('board.newReview', { n: counts.newCount, m: counts.reviewCount })}
+      <Page width="sm">
+        <Panel>
+          <div className="text-center">
+            <div className="text-2xl font-semibold">{t('board.groupDone')}</div>
+            <p className="mt-1 text-sm text-dim">
+              {t('board.groupSummary', { title: boardTitle, n: words.length })}
             </p>
-          )}
-          <div className="flex items-center justify-center gap-1.5 mb-6">
-            <span className="text-xs text-dim mr-1">{t('board.week')}</span>
-            {week.map(d => (
-              <span
-                key={d.date}
-                title={d.date}
-                className={`h-6 w-6 flex items-center justify-center rounded-md border text-[10px] ${
-                  d.active ? 'bg-brand text-white border-brand' : 'border-line text-dim'
-                }`}
+
+            <div className="mx-auto mt-6 grid max-w-md grid-cols-3 gap-3">
+              <StatCard label={t('board.accuracy')} value={`${acc}%`} />
+              <StatCard
+                label={t('board.speed')}
+                value={`${sp.kpm} ${hanziMode ? t('board.charsPerMin') : t('board.keysPerMin')}`}
+              />
+              <StatCard label={t('board.time')} value={mmss(spend)} />
+            </div>
+            {counts && counts.newCount + counts.reviewCount > 0 && (
+              <p className="mt-3 text-xs text-dim">
+                {t('board.newReview', { n: counts.newCount, m: counts.reviewCount })}
+              </p>
+            )}
+
+            <div className="mt-8">
+              <div className="mb-2 text-xs text-dim">{t('board.week')}</div>
+              <div className="flex items-center justify-center gap-1.5">
+                {week.map(d => (
+                  <span
+                    key={d.date}
+                    title={d.date}
+                    className={`flex h-7 w-7 items-center justify-center rounded-md border text-[11px] tabular-nums ${
+                      d.active ? 'border-brand bg-brand text-white' : 'border-line text-dim'
+                    }`}
+                  >
+                    {new Date(d.date).getDate()}
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            <p className="mt-8 text-sm text-dim">{acc >= 90 ? t('board.cheerHigh') : t('board.cheerLow')}</p>
+
+            <div className="mt-6 flex flex-wrap justify-center gap-3">
+              <button
+                onClick={() => {
+                  setSpend(0)
+                  setCombo(0)
+                  onRestartSession()
+                  session.restart()
+                }}
+                className="h-10 rounded-xl bg-brand px-5 text-white"
               >
-                {new Date(d.date).getDate()}
-              </span>
-            ))}
+                {t('board.again')}
+              </button>
+              <button
+                onClick={async () => {
+                  const ok = await downloadShareCard({
+                    title: boardTitle,
+                    accuracy: acc,
+                    speed: `${sp.kpm} ${hanziMode ? t('board.charsPerMin') : t('board.keysPerMin')}`,
+                    seconds: spend / 1000,
+                    words: words.length,
+                    date: new Date().toISOString().slice(0, 10),
+                  })
+                  setShareMsg(ok ? t('board.shareOk') : t('board.shareFail'))
+                }}
+                className="h-10 rounded-xl border border-line px-5"
+              >
+                {t('board.share')}
+              </button>
+              <Link href="/" className="inline-flex h-10 items-center rounded-xl border border-line px-5">
+                {t('common.backHome')}
+              </Link>
+            </div>
+            {shareMsg && <p className="mt-3 text-xs text-dim">{shareMsg}</p>}
           </div>
-          <p className="text-sm text-dim mb-8">{acc >= 90 ? t('board.cheerHigh') : t('board.cheerLow')}</p>
-          <div className="flex justify-center gap-3">
-            <button
-              onClick={() => {
-                setSpend(0)
-                onRestartSession()
-                session.restart()
-              }}
-              className="h-10 px-5 rounded-xl bg-brand text-white"
-            >
-              {t('board.again')}
-            </button>
-            <button
-              onClick={async () => {
-                const ok = await downloadShareCard({
-                  title: boardTitle,
-                  accuracy: acc,
-                  speed: `${sp.kpm} ${hanziMode ? t('board.charsPerMin') : t('board.keysPerMin')}`,
-                  seconds: spend / 1000,
-                  words: words.length,
-                  date: new Date().toISOString().slice(0, 10),
-                })
-                setShareMsg(ok ? t('board.shareOk') : t('board.shareFail'))
-              }}
-              className="h-10 px-5 rounded-xl border border-line"
-            >
-              {t('board.share')}
-            </button>
-            <Link href="/" className="h-10 px-5 inline-flex items-center rounded-xl border border-line">
-              {t('common.backHome')}
-            </Link>
-          </div>
-          {shareMsg && <p className="mt-3 text-xs text-dim">{shareMsg}</p>}
-        </div>
-      </div>
+        </Panel>
+      </Page>
     )
   }
 
-  return (
-    <div className="mx-auto max-w-3xl px-4 py-8">
-      <div className="flex items-center justify-between text-sm text-dim mb-4">
-        <div>
-          {boardTitle} · {session.progress.index + 1}/{session.progress.total}
-          {step.total > 1 && (
-            <span className="ml-2">
-              {t('board.step', { i: step.index + 1, n: step.total })} · {t(MODE_LABEL[mode])}
-            </span>
-          )}
-          {step.patch && <span className="ml-2 px-1.5 py-0.5 rounded-md bg-surface2">{t('board.wrongPractice')}</span>}
-          {session.repeatLabel && <span className="ml-2">{t('board.repeat', { n: session.repeatLabel })}</span>}
-        </div>
-        <div className="flex gap-4">
-          <span>{t('board.accValue', { n: acc })}</span>
-          <span>
-            {sp.kpm} {hanziMode ? t('board.charsPerMin') : t('board.keysPerMin')}
-          </span>
-          <span>{Math.round(spend / 1000)}s</span>
-        </div>
-      </div>
+  // 打完当前词、等下一个的时候就算完成一格，进度条要跟手
+  const doneCount = session.progress.index + (session.waitingNext ? 1 : 0)
+  const progressPct = session.progress.total ? (doneCount / session.progress.total) * 100 : 0
 
-      <div className="h-1.5 rounded-full bg-surface2 overflow-hidden mb-6">
-        <div
-          className="h-full bg-brand transition-all"
-          style={{ width: `${(session.progress.index / session.progress.total) * 100}%` }}
-        />
+  return (
+    <Page width="sm">
+      {/* 进度区：与词卡同一层皮（白卡片），上面「在练什么 + 实时数据」，中间粗进度条，下面两端对齐说明 */}
+      <div className="mb-6 rounded-xl border border-line bg-surface p-4 shadow-[var(--shadow-card)] sm:p-5">
+        <div className="flex flex-wrap items-start justify-between gap-x-4 gap-y-2">
+          <div className="min-w-0">
+            {/* 词典名：对标 TypeWords 的 text-2xl font-bold */}
+            <div className="truncate text-xl font-bold sm:text-2xl">{boardTitle}</div>
+            <div className="mt-1 flex flex-wrap items-center gap-1.5">
+              {step.total > 1 && (
+                <Chip>
+                  {t('board.step', { i: step.index + 1, n: step.total })} · {t(MODE_LABEL[mode])}
+                </Chip>
+              )}
+              {step.patch && <Chip>{t('board.wrongPractice')}</Chip>}
+              {session.repeatLabel && <Chip>{t('board.repeat', { n: session.repeatLabel })}</Chip>}
+              {/* 当前词已掌握 / 已收藏：不用点开按钮也能看到状态 */}
+              {session.word && knownWords.includes(session.word.word) && (
+                <Chip tone="plain">{t('wordCard.known')}</Chip>
+              )}
+              {session.word && collect.includes(session.word.word) && (
+                <Chip tone="plain">{t('wordCard.collected')}</Chip>
+              )}
+            </div>
+          </div>
+          <div className="flex shrink-0 flex-wrap items-center gap-1.5">
+            {/* 连对 3 个以上才亮出来，避免每词都闪 */}
+            {combo >= 3 && (
+              <Chip key={combo} tone="brand" className="pop font-semibold">
+                ×{combo}
+              </Chip>
+            )}
+            <Chip>{t('board.accValue', { n: acc })}</Chip>
+            <Chip>
+              {sp.kpm} {hanziMode ? t('board.charsPerMin') : t('board.keysPerMin')}
+            </Chip>
+            <Chip>{mmss(spend)}</Chip>
+          </div>
+        </div>
+
+        <ProgressBar className="mt-3" size="lg" value={progressPct} />
+
+        <div className="mt-1.5 flex items-center justify-between text-xs text-dim">
+          <span>
+            {t('common.progress', { a: doneCount, b: session.progress.total })}
+          </span>
+          <span className="tabular-nums">{Math.round(progressPct)}%</span>
+        </div>
       </div>
 
       {session.word && (
@@ -391,7 +437,7 @@ export default function PracticeBoard({
       </div>
 
       {session.waitingNext && (
-        <div className="mt-6 text-center text-sm text-dim">
+        <div className="pop mt-6 text-center text-sm text-dim">
           {setting.autoNext || hanziMode
             ? t('board.nextSoon')
             : t('board.pressNext', {
@@ -437,47 +483,58 @@ export default function PracticeBoard({
         </>
       )}
 
-      <div className="mt-10 flex flex-wrap justify-center items-center gap-2 text-xs text-dim">
-        <Key>{setting.replayKey === 'f2' ? t('board.keyReplayF2') : t('board.keyReplayTab')}</Key>
-        {SHORTCUT_ACTIONS.map(action => {
-          const key = setting.shortcuts?.[action]
-          if (!key) return null
-          return (
-            <Key key={action}>
-              {key === 'Escape' ? 'Esc' : key} · {t(ACTION_LABEL[action])}
-            </Key>
-          )
-        })}
-        <Key>{hanziMode ? t('board.keyBackspaceHanzi') : t('board.keyBackspacePinyin')}</Key>
-        <button
-          onClick={session.prev}
-          disabled={session.progress.index === 0}
-          className="px-3 py-1.5 rounded-lg border border-line hover:bg-surface2 disabled:opacity-40"
-        >
-          {t('board.prev')}
-        </button>
-        <button
-          onClick={() => setDetailOpen(true)}
-          disabled={!session.word}
-          className="px-3 py-1.5 rounded-lg border border-line hover:bg-surface2 disabled:opacity-40"
-        >
-          {t('board.detail')}
-        </button>
-        <button onClick={session.skip} className="px-3 py-1.5 rounded-lg border border-line hover:bg-surface2">
-          {t('board.skip')}
-        </button>
-        <button
-          onClick={() => {
-            // 先把本组已产生的用时落盘，再重开（否则会被新会话覆盖）
-            onFlush(session.elapsed(), session.stats.keys, sessionStartedAt)
-            onResetSession()
-            setSpend(0)
-            session.restart()
-          }}
-          className="px-3 py-1.5 rounded-lg border border-line hover:bg-surface2"
-        >
-          {t('board.restart')}
-        </button>
+      {/* 操作 + 键位提示：收进一张卡片，别散在页面底部 */}
+      <div className="mt-8 rounded-xl border border-line bg-surface p-3 shadow-[var(--shadow-card)]">
+        <div className="flex flex-wrap items-center justify-center gap-2">
+          <button
+            onClick={session.prev}
+            disabled={session.progress.index === 0}
+            className="h-9 rounded-lg border border-line px-3 text-sm hover:bg-hover disabled:opacity-40"
+          >
+            {t('board.prev')}
+          </button>
+          <button
+            onClick={() => setDetailOpen(true)}
+            disabled={!session.word}
+            className="h-9 rounded-lg border border-line px-3 text-sm hover:bg-hover disabled:opacity-40"
+          >
+            {t('board.detail')}
+          </button>
+          <button onClick={session.skip} className="h-9 rounded-lg border border-line px-3 text-sm hover:bg-hover">
+            {t('board.skip')}
+          </button>
+          <button
+            onClick={() => {
+              // 先把本组已产生的用时落盘，再重开（否则会被新会话覆盖）
+              onFlush(session.elapsed(), session.stats.keys, sessionStartedAt)
+              onResetSession()
+              setSpend(0)
+              setCombo(0)
+              session.restart()
+            }}
+            className="h-9 rounded-lg border border-line px-3 text-sm hover:bg-hover"
+          >
+            {t('board.restart')}
+          </button>
+        </div>
+
+        {/* 键位提示：触屏按不到功能键，小屏直接不显示；末尾给出改键入口 */}
+        <div className="mt-3 hidden flex-wrap items-center justify-center gap-1.5 sm:flex">
+          <Key>{setting.replayKey === 'f2' ? t('board.keyReplayF2') : t('board.keyReplayTab')}</Key>
+          {SHORTCUT_ACTIONS.map(action => {
+            const key = setting.shortcuts?.[action]
+            if (!key) return null
+            return (
+              <Key key={action}>
+                {key === 'Escape' ? 'Esc' : key} · {t(ACTION_LABEL[action])}
+              </Key>
+            )
+          })}
+          <Key>{hanziMode ? t('board.keyBackspaceHanzi') : t('board.keyBackspacePinyin')}</Key>
+          <Link href="/setting" className="text-[11px] text-dim underline decoration-dotted hover:text-brand">
+            {t('nav.setting')}
+          </Link>
+        </div>
       </div>
 
       {session.imeDetected && !hanziMode && (
@@ -500,7 +557,7 @@ export default function PracticeBoard({
           onClose={() => setDetailOpen(false)}
         />
       )}
-    </div>
+    </Page>
   )
 }
 
@@ -539,7 +596,7 @@ function WordDetail({
       role="presentation"
     >
       <div
-        className="w-full max-w-md rounded-2xl border border-line bg-surface p-6"
+        className="w-full max-w-md rounded-xl border border-line bg-surface p-6 shadow-[var(--shadow-card)]"
         onClick={e => e.stopPropagation()}
       >
         <div className="flex items-start justify-between gap-3 mb-3">
@@ -619,15 +676,16 @@ const MODE_LABEL: Record<StepType, MessageKey> = {
   write: 'setting.modeWrite',
 }
 
-function Stat({ label, value }: { label: string; value: string }) {
+function Key({ children }: { children: React.ReactNode }) {
   return (
-    <div className="rounded-xl border border-line p-4">
-      <div className="text-xs text-dim mb-1">{label}</div>
-      <div className="text-xl font-semibold">{value}</div>
-    </div>
+    <span className="rounded-md border border-line bg-surface2 px-1.5 py-0.5 text-[11px] text-dim">
+      {children}
+    </span>
   )
 }
 
-function Key({ children }: { children: React.ReactNode }) {
-  return <span className="px-2 py-1 rounded-md border border-line">{children}</span>
+/** 用时统一排成 mm:ss，比秒数少一位跳动，也不至于宽度乱变 */
+function mmss(ms: number) {
+  const s = Math.max(0, Math.round(ms / 1000))
+  return `${String(Math.floor(s / 60)).padStart(2, '0')}:${String(s % 60).padStart(2, '0')}`
 }

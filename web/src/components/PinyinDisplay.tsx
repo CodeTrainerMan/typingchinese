@@ -18,12 +18,12 @@ interface Props {
  */
 export default function PinyinDisplay({ hanzi, groups, cursor, shakeKey, masked = false }: Props) {
   return (
-    <div className={`flex flex-wrap justify-center gap-4 no-select ${shakeKey ? 'shake' : ''}`} key={shakeKey}>
+    <div className={`flex flex-wrap justify-center gap-3 no-select sm:gap-4 ${shakeKey ? 'shake' : ''}`} key={shakeKey}>
       {groups.map((group, gi) => {
         const chars = [...group.plain]
         return (
-          <div key={gi} className="flex flex-col items-center min-w-12">
-            <div className="text-4xl sm:text-5xl font-medium tracking-[0.2em] mb-2">
+          <div key={gi} className="flex flex-col items-center min-w-10 sm:min-w-12">
+            <div className="font-hanzi text-3xl sm:text-5xl font-medium tracking-[0.2em] mb-2">
               {masked ? '·' : ([...hanzi][gi] ?? '')}
             </div>
             <div className="flex">
@@ -31,9 +31,10 @@ export default function PinyinDisplay({ hanzi, groups, cursor, shakeKey, masked 
                 const globalIndex = group.offset + ci
                 const typed = group.chars[ci]
                 const isCursor = globalIndex === cursor
+                // 打对的字稍微放大一点，给一个「命中」的即时反馈
                 const cls = typed
                   ? typed.correct
-                    ? 'text-ok'
+                    ? 'text-ok scale-110 font-semibold'
                     : 'text-err'
                   : isCursor
                     ? 'text-brand bg-brand-soft'
@@ -41,7 +42,7 @@ export default function PinyinDisplay({ hanzi, groups, cursor, shakeKey, masked 
                 return (
                   <span
                     key={ci}
-                    className={`w-4 h-8 inline-flex items-center justify-center text-lg sm:text-xl font-mono rounded ${
+                    className={`inline-flex h-8 w-3.5 items-center justify-center rounded font-mono text-lg transition-transform duration-150 sm:w-4 sm:text-xl ${
                       cls
                     } ${isCursor ? 'ring-1 ring-brand' : ''}`}
                   >

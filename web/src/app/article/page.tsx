@@ -1,15 +1,21 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useBaseStore } from '@/lib/store/base'
 import { useExtraStore } from '@/lib/store/extra'
 import { useSettingStore } from '@/lib/store/setting'
 import { useHydrated } from '@/lib/useHydrated'
 import { buildArticleWords, splitSentences, type ArticleResource } from '@/lib/article'
+import { groupReadByArticle, type ArticleProgress } from '@/lib/readProgress'
 import { isSpeechRecognitionSupported, listenOnce, scoreRead } from '@/lib/speechScore'
 import { speak } from '@/lib/tts'
 import VoicePicker from '@/components/VoicePicker'
+import ReadCurve from '@/components/ReadCurve'
+import Page from '@/components/ui/Page'
+import PageHeader from '@/components/ui/PageHeader'
+import Panel from '@/components/ui/Panel'
+import Chip from '@/components/ui/Chip'
 import { useI18n } from '@/i18n'
 
 export default function ArticlePage() {
@@ -18,7 +24,13 @@ export default function ArticlePage() {
   const extra = useExtraStore()
   const setting = useSettingStore()
   const router = useRouter()
-  const { t } = useI18n()
+  const { t, locale } = useI18n()
+  // 每篇文章的跟读进步情况（历史记录按文章聚合，没有跟读过的文章不在表里）
+  const progressByArticle = useMemo(() => {
+    const map = new Map<string, ArticleProgress>()
+    for (const g of groupReadByArticle(extra.readRecords)) map.set(g.key, g)
+    return map
+  }, [extra.readRecords])
   const [articles, setArticles] = useState<ArticleResource[]>([])
   const [loading, setLoading] = useState(true)
   const [openId, setOpenId] = useState<string | null>(null)
@@ -114,22 +126,23 @@ export default function ArticlePage() {
   const startCustom = () => startText(customTitle.trim() || t('article.customDefaultTitle'), customText)
 
   return (
-    <div className="mx-auto max-w-4xl px-4 py-10">
-      <div className="flex items-center justify-between mb-6">
-        <h1 className="text-xl font-semibold">{t('article.title')}</h1>
-        {base.session?.kind === 'article' && (
-          <button
-            onClick={() => router.push('/practice')}
-            className="h-9 px-4 rounded-lg bg-brand text-white text-sm"
-          >
-            {t('article.continuePrev', { title: base.session.title ?? '' })}
-          </button>
-        )}
-      </div>
+    <Page>
+      <PageHeader
+        title={t('article.title')}
+        desc={t('article.intro')}
+        actions={
+          base.session?.kind === 'article' ? (
+            <button
+              onClick={() => router.push('/practice')}
+              className="inline-flex h-9 items-center rounded-lg bg-brand px-3 text-sm text-white"
+            >
+              {t('article.continuePrev', { title: base.session.title ?? '' })}
+            </button>
+          ) : undefined
+        }
+      />
 
-      <p className="text-sm text-dim mb-3">{t('article.intro')}</p>
-
-      <div className="flex items-center gap-3 mb-6 flex-wrap">
+      <div className="mb-6 flex flex-wrap items-center gap-3">
         <span className="text-sm text-dim">{t('setting.voice')}</span>
         <VoicePicker
           value={voice}
@@ -149,7 +162,7 @@ export default function ArticlePage() {
       </div>
 
       {customOpen && (
-        <div className="rounded-2xl border border-line bg-surface p-5 mb-8">
+        <Panel className="mb-4" title={t('article.customPanel')}>
           <input
             value={customTitle}
             onChange={e => setCustomTitle(e.target.value)}
@@ -179,7 +192,7 @@ export default function ArticlePage() {
               {t('article.customSave')}
             </button>
           </div>
-        </div>
+        </Panel>
       )}
 
       {extra.articles.length > 0 && (
@@ -187,25 +200,23 @@ export default function ArticlePage() {
           <div className="text-sm text-dim mb-3">{t('article.myArticles')}</div>
           <div className="grid gap-4 sm:grid-cols-2">
             {extra.articles.map(a => (
-              <div key={a.id} className="rounded-2xl border border-line bg-surface p-5">
-                <div className="font-medium">{a.title}</div>
-                <div className="text-sm text-dim mt-1">{a.text.slice(0, 120)}</div>
-                <div className="flex gap-2 mt-4">
+              <Panel key={a.id} title={a.title} desc={a.text.slice(0, 120)}>
+                <div className="mt-4 flex flex-wrap items-center gap-2">
                   <button
                     onClick={() => void startText(a.title, a.text)}
                     disabled={busy}
-                    className="h-9 px-4 rounded-lg bg-brand text-white text-sm disabled:opacity-50"
+                    className="inline-flex h-8 items-center rounded-lg bg-brand px-2.5 text-xs text-white disabled:opacity-50"
                   >
                     {t('article.start')}
                   </button>
                   <button
                     onClick={() => extra.removeArticle(a.id)}
-                    className="h-9 px-4 rounded-lg border border-line text-sm text-err hover:bg-surface2"
+                    className="inline-flex h-8 items-center rounded-lg border border-line px-2.5 text-xs text-err hover:bg-surface2"
                   >
                     {t('common.remove')}
                   </button>
                 </div>
-              </div>
+              </Panel>
             ))}
           </div>
         </div>
@@ -218,19 +229,19 @@ export default function ArticlePage() {
         {articles.map(a => {
           const open = openId === a.id
           const sentences = splitSentences(a.text)
+          const prog = progressByArticle.get(a.id)
           return (
-            <div key={a.id} className="rounded-2xl border border-line bg-surface p-5">
-              <div className="flex items-start justify-between gap-3">
-                <div>
-                  <div className="font-medium">{a.title}</div>
-                  <div className="text-sm text-dim mt-1">{a.desc}</div>
-                </div>
-                <span className="text-xs px-2 py-1 rounded-md bg-surface2 text-dim whitespace-nowrap">
+            <Panel
+              key={a.id}
+              title={a.title}
+              desc={a.desc}
+              actions={
+                <Chip className="whitespace-nowrap">
                   {t('article.levelSentences', { level: a.level, n: sentences.length })}
-                </span>
-              </div>
-
-              <div className="mt-4 text-sm text-dim leading-relaxed">
+                </Chip>
+              }
+            >
+              <div className="text-sm leading-relaxed text-dim">
                 {open ? a.text.split('\n').map((line, i) => <p key={i}>{line}</p>) : <p>{sentences[0]}…</p>}
               </div>
 
@@ -262,27 +273,57 @@ export default function ArticlePage() {
                 </div>
               )}
 
-              <div className="flex gap-2 mt-5">
+              {prog && (
+                <div className="mt-4 border-t border-line pt-4">
+                  <div className="mb-1.5 flex flex-wrap items-center gap-2">
+                    <Chip>{t('stats.readLatest', { n: prog.latest })}</Chip>
+                    <Chip>{prog.count} ×</Chip>
+                    {prog.delta !== 0 && (
+                      <Chip tone={prog.delta > 0 ? 'brand' : 'plain'}>
+                        {prog.delta > 0
+                          ? t('stats.readDeltaUp', { n: prog.delta })
+                          : t('stats.readDeltaDown', { n: -prog.delta })}
+                      </Chip>
+                    )}
+                  </div>
+                  {prog.count > 1 && (
+                    <ReadCurve
+                      compact
+                      points={prog.records.map((r, i) => ({
+                        score: r.score,
+                        label: `${i + 1}`,
+                        tip: `${t('stats.readPointTip', {
+                          n: i + 1,
+                          score: r.score,
+                          date: new Date(r.at).toLocaleDateString(locale),
+                        })} · ${r.sentence}`,
+                      }))}
+                    />
+                  )}
+                </div>
+              )}
+
+              <div className="mt-4 flex flex-wrap items-center gap-2">
                 <button
                   onClick={() => void start(a)}
                   disabled={busy}
-                  className="h-9 px-4 rounded-lg bg-brand text-white text-sm disabled:opacity-50"
+                  className="inline-flex h-8 items-center rounded-lg bg-brand px-2.5 text-xs text-white disabled:opacity-50"
                 >
                   {busy ? t('common.generating') : t('article.start')}
                 </button>
                 <button
                   onClick={() => setOpenId(open ? null : a.id)}
-                  className="h-9 px-4 rounded-lg border border-line text-sm hover:bg-surface2"
+                  className="inline-flex h-8 items-center rounded-lg border border-line px-2.5 text-xs hover:bg-surface2"
                 >
                   {open ? t('common.collapse') : t('article.viewFull')}
                 </button>
               </div>
-            </div>
+            </Panel>
           )
         })}
       </div>
 
       <p className="mt-8 text-xs text-dim">{t('article.footerNote')}</p>
-    </div>
+    </Page>
   )
 }

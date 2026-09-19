@@ -1,10 +1,18 @@
 'use client'
 
 import Link from 'next/link'
+import { useState } from 'react'
 import { useBaseStore } from '@/lib/store/base'
-import { useExtraStore } from '@/lib/store/extra'
+import { useExtraStore, type ReadRecord } from '@/lib/store/extra'
 import { useHydrated } from '@/lib/useHydrated'
+import { groupReadByArticle } from '@/lib/readProgress'
 import { useI18n } from '@/i18n'
+import ReadCurve from '@/components/ReadCurve'
+import Page from '@/components/ui/Page'
+import PageHeader from '@/components/ui/PageHeader'
+import Panel from '@/components/ui/Panel'
+import StatCard from '@/components/ui/StatCard'
+import Chip from '@/components/ui/Chip'
 import type { Statistics } from '@/lib/types'
 
 const DAYS = 14
@@ -32,6 +40,8 @@ export default function StatsPage() {
   const base = useBaseStore()
   const extra = useExtraStore()
   const { t, locale } = useI18n()
+  // 跟读进步曲线看哪一篇；null = 跟到最近练过的那篇
+  const [pickArticle, setPickArticle] = useState<string | null>(null)
   // 日期按界面语言排版（美式 9/18、德语 18.9. 等），不再手拼
   const fmtDay = new Intl.DateTimeFormat(locale, { month: 'numeric', day: 'numeric' })
   const fmtFull = new Intl.DateTimeFormat(locale, { year: 'numeric', month: 'short', day: 'numeric' })
@@ -107,162 +117,242 @@ export default function StatsPage() {
   const readAvg = reads.length ? Math.round(reads.reduce((a, r) => a + r.score, 0) / reads.length) : 0
   const readBest = reads.reduce((a, r) => Math.max(a, r.score), 0)
 
+  // 按文章聚合出进步曲线：默认看最近练过的那篇，可点标题切换
+  const groups = groupReadByArticle(reads)
+  const current = groups.find(g => g.key === pickArticle) ?? groups[0]
+  const tip = (i: number, r: ReadRecord) =>
+    `${t('stats.readPointTip', { n: i + 1, score: r.score, date: fmtFull.format(new Date(r.at)) })} · ${r.sentence}`
+
   return (
-    <div className="mx-auto max-w-4xl px-4 py-10">
-      <div className="flex items-center justify-between mb-6">
-        <h1 className="text-xl font-semibold">{t('stats.title')}</h1>
-        <Link href="/practice" className="h-9 px-4 inline-flex items-center rounded-lg bg-brand text-white text-sm">
-          {t('common.goPractice')}
-        </Link>
-      </div>
+    <Page>
+      <PageHeader
+        title={t('stats.title')}
+        actions={
+          <Link
+            href="/practice"
+            className="inline-flex h-9 items-center rounded-lg bg-brand px-4 text-sm text-white"
+          >
+            {t('common.goPractice')}
+          </Link>
+        }
+      />
 
-      <div className="grid gap-4 sm:grid-cols-4 mb-8">
-        <Card label={t('stats.streak')} value={t('stats.daysValue', { n: keep })} />
-        <Card label={t('stats.activeDays')} value={t('stats.daysValue', { n: activeDays })} />
-        <Card label={t('stats.totalWords')} value={t('common.words', { n: sum.total })} />
-        <Card label={t('stats.avgAcc')} value={`${acc}%`} />
-      </div>
-
-      <div className="rounded-2xl border border-line bg-surface p-5 mb-8">
-        <div className="text-sm font-medium mb-1">{t('stats.recentDone', { n: DAYS })}</div>
-        <div className="text-xs text-dim mb-2">{t('stats.recentDoneDesc', { n: maxTotal })}</div>
-        <div className="flex items-center gap-4 text-xs text-dim mb-4">
-          <span className="inline-flex items-center gap-1">
-            <span className="w-3 h-3 rounded-sm bg-brand inline-block" />
-            {t('stats.legendNew')}
-          </span>
-          <span className="inline-flex items-center gap-1">
-            <span className="w-3 h-3 rounded-sm bg-brand/40 inline-block" />
-            {t('stats.legendReview')}
-          </span>
+      <div className="space-y-6">
+        <div className="grid gap-4 sm:grid-cols-4">
+          <StatCard label={t('stats.streak')} value={t('stats.daysValue', { n: keep })} />
+          <StatCard label={t('stats.activeDays')} value={t('stats.daysValue', { n: activeDays })} />
+          <StatCard label={t('stats.totalWords')} value={t('common.words', { n: sum.total })} />
+          <StatCard label={t('stats.avgAcc')} value={`${acc}%`} />
         </div>
-        <div className="flex items-end gap-1.5 h-40">
-          {days.map(d => {
-            const total = d.stat?.total ?? 0
-            const fresh = d.stat?.newCount ?? 0
-            const review = d.stat?.reviewCount ?? 0
-            const h = total ? Math.max(6, Math.round((total / maxTotal) * 100)) : 2
-            // 旧存档只有 total：整根按新学算，避免柱子凭空矮一截
-            const freshShare = total ? ((fresh || total) / total) * 100 : 100
-            const reviewShare = total && review ? (review / total) * 100 : 0
-            return (
-              <div key={d.key} className="flex-1 flex flex-col items-center justify-end h-full">
-                <div className="text-[10px] text-dim mb-1">{total || ''}</div>
+
+        <Panel title={t('stats.recentDone', { n: DAYS })} desc={t('stats.recentDoneDesc', { n: maxTotal })}>
+          <div className="flex items-center gap-4 text-xs text-dim">
+            <span className="inline-flex items-center gap-1">
+              <span className="inline-block h-3 w-3 rounded-sm bg-brand" />
+              {t('stats.legendNew')}
+            </span>
+            <span className="inline-flex items-center gap-1">
+              <span className="inline-block h-3 w-3 rounded-sm bg-brand/40" />
+              {t('stats.legendReview')}
+            </span>
+          </div>
+          <div className="flex h-40 items-end gap-1">
+            {days.map(d => {
+              const total = d.stat?.total ?? 0
+              const fresh = d.stat?.newCount ?? 0
+              const review = d.stat?.reviewCount ?? 0
+              const h = total ? Math.max(6, Math.round((total / maxTotal) * 100)) : 2
+              // 旧存档只有 total：整根按新学算，避免柱子凭空矮一截
+              const freshShare = total ? ((fresh || total) / total) * 100 : 100
+              const reviewShare = total && review ? (review / total) * 100 : 0
+              return (
+                <div key={d.key} className="flex h-full flex-1 flex-col items-center justify-end">
+                  <div className="mb-1 text-[10px] text-dim">{total || ''}</div>
+                  <div
+                    title={t('stats.tooltip', { date: d.full, n: total })}
+                    className="flex w-full flex-col justify-end overflow-hidden rounded-t"
+                    style={{ height: `${h}%` }}
+                  >
+                    {reviewShare > 0 && (
+                      <div className="bg-brand/40" style={{ height: `${reviewShare}%` }} />
+                    )}
+                    <div
+                      className={total ? 'bg-brand' : 'bg-surface2'}
+                      style={{ height: `${freshShare}%` }}
+                    />
+                  </div>
+                  <div className="mt-1 text-[10px] text-dim">{d.label}</div>
+                </div>
+              )
+            })}
+          </div>
+        </Panel>
+
+        <Panel title={t('stats.forecastTitle', { n: DAYS })} desc={t('stats.forecastDesc')}>
+          <div className="flex h-32 items-end gap-1">
+            {forecast.map(f => (
+              <div key={f.key} className="flex h-full flex-1 flex-col items-center justify-end">
+                <div className="mb-1 text-[10px] text-dim">{f.count || ''}</div>
                 <div
-                  title={t('stats.tooltip', { date: d.full, n: total })}
-                  className="w-full flex flex-col justify-end rounded-t overflow-hidden"
-                  style={{ height: `${h}%` }}
-                >
-                  {reviewShare > 0 && <div className="bg-brand/40" style={{ height: `${reviewShare}%` }} />}
-                  <div className={total ? 'bg-brand' : 'bg-surface2'} style={{ height: `${freshShare}%` }} />
-                </div>
-                <div className="text-[10px] text-dim mt-1">{d.label}</div>
+                  title={t('stats.tooltip', { date: f.full, n: f.count })}
+                  className={`w-full rounded-t ${f.count ? 'bg-ok/70' : 'bg-surface2'}`}
+                  style={{
+                    height: f.count ? `${Math.max(6, Math.round((f.count / maxDue) * 100))}%` : '2%',
+                  }}
+                />
+                <div className="mt-1 text-[10px] text-dim">{f.label}</div>
               </div>
-            )
-          })}
-        </div>
-      </div>
+            ))}
+          </div>
+        </Panel>
 
-      <div className="rounded-2xl border border-line bg-surface p-5 mb-8">
-        <div className="text-sm font-medium mb-1">{t('stats.forecastTitle', { n: DAYS })}</div>
-        <div className="text-xs text-dim mb-5">{t('stats.forecastDesc')}</div>
-        <div className="flex items-end gap-1.5 h-32">
-          {forecast.map(f => (
-            <div key={f.key} className="flex-1 flex flex-col items-center justify-end h-full">
-              <div className="text-[10px] text-dim mb-1">{f.count || ''}</div>
+        <Panel title={t('stats.speedAcc', { n: DAYS })}>
+          <div className="mb-3 flex items-center gap-4 text-xs text-dim">
+            <span className="inline-flex items-center gap-1">
+              <span className="inline-block h-0.5 w-4 bg-brand" />
+              {t('stats.speedLegend')}
+            </span>
+            <span className="inline-flex items-center gap-1">
+              <span className="inline-block h-0.5 w-4 bg-ok" />
+              {t('stats.accLegend')}
+            </span>
+          </div>
+          <TrendChart
+            points={days.map(d => ({
+              label: d.label,
+              kpm: d.stat?.spend ? Math.round(d.stat.keystrokes / (d.stat.spend / 60000)) : 0,
+              acc: d.stat?.total ? (d.stat.correct / d.stat.total) * 100 : 0,
+            }))}
+          />
+        </Panel>
+
+        <Panel title={t('stats.heat', { n: WEEKS })} desc={t('stats.heatDesc')}>
+          <div className="grid w-fit grid-flow-col grid-rows-7 gap-1">
+            {heat.map(d => (
               <div
-                title={t('stats.tooltip', { date: f.full, n: f.count })}
-                className={`w-full rounded-t ${f.count ? 'bg-ok/70' : 'bg-surface2'}`}
-                style={{ height: f.count ? `${Math.max(6, Math.round((f.count / maxDue) * 100))}%` : '2%' }}
+                key={d.key}
+                title={t('stats.tooltip', { date: d.full, n: d.total })}
+                className={`h-3.5 w-3.5 rounded-sm ${
+                  d.total === 0
+                    ? 'bg-surface2'
+                    : d.total < 10
+                      ? 'bg-brand/35'
+                      : d.total < 20
+                        ? 'bg-brand/65'
+                        : 'bg-brand'
+                }`}
               />
-              <div className="text-[10px] text-dim mt-1">{f.label}</div>
-            </div>
-          ))}
-        </div>
-      </div>
+            ))}
+          </div>
+        </Panel>
 
-      <div className="rounded-2xl border border-line bg-surface p-5 mb-8">
-        <div className="text-sm font-medium mb-1">{t('stats.speedAcc', { n: DAYS })}</div>
-        <div className="flex items-center gap-4 text-xs text-dim mb-3">
-          <span className="inline-flex items-center gap-1">
-            <span className="w-4 h-0.5 bg-brand inline-block" />
-            {t('stats.speedLegend')}
-          </span>
-          <span className="inline-flex items-center gap-1">
-            <span className="w-4 h-0.5 bg-ok inline-block" />
-            {t('stats.accLegend')}
-          </span>
-        </div>
-        <TrendChart
-          points={days.map(d => ({
-            label: d.label,
-            kpm: d.stat?.spend ? Math.round(d.stat.keystrokes / (d.stat.spend / 60000)) : 0,
-            acc: d.stat?.total ? (d.stat.correct / d.stat.total) * 100 : 0,
-          }))}
+      <div className="grid gap-4 sm:grid-cols-5">
+        <StatCard label={t('stats.newWords')} value={t('common.words', { n: sum.newCount })} />
+        <StatCard label={t('stats.reviewWords')} value={t('common.words', { n: sum.reviewCount })} />
+        <StatCard
+          label={t('stats.totalTime')}
+          value={t('common.minutes', { n: Math.round(sum.spend / 60000) })}
         />
+        <StatCard label={t('stats.totalKeys')} value={`${sum.keystrokes}`} />
+        <StatCard label={t('stats.totalWrong')} value={`${sum.wrong}`} />
       </div>
 
-      <div className="rounded-2xl border border-line bg-surface p-5 mb-8">
-        <div className="text-sm font-medium mb-1">{t('stats.heat', { n: WEEKS })}</div>
-        <div className="text-xs text-dim mb-4">{t('stats.heatDesc')}</div>
-        <div className="grid grid-flow-col grid-rows-7 gap-1 w-fit">
-          {heat.map(d => (
-            <div
-              key={d.key}
-              title={t('stats.tooltip', { date: d.full, n: d.total })}
-              className={`w-3.5 h-3.5 rounded-sm ${
-                d.total === 0 ? 'bg-surface2' : d.total < 10 ? 'bg-brand/35' : d.total < 20 ? 'bg-brand/65' : 'bg-brand'
-              }`}
-            />
-          ))}
-        </div>
-      </div>
+        <Panel
+          title={t('stats.readTitle')}
+          actions={
+            reads.length > 0 ? (
+              <button
+                onClick={extra.clearReadRecords}
+                className="h-8 rounded-lg border border-line px-3 text-xs text-err hover:bg-surface2"
+              >
+                {t('stats.readClear')}
+              </button>
+            ) : undefined
+          }
+        >
+          {reads.length === 0 ? (
+            <p className="text-sm text-dim">{t('stats.readEmpty')}</p>
+          ) : (
+            <div className="space-y-4">
+              <div className="grid gap-4 sm:grid-cols-3">
+                <StatCard label={t('stats.readCount')} value={`${reads.length}`} />
+                <StatCard label={t('stats.readAvg')} value={`${readAvg}`} />
+                <StatCard label={t('stats.readBest')} value={`${readBest}`} />
+              </div>
 
-      <div className="grid gap-4 sm:grid-cols-5 mb-8">
-        <Card label={t('stats.newWords')} value={t('common.words', { n: sum.newCount })} />
-        <Card label={t('stats.reviewWords')} value={t('common.words', { n: sum.reviewCount })} />
-        <Card label={t('stats.totalTime')} value={t('common.minutes', { n: Math.round(sum.spend / 60000) })} />
-        <Card label={t('stats.totalKeys')} value={`${sum.keystrokes}`} />
-        <Card label={t('stats.totalWrong')} value={`${sum.wrong}`} />
-      </div>
-
-      <div className="rounded-2xl border border-line bg-surface p-5 mb-8">
-        <div className="text-sm font-medium mb-1">{t('stats.readTitle')}</div>
-        {reads.length === 0 ? (
-          <p className="text-xs text-dim mt-1">{t('stats.readEmpty')}</p>
-        ) : (
-          <>
-            <div className="grid gap-4 sm:grid-cols-3 mt-3 mb-4">
-              <Card label={t('stats.readCount')} value={`${reads.length}`} />
-              <Card label={t('stats.readAvg')} value={`${readAvg}`} />
-              <Card label={t('stats.readBest')} value={`${readBest}`} />
-            </div>
-            <div className="text-xs text-dim mb-2">{t('stats.readRecent')}</div>
-            <div className="space-y-1.5">
-              {reads.slice(0, 8).map(r => (
-                <div key={r.id} className="flex items-center gap-3 text-sm">
-                  <span className="text-brand font-medium w-14 shrink-0">
-                    {t('article.readScore', { n: r.score })}
-                  </span>
-                  <span className="flex-1 truncate">{r.sentence}</span>
-                  <span className="text-xs text-dim whitespace-nowrap">{fmtFull.format(new Date(r.at))}</span>
+              <div>
+                <div className="mb-2 text-xs text-dim">{t('stats.readRecent')}</div>
+                <div className="space-y-1.5">
+                  {reads.slice(0, 8).map(r => (
+                    <div key={r.id} className="flex items-center gap-3 text-sm">
+                      <span className="w-14 shrink-0 font-medium tabular-nums text-brand">
+                        {t('article.readScore', { n: r.score })}
+                      </span>
+                      <span className="flex-1 truncate">{r.sentence}</span>
+                      <span className="whitespace-nowrap text-xs text-dim">
+                        {fmtFull.format(new Date(r.at))}
+                      </span>
+                    </div>
+                  ))}
                 </div>
+              </div>
+            </div>
+          )}
+        </Panel>
+
+        {/* 按文章聚合：一篇一条曲线 */}
+        {current && (
+          <Panel title={t('stats.readByArticle')} desc={current.title}>
+            <div className="flex flex-wrap gap-2">
+              {groups.map(g => (
+                <button
+                  key={g.key}
+                  onClick={() => setPickArticle(g.key)}
+                  title={g.title}
+                  className={`inline-flex h-8 max-w-[14rem] items-center gap-1.5 rounded-lg border px-3 text-xs ${
+                    g.key === current.key
+                      ? 'border-brand bg-brand-soft text-brand'
+                      : 'border-line text-dim hover:bg-surface2'
+                  }`}
+                >
+                  <span className="truncate">{g.title}</span>
+                  <span className="tabular-nums opacity-70">{g.count}</span>
+                </button>
               ))}
             </div>
-            <button
-              onClick={extra.clearReadRecords}
-              className="mt-4 h-9 px-4 rounded-lg border border-line text-sm text-err hover:bg-surface2"
-            >
-              {t('stats.readClear')}
-            </button>
-          </>
+
+            <div className="mt-3 flex flex-wrap items-center gap-2">
+              <Chip>{t('stats.readFirst', { n: current.first })}</Chip>
+              <Chip>{t('stats.readLatest', { n: current.latest })}</Chip>
+              <Chip tone={current.delta > 0 ? 'brand' : 'plain'}>
+                {current.delta >= 0
+                  ? t('stats.readDeltaUp', { n: current.delta })
+                  : t('stats.readDeltaDown', { n: -current.delta })}
+              </Chip>
+            </div>
+
+            {current.count < 2 ? (
+              <p className="mt-3 text-xs text-dim">{t('stats.readNeedMore')}</p>
+            ) : (
+              <div className="mt-3">
+                <ReadCurve
+                  points={current.records.map((r, i) => ({
+                    score: r.score,
+                    label: `${i + 1}`,
+                    tip: tip(i, r),
+                  }))}
+                  avg={current.avg}
+                  avgLabel={t('stats.readAvgLine')}
+                />
+              </div>
+            )}
+          </Panel>
         )}
-      </div>
 
       {activeDays === 0 ? (
         <p className="text-dim">{t('stats.empty')}</p>
       ) : (
-        <div className="rounded-2xl border border-line bg-surface overflow-hidden">
+        <div className="overflow-hidden rounded-xl border border-line bg-surface">
           <table className="w-full text-sm">
             <thead className="bg-surface2 text-dim">
               <tr>
@@ -292,7 +382,8 @@ export default function StatsPage() {
           </table>
         </div>
       )}
-    </div>
+      </div>
+    </Page>
   )
 }
 
@@ -343,11 +434,4 @@ function TrendChart({ points }: { points: { label: string; kpm: number; acc: num
   )
 }
 
-function Card({ label, value }: { label: string; value: string }) {
-  return (
-    <div className="rounded-2xl border border-line bg-surface p-4">
-      <div className="text-xs text-dim">{label}</div>
-      <div className="text-xl font-semibold mt-1">{value}</div>
-    </div>
-  )
-}
+

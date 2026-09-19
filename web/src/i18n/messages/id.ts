@@ -3,7 +3,7 @@ import type { Messages } from './en'
 
 export const id: Messages = {
   app: {
-    title: 'Pinyin Type · Belajar Mandarin dengan mengetik',
+    title: 'TypingChinese · Belajar Mandarin dengan mengetik',
     desc: 'Ketik pinyin untuk belajar Mandarin: mengetik ulang dan dikte, koreksi per huruf, pengulangan berjarak, buku kesalahan dan statistik.',
   },
 
@@ -15,8 +15,8 @@ export const id: Messages = {
     wrong: 'Kesalahan',
     stats: 'Statistik',
     setting: 'Pengaturan',
-    brandA: 'Pinyin',
-    brandB: 'Type',
+    brandA: 'Typing',
+    brandB: 'Chinese',
   },
 
   common: {
@@ -282,6 +282,14 @@ export const id: Messages = {
   readRecent: 'Percobaan terakhir',
   readEmpty: 'Belum ada rekaman — buka artikel dan bacalah satu baris dengan lantang.',
   readClear: 'Hapus rekaman',
+    readByArticle: 'Kemajuan per artikel',
+    readFirst: 'Pertama {n}',
+    readLatest: 'Terakhir {n}',
+    readDeltaUp: '↑ {n}',
+    readDeltaDown: '↓ {n}',
+    readPointTip: 'Percobaan {n} · {score} · {date}',
+    readAvgLine: 'rata-rata',
+    readNeedMore: 'Baca sekali lagi untuk melihat kurvanya',
 
   legendNew: 'Baru',
   legendReview: 'Diulang',

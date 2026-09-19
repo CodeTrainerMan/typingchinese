@@ -1,4 +1,4 @@
-<h1 align="center">Pinyin Type</h1>
+<h1 align="center">TypingChinese</h1>
 
 <p align="center">
   <a href="/README.md">English</a> |

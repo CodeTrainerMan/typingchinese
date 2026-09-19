@@ -3,7 +3,7 @@ import type { Messages } from './en'
 
 export const th: Messages = {
   app: {
-    title: 'Pinyin Type · เรียนภาษาจีนด้วยการพิมพ์',
+    title: 'TypingChinese · เรียนภาษาจีนด้วยการพิมพ์',
     desc: 'พิมพ์พินอินเพื่อเรียนภาษาจีน: คัดลอกและฟัง-เขียน, ตรวจทีละตัวอักษร, ทบทวนแบบเว้นระยะ, สมุดคำผิด และสถิติ.',
   },
 
@@ -15,8 +15,8 @@ export const th: Messages = {
     wrong: 'คำผิด',
     stats: 'สถิติ',
     setting: 'ตั้งค่า',
-    brandA: 'Pinyin',
-    brandB: 'Type',
+    brandA: 'Typing',
+    brandB: 'Chinese',
   },
 
   common: {
@@ -282,6 +282,14 @@ export const th: Messages = {
   readRecent: 'ครั้งล่าสุด',
   readEmpty: 'ยังไม่มีบันทึก — เปิดบทความแล้วอ่านออกเสียงหนึ่งประโยค',
   readClear: 'ล้างบันทึก',
+    readByArticle: 'ความก้าวหน้าตามบทความ',
+    readFirst: 'ครั้งแรก {n}',
+    readLatest: 'ล่าสุด {n}',
+    readDeltaUp: '↑ {n}',
+    readDeltaDown: '↓ {n}',
+    readPointTip: 'ครั้งที่ {n} · {score} · {date}',
+    readAvgLine: 'เฉลี่ย',
+    readNeedMore: 'อ่านอีกครั้งเพื่อดูกราฟ',
 
   legendNew: 'คำใหม่',
   legendReview: 'ทบทวน',

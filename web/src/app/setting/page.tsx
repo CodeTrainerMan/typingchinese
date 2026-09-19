@@ -4,6 +4,9 @@ import { useEffect, useRef, useState } from 'react'
 import { useSettingStore } from '@/lib/store/setting'
 import { useBaseStore } from '@/lib/store/base'
 import { useHydrated } from '@/lib/useHydrated'
+import Page from '@/components/ui/Page'
+import PageHeader from '@/components/ui/PageHeader'
+import Panel from '@/components/ui/Panel'
 import { listZhVoices } from '@/lib/tts'
 import { LOCALES, useI18n, type MessageKey } from '@/i18n'
 import VoicePicker from '@/components/VoicePicker'
@@ -32,11 +35,16 @@ export default function SettingPage() {
     listZhVoices().then(setVoices)
   }, [])
 
-  if (!hydrated) return <div className="mx-auto max-w-3xl px-4 py-16 text-dim">{t('common.loading')}</div>
+  if (!hydrated)
+    return (
+      <Page width="sm">
+        <p className="py-16 text-dim">{t('common.loading')}</p>
+      </Page>
+    )
 
   return (
-    <div className="mx-auto max-w-3xl px-4 py-10">
-      <h1 className="text-xl font-semibold mb-6">{t('setting.title')}</h1>
+    <Page width="sm">
+      <PageHeader title={t('setting.title')} />
 
       <Section title={t('setting.sectionLanguage')}>
         <Row label={t('setting.language')} desc={t('setting.languageDesc')}>
@@ -314,7 +322,7 @@ export default function SettingPage() {
               const url = URL.createObjectURL(blob)
               const a = document.createElement('a')
               a.href = url
-              a.download = `pinyin-type-backup-${new Date().toISOString().slice(0, 10)}.json`
+              a.download = `typingchinese-backup-${new Date().toISOString().slice(0, 10)}.json`
               a.click()
               URL.revokeObjectURL(url)
             }}
@@ -355,7 +363,7 @@ export default function SettingPage() {
           </button>
         </Row>
       </Section>
-    </div>
+    </Page>
   )
 }
 
@@ -384,17 +392,16 @@ const SHORTCUT_KEYS = [
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <section className="mb-8 rounded-2xl border border-line bg-surface p-5">
-      <h2 className="text-sm font-semibold text-dim mb-4">{title}</h2>
+    <Panel title={title} className="mb-6">
       <div className="flex flex-col gap-4">{children}</div>
-    </section>
+    </Panel>
   )
 }
 
 function Row({ label, desc, children }: { label: string; desc?: string; children: React.ReactNode }) {
   return (
-    <div className="flex items-center justify-between gap-4 flex-wrap">
-      <div>
+    <div className="flex flex-wrap items-center justify-between gap-4">
+      <div className="min-w-0">
         <div className="text-sm">{label}</div>
         {desc && <div className="text-xs text-dim mt-0.5">{desc}</div>}
       </div>

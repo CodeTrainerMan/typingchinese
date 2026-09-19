@@ -4,6 +4,11 @@ import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 import { useBaseStore } from '@/lib/store/base'
 import { useHydrated } from '@/lib/useHydrated'
+import Page from '@/components/ui/Page'
+import PageHeader from '@/components/ui/PageHeader'
+import Panel from '@/components/ui/Panel'
+import ProgressBar from '@/components/ui/ProgressBar'
+import Chip from '@/components/ui/Chip'
 import { buildCustomDict, buildCustomDictFromEntries, parseDictFile, parseEntries } from '@/lib/customDict'
 import { SHARE_URL_LIMIT, decodeShare, exportDictFile, shareUrl } from '@/lib/dictShare'
 import { useI18n } from '@/i18n'
@@ -69,7 +74,12 @@ export default function DictsPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  if (!hydrated) return <div className="mx-auto max-w-4xl px-4 py-16 text-dim">{t('common.loading')}</div>
+  if (!hydrated)
+    return (
+      <Page>
+        <p className="py-16 text-dim">{t('common.loading')}</p>
+      </Page>
+    )
 
   const customDicts = base.dicts.filter(d => !resources.some(r => r.id === d.id))
   const parsed = parseEntries(text).length
@@ -162,28 +172,31 @@ export default function DictsPage() {
   }
 
   return (
-    <div className="mx-auto max-w-4xl px-4 py-10">
-      <div className="flex items-center justify-between mb-6">
-        <h1 className="text-xl font-semibold">{t('dicts.title')}</h1>
-        <div className="flex gap-2">
-          <button
-            onClick={() => setOpenImport(v => !v)}
-            className="h-9 px-4 inline-flex items-center rounded-lg border border-line text-sm hover:bg-surface2"
-          >
-            {openImport ? t('common.collapse') : t('dicts.importPanel')}
-          </button>
-          {base.dicts.length > 0 && (
-            <Link href="/practice" className="h-9 px-4 inline-flex items-center rounded-lg bg-brand text-white text-sm">
-              {t('common.goPractice')}
-            </Link>
-          )}
-        </div>
-      </div>
+    <Page>
+      <PageHeader
+        title={t('dicts.title')}
+        actions={
+          <>
+            <button
+              onClick={() => setOpenImport(v => !v)}
+              className="inline-flex h-9 items-center rounded-lg border border-line px-3 text-sm hover:bg-surface2"
+            >
+              {openImport ? t('common.collapse') : t('dicts.importPanel')}
+            </button>
+            {base.dicts.length > 0 && (
+              <Link
+                href="/practice"
+                className="inline-flex h-9 items-center rounded-lg bg-brand px-3 text-sm text-white"
+              >
+                {t('common.goPractice')}
+              </Link>
+            )}
+          </>
+        }
+      />
 
       {openImport && (
-        <div className="rounded-2xl border border-line bg-surface p-5 mb-8">
-          <div className="font-medium mb-1">{t('dicts.importPanel')}</div>
-          <p className="text-xs text-dim mb-4">{t('dicts.importDesc')}</p>
+        <Panel className="mb-6" title={t('dicts.importPanel')} desc={t('dicts.importDesc')}>
           <input
             value={name}
             onChange={e => setName(e.target.value)}
@@ -250,155 +263,178 @@ export default function DictsPage() {
               {t('dicts.shareImport')}
             </button>
           </div>
-          <p className="text-xs text-dim mt-3">{t('dicts.shareHint')}</p>
-        </div>
+          <p className="mt-3 text-xs text-dim">{t('dicts.shareHint')}</p>
+        </Panel>
       )}
 
       {customDicts.length > 0 && (
-        <div className="mb-8">
-          <div className="text-sm text-dim mb-3">{t('dicts.myCustom')}</div>
-          <div className="grid gap-4 sm:grid-cols-2">
+        <Panel title={t('dicts.myCustom')}>
+          <div className="space-y-3">
             {customDicts.map(dict => {
               const current = base.currentDictId === dict.id
+              const pct = dict.length ? (dict.lastLearnIndex / dict.length) * 100 : 0
               return (
-                <div key={dict.id} className="rounded-2xl border border-line bg-surface p-5">
-                  <div className="flex items-start justify-between gap-3">
-                    <div>
-                      <div className="font-medium">
-                        {dict.name}
-                        {current && <span className="ml-2 text-xs text-brand">{t('common.current')}</span>}
-                      </div>
-                      <div className="text-sm text-dim mt-1">{dict.description}</div>
+                <div
+                  key={dict.id}
+                  className={`flex flex-wrap items-start justify-between gap-3 rounded-lg border border-line bg-solid p-3 transition-colors duration-300 hover:bg-hover ${
+                    current ? 'bg-active' : ''
+                  }`}
+                >
+                  <div className="min-w-[12rem] flex-1">
+                    <div className="flex flex-wrap items-center gap-2">
+                      <span className="font-medium text-ink">{dict.name}</span>
+                      {current && <Chip tone="brand">{t('common.current')}</Chip>}
+                      <Chip>{t('common.words', { n: dict.length })}</Chip>
                     </div>
-                    <span className="text-xs px-2 py-1 rounded-md bg-surface2 text-dim">
-                      {t('common.words', { n: dict.length })}
-                    </span>
+                    {dict.description && (
+                      <p className="mt-1 truncate text-xs text-dim">{dict.description}</p>
+                    )}
+                    <div className="mt-2 max-w-xs">
+                      <div className="mb-1 flex items-center justify-between text-xs text-dim">
+                        <span>{t('common.progress', { a: dict.lastLearnIndex, b: dict.length })}</span>
+                        <span className="tabular-nums">{Math.round(pct)}%</span>
+                      </div>
+                      <ProgressBar size="sm" value={pct} />
+                    </div>
                   </div>
-                  <div className="flex gap-2 mt-5">
+                  <div className="flex flex-wrap items-center gap-2">
                     <button
                       onClick={() => base.setCurrentDict(dict.id)}
                       disabled={current}
-                      className="h-9 px-4 rounded-lg border border-line text-sm disabled:opacity-50 hover:bg-surface2"
+                      className={`inline-flex h-8 items-center rounded-lg px-2.5 text-xs disabled:opacity-50 ${
+                        current ? 'border border-line hover:bg-surface2' : 'bg-brand text-white'
+                      }`}
                     >
                       {current ? t('common.inUse') : t('common.setCurrent')}
                     </button>
                     <Link
                       href={`/dicts/${dict.id}`}
-                      className="h-9 px-4 inline-flex items-center rounded-lg border border-line text-sm hover:bg-surface2"
+                      className="inline-flex h-8 items-center rounded-lg border border-line px-2.5 text-xs hover:bg-surface2"
                     >
                       {t('common.edit')}
                     </Link>
                     <button
                       onClick={() => exportJson(dict)}
-                      className="h-9 px-4 rounded-lg border border-line text-sm hover:bg-surface2"
+                      className="inline-flex h-8 items-center rounded-lg border border-line px-2.5 text-xs hover:bg-surface2"
                     >
                       {t('dicts.export')}
                     </button>
                     <button
                       onClick={() => void copyShare(dict)}
-                      className="h-9 px-4 rounded-lg border border-line text-sm hover:bg-surface2"
+                      className="inline-flex h-8 items-center rounded-lg border border-line px-2.5 text-xs hover:bg-surface2"
                     >
                       {t('dicts.share')}
                     </button>
                     <button
                       onClick={() => base.removeDict(dict.id)}
-                      className="h-9 px-4 rounded-lg border border-line text-sm text-err hover:bg-surface2"
+                      className="inline-flex h-8 items-center rounded-lg border border-line px-2.5 text-xs text-err hover:bg-surface2"
                     >
                       {t('common.remove')}
                     </button>
-                    <span className="text-xs text-dim self-center">
-                      {t('common.progress', { a: dict.lastLearnIndex, b: dict.length })}
-                    </span>
                   </div>
                 </div>
               )
             })}
           </div>
-        </div>
+        </Panel>
       )}
 
       {loading && <p className="text-dim">{t('dicts.loadingList')}</p>}
 
-      <div className="grid gap-4 sm:grid-cols-2">
-        {resources.map(res => {
-          const added = base.dicts.find(d => d.id === res.id)
-          const current = base.currentDictId === res.id
-          return (
-            <div key={res.id} className="rounded-2xl border border-line bg-surface p-5">
-              <div className="flex items-start justify-between gap-3">
-                <div>
-                  <div className="font-medium">
-                    {res.name}
-                    {current && <span className="ml-2 text-xs text-brand">{t('common.current')}</span>}
+      <Panel title={t('home.chooseDict')}>
+        <div className="space-y-3">
+          {resources.map(res => {
+            const added = base.dicts.find(d => d.id === res.id)
+            const current = base.currentDictId === res.id
+            return (
+              <div
+                key={res.id}
+                className={`flex flex-wrap items-start justify-between gap-3 rounded-lg border border-line bg-solid p-3 transition-colors duration-300 hover:bg-hover ${
+                  current ? 'bg-active' : ''
+                }`}
+              >
+                <div className="min-w-[12rem] flex-1">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <span className="font-medium text-ink">{res.name}</span>
+                    {current && <Chip tone="brand">{t('common.current')}</Chip>}
+                    <Chip>{t('common.words', { n: res.length })}</Chip>
                   </div>
-                  <div className="text-sm text-dim mt-1">{res.description}</div>
+                  {res.description && <p className="mt-1 truncate text-xs text-dim">{res.description}</p>}
+                  <div className="mt-2 flex flex-wrap gap-1.5">
+                    {res.tags.map(tag => (
+                      <Chip key={tag}>{tag}</Chip>
+                    ))}
+                  </div>
+
+                  {added && (
+                    <div className="mt-2 max-w-xs">
+                      <div className="mb-1 flex items-center justify-between text-xs text-dim">
+                        <span>{t('common.progress', { a: added.lastLearnIndex, b: added.length })}</span>
+                        <span className="tabular-nums">
+                          {Math.round(added.length ? (added.lastLearnIndex / added.length) * 100 : 0)}%
+                        </span>
+                      </div>
+                      <ProgressBar
+                        size="sm"
+                        value={added.length ? (added.lastLearnIndex / added.length) * 100 : 0}
+                      />
+                    </div>
+                  )}
                 </div>
-                <span className="text-xs px-2 py-1 rounded-md bg-surface2 text-dim">
-                  {t('common.words', { n: res.length })}
-                </span>
-              </div>
 
-              <div className="flex flex-wrap gap-1 mt-3">
-                {res.tags.map(tag => (
-                  <span key={tag} className="text-xs px-2 py-0.5 rounded-md border border-line text-dim">
-                    {tag}
-                  </span>
-                ))}
+                <div className="flex flex-wrap items-center gap-2">
+                  {added ? (
+                    <>
+                      <button
+                        onClick={() => base.setCurrentDict(res.id)}
+                        disabled={current}
+                        className={`inline-flex h-8 items-center rounded-lg px-2.5 text-xs disabled:opacity-50 ${
+                          current ? 'border border-line hover:bg-surface2' : 'bg-brand text-white'
+                        }`}
+                      >
+                        {current ? t('common.inUse') : t('common.setCurrent')}
+                      </button>
+                      <Link
+                        href={`/dicts/${res.id}`}
+                        className="inline-flex h-8 items-center rounded-lg border border-line px-2.5 text-xs hover:bg-surface2"
+                      >
+                        {t('common.edit')}
+                      </Link>
+                      <button
+                        onClick={() => exportJson(added)}
+                        className="inline-flex h-8 items-center rounded-lg border border-line px-2.5 text-xs hover:bg-surface2"
+                      >
+                        {t('dicts.export')}
+                      </button>
+                      <button
+                        onClick={() => void copyShare(added)}
+                        className="inline-flex h-8 items-center rounded-lg border border-line px-2.5 text-xs hover:bg-surface2"
+                      >
+                        {t('dicts.share')}
+                      </button>
+                      <button
+                        onClick={() => base.removeDict(res.id)}
+                        className="inline-flex h-8 items-center rounded-lg border border-line px-2.5 text-xs text-err hover:bg-surface2"
+                      >
+                        {t('common.remove')}
+                      </button>
+                    </>
+                  ) : (
+                    <button
+                      onClick={() => base.addDict(res)}
+                      className="inline-flex h-8 items-center rounded-lg bg-brand px-2.5 text-xs text-white"
+                    >
+                      {t('dicts.addLearning')}
+                    </button>
+                  )}
+                </div>
               </div>
-
-              <div className="flex gap-2 mt-5">
-                {added ? (
-                  <>
-                    <button
-                      onClick={() => base.setCurrentDict(res.id)}
-                      disabled={current}
-                      className="h-9 px-4 rounded-lg border border-line text-sm disabled:opacity-50 hover:bg-surface2"
-                    >
-                      {current ? t('common.inUse') : t('common.setCurrent')}
-                    </button>
-                    <Link
-                      href={`/dicts/${res.id}`}
-                      className="h-9 px-4 inline-flex items-center rounded-lg border border-line text-sm hover:bg-surface2"
-                    >
-                      {t('common.edit')}
-                    </Link>
-                    <button
-                      onClick={() => exportJson(added)}
-                      className="h-9 px-4 rounded-lg border border-line text-sm hover:bg-surface2"
-                    >
-                      {t('dicts.export')}
-                    </button>
-                    <button
-                      onClick={() => void copyShare(added)}
-                      className="h-9 px-4 rounded-lg border border-line text-sm hover:bg-surface2"
-                    >
-                      {t('dicts.share')}
-                    </button>
-                    <button
-                      onClick={() => base.removeDict(res.id)}
-                      className="h-9 px-4 rounded-lg border border-line text-sm text-err hover:bg-surface2"
-                    >
-                      {t('common.remove')}
-                    </button>
-                    <span className="text-xs text-dim self-center">
-                      {t('common.progress', { a: added.lastLearnIndex, b: added.length })}
-                    </span>
-                  </>
-                ) : (
-                  <button
-                    onClick={() => base.addDict(res)}
-                    className="h-9 px-4 rounded-lg bg-brand text-white text-sm"
-                  >
-                    {t('dicts.addLearning')}
-                  </button>
-                )}
-              </div>
-            </div>
-          )
-        })}
-      </div>
+            )
+          })}
+        </div>
+      </Panel>
 
       <p className="mt-8 text-xs text-dim">{t('dicts.footerNote')}</p>
-    </div>
+    </Page>
   )
 }

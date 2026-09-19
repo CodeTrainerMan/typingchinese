@@ -33,23 +33,25 @@ export default function WordCard({
 }: Props) {
   const { t } = useI18n()
   return (
-    <div className="rounded-2xl border border-line bg-surface p-6 sm:p-8">
-      <div className="flex items-center justify-between gap-4 mb-4">
-        <div className="text-3xl sm:text-4xl font-semibold tracking-[0.15em]">
+    <div className="rounded-xl border border-line bg-surface p-6 shadow-[var(--shadow-card)] sm:p-8">
+      {/* 窄屏时标题和按钮各占一行，别把按钮挤变形 */}
+      <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
+        {/* 汉字用宋体系（对标 TypeWords 中文文章字体），视觉上更像字帖 */}
+        <div className="font-hanzi text-3xl sm:text-4xl font-semibold tracking-[0.15em]">
           {masked ? '·'.repeat(word.word.length) : word.word}
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center justify-end gap-2">
           <button
             onClick={onPlay}
-            className="h-9 px-3 rounded-lg border border-line text-sm hover:bg-surface2 transition-colors"
+            className="h-8 px-2.5 rounded-lg border border-line text-xs whitespace-nowrap hover:bg-hover transition-colors"
             title={t('wordCard.playTitle')}
           >
             {t('wordCard.playBtn')}
           </button>
           <button
             onClick={onToggleKnown}
-            className={`h-9 px-3 rounded-lg border text-sm transition-colors ${
-              known ? 'border-ok text-ok' : 'border-line text-dim hover:bg-surface2'
+            className={`h-8 px-2.5 rounded-lg border text-xs whitespace-nowrap transition-colors ${
+            known ? 'border-ok text-ok' : 'border-line text-dim hover:bg-hover'
             }`}
             title={t('wordCard.knownTitle')}
           >
@@ -57,8 +59,8 @@ export default function WordCard({
           </button>
           <button
             onClick={onToggleCollect}
-            className={`h-9 px-3 rounded-lg border text-sm transition-colors ${
-              collected ? 'border-warn text-warn' : 'border-line text-dim hover:bg-surface2'
+            className={`h-8 px-2.5 rounded-lg border text-xs whitespace-nowrap transition-colors ${
+            collected ? 'border-warn text-warn' : 'border-line text-dim hover:bg-hover'
             }`}
             title={t('wordCard.collectTitle')}
           >
@@ -67,7 +69,7 @@ export default function WordCard({
         </div>
       </div>
 
-      {showPinyin && <div className="text-brand text-lg tracking-wide mb-2">{word.pinyin.join(' ')}</div>}
+      {showPinyin && <div className="text-brand text-xl tracking-wide mb-2">{word.pinyin.join(' ')}</div>}
       {showTrans && <div className="text-dim text-sm sm:text-base">{word.trans}</div>}
       {showRich && <RichInfo word={word} />}
 

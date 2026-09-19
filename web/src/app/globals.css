@@ -1,78 +1,137 @@
 @import "tailwindcss";
 
+/**
+ * 色板对齐 TypeWords：冷灰底 → 灰阶卡片 → 蓝色强调 → 浅橙选中。
+ * 组件只写语义类名（bg-surface / text-brand / border-line），换肤不用改组件。
+ */
 :root {
-  --bg: #f6f7f9;
-  --surface: #ffffff;
-  --surface-2: #f1f3f5;
-  --line: #e3e6ea;
-  --ink: #1f2328;
-  --dim: #6b7280;
-  --brand: #2563eb;
-  --brand-soft: #dbeafe;
+  --bg: #e6e8eb; /* 页面底 */
+  --surface: #f7f7f7; /* 卡片 */
+  --surface-2: #e4e6e8; /* 列表项 / 次级块 */
+  --solid: #ffffff; /* 纯白块：统计数字块、输入框 */
+  --hover: #dadcde; /* 图标按钮 hover */
+  --active: #fdf6ec; /* 选中 / 激活：浅橙 */
+  --line: #e2e2e2;
+  --ink: #2e2e2e; /* 主文字 */
+  --ink-2: #5b5b5b; /* 正文 */
+  --dim: #818181; /* 辅助 */
+  --brand: #409eff; /* 强调蓝：统计数字 / 进度条 */
+  --brand-soft: #e8f2ff;
+  --purple: #ac6ed1; /* 每日目标 */
   --ok: #16a34a;
   --err: #dc2626;
-  --warn: #d97706;
+  --warn: #f59e0b;
+  --track: #d1d5df;
+  --book: #e2e8f0;
+  --book-line: #e1d9d9;
+  --shadow-card: 0 6px 24px rgba(0, 0, 0, 0.12);
+  --shadow-lg: 0 12px 48px rgba(0, 0, 0, 0.11);
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.08);
+
+  --font-ui: -apple-system, "PingFang SC", "Microsoft YaHei", "Hiragino Sans GB", "Noto Sans CJK SC", system-ui,
+    "Segoe UI", sans-serif;
+  --font-hanzi: "Songti SC", "SimSun", "Noto Serif CJK SC", "Source Han Serif SC", serif;
 }
 
 /* 深色：跟随系统（手动选浅色时不生效） */
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme='light']) {
-    --bg: #0d1117;
-    --surface: #161b22;
-    --surface-2: #1c2129;
-    --line: #2b313a;
-    --ink: #e6edf3;
-    --dim: #8b949e;
-    --brand: #4f8cff;
-    --brand-soft: #1d2b45;
+    --bg: #202124;
+    --surface: #292a2d;
+    --surface-2: #35373a;
+    --solid: #1b1b1b;
+    --hover: #464646;
+    --active: #545454;
+    --line: #292929;
+    --ink: rgba(255, 255, 255, 0.82);
+    --ink-2: rgba(249, 250, 251, 0.8);
+    --dim: #b8b8b8;
+    --brand: #93ade3;
+    --brand-soft: #2a3a52;
+    --purple: #c48ade;
     --ok: #3fb950;
     --err: #f85149;
     --warn: #d29922;
+    --track: #494d52;
+    --book: #35373a;
+    --book-line: #3a3d41;
+    --shadow-card: 0 6px 24px rgba(0, 0, 0, 0.35);
+    --shadow-lg: 0 12px 48px rgba(0, 0, 0, 0.45);
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.20);
   }
 }
 
 /* 深色：手动指定，优先级高于系统设置 */
 :root[data-theme='dark'] {
-  --bg: #0d1117;
-  --surface: #161b22;
-  --surface-2: #1c2129;
-  --line: #2b313a;
-  --ink: #e6edf3;
-  --dim: #8b949e;
-  --brand: #4f8cff;
-  --brand-soft: #1d2b45;
+  --bg: #202124;
+  --surface: #292a2d;
+  --surface-2: #35373a;
+  --solid: #1b1b1b;
+  --hover: #464646;
+  --active: #545454;
+  --line: #292929;
+  --ink: rgba(255, 255, 255, 0.82);
+  --ink-2: rgba(249, 250, 251, 0.8);
+  --dim: #b8b8b8;
+  --brand: #93ade3;
+  --brand-soft: #2a3a52;
+  --purple: #c48ade;
   --ok: #3fb950;
   --err: #f85149;
   --warn: #d29922;
+  --track: #494d52;
+  --shadow-card: 0 4px 20px rgba(0, 0, 0, 0.35);
+  --shadow-lg: 0 12px 48px rgba(0, 0, 0, 0.45);
 }
 
 /* 浅色：手动指定，压过系统深色 */
 :root[data-theme='light'] {
-  --bg: #f6f7f9;
-  --surface: #ffffff;
-  --surface-2: #f1f3f5;
-  --line: #e3e6ea;
-  --ink: #1f2328;
-  --dim: #6b7280;
-  --brand: #2563eb;
-  --brand-soft: #dbeafe;
+  --bg: #e6e8eb;
+  --surface: #f7f7f7;
+  --surface-2: #e4e6e8;
+  --solid: #ffffff;
+  --hover: #dadcde;
+  --active: #fdf6ec;
+  --line: #e2e2e2;
+  --ink: #2e2e2e;
+  --ink-2: #5b5b5b;
+  --dim: #818181;
+  --brand: #409eff;
+  --brand-soft: #e8f2ff;
+  --purple: #ac6ed1;
   --ok: #16a34a;
   --err: #dc2626;
   --warn: #d97706;
+  --track: #d1d5df;
+  --book: #e2e8f0;
+  --book-line: #e1d9d9;
+  --shadow-card: 0 6px 24px rgba(0, 0, 0, 0.12);
+  --shadow-lg: 0 12px 48px rgba(0, 0, 0, 0.11);
 }
 
 @theme inline {
   --color-bg: var(--bg);
   --color-surface: var(--surface);
   --color-surface2: var(--surface-2);
+  --color-solid: var(--solid);
+  --color-hover: var(--hover);
+  --color-active: var(--active);
   --color-line: var(--line);
   --color-ink: var(--ink);
+  --color-ink2: var(--ink-2);
   --color-dim: var(--dim);
   --color-brand: var(--brand);
   --color-brand-soft: var(--brand-soft);
+  --color-purple: var(--purple);
   --color-ok: var(--ok);
   --color-err: var(--err);
   --color-warn: var(--warn);
+  --color-track: var(--track);
+  --color-book: var(--book);
+  --color-book-line: var(--book-line);
+
+  --font-sans: var(--font-ui);
+  --font-hanzi: var(--font-hanzi);
 }
 
 html,
@@ -82,9 +141,8 @@ body {
 
 body {
   background: var(--bg);
-  color: var(--ink);
-  font-family: "PingFang SC", "Microsoft YaHei", "Hiragino Sans GB", "Noto Sans CJK SC", system-ui, -apple-system,
-    "Segoe UI", sans-serif;
+  color: var(--ink-2);
+  font-family: var(--font-ui);
 }
 
 /* 练习区禁止选中，避免快速打字误选文本 */
@@ -107,4 +165,32 @@ body {
 
 .shake {
   animation: shake 0.18s ease-in-out;
+}
+
+/* 答对一个词 / 连击数字变化时的轻微弹一下 */
+@keyframes pop {
+  0% {
+    transform: scale(0.86);
+    opacity: 0.5;
+  }
+  60% {
+    transform: scale(1.06);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.pop {
+  animation: pop 0.22s ease-out;
+}
+
+/* 尊重系统的「减少动态效果」设置 */
+@media (prefers-reduced-motion: reduce) {
+  .shake,
+  .pop {
+    animation: none;
+  }
 }
