@@ -8,6 +8,7 @@ export const pt: Messages = {
   },
 
   nav: {
+    pinyin: 'Pinyin',
     home: 'Início',
     practice: 'Praticar',
     dicts: 'Listas',
@@ -44,6 +45,45 @@ export const pt: Messages = {
     meaningCol: 'Significado',
     searchPlaceholder: 'Buscar palavra / pinyin / significado',
     noMatch: 'Sem resultados',
+  },
+
+  community: {
+    title: 'Comunidade',
+    desc: 'Gratuito e de código aberto: participe e diga o que melhorar.',
+    githubDesc: 'Ver o código, reportar um bug ou enviar um PR',
+    discordDesc: 'Converse com outros alunos, tire dúvidas e compartilhe seu progresso',
+  },
+
+  pinyin: {
+    title: 'Tabela de pinyin',
+    desc: 'Todos os sons do chinês: iniciais, finais, sílabas completas e os quatro tons. Toque qualquer quadrado para ouvir.',
+    tapHint: 'Toque um quadrado para ouvir como soa',
+    initials: 'Iniciais (23)',
+    finals: 'Finais (24)',
+    finalSingle: 'Finais simples',
+    finalCompound: 'Finais compostas',
+    finalSpecial: 'Final especial',
+    finalNasal: 'Finais nasais',
+    finalFront: 'Finais nasais anteriores',
+    finalBack: 'Finais nasais posteriores',
+    whole: 'Sílabas completas (16)',
+    tones: 'Os quatro tons',
+    toneDesc: 'Uma só sílaba, quatro tons — quatro palavras diferentes.',
+    toneN: 'Tom {n}',
+    quiz: 'Teste',
+    quizTitle: 'Teste de pinyin',
+    quizDesc: 'Dez perguntas: ouça e escolha o pinyin, ou leia o pinyin e escolha o caractere.',
+    qStart: 'Começar',
+    qProgress: 'Pergunta {i}/{n}',
+    qScoreShort: 'Pontos {n}',
+    qListen: 'Ouça e escolha o pinyin',
+    qRead: 'Qual caractere é este?',
+    qReplay: 'Ouvir de novo',
+    qRight: 'Correto!',
+    qWrong: 'Era {x}',
+    qScore: 'Você acertou {n} de {m}',
+    qAgain: 'Mais uma rodada',
+    backChart: 'Tabela de pinyin',
   },
 
   home: {

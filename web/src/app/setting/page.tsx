@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react'
 import { useSettingStore } from '@/lib/store/setting'
 import { useBaseStore } from '@/lib/store/base'
 import { useHydrated } from '@/lib/useHydrated'
+import CommunityLinks from '@/components/CommunityLinks'
 import Page from '@/components/ui/Page'
 import PageHeader from '@/components/ui/PageHeader'
 import Panel from '@/components/ui/Panel'
@@ -362,6 +363,11 @@ export default function SettingPage() {
             {t('setting.resetBtn')}
           </button>
         </Row>
+      </Section>
+
+      <Section title={t('community.title')}>
+        <p className="text-xs text-dim">{t('community.desc')}</p>
+        <CommunityLinks variant="rows" />
       </Section>
     </Page>
   )

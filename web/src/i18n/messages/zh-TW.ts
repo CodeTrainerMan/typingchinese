@@ -8,6 +8,7 @@ export const zhTW: Messages = {
   },
 
   nav: {
+    pinyin: '拼音',
     home: '首页',
     practice: '练习',
     dicts: '词库',
@@ -44,6 +45,45 @@ export const zhTW: Messages = {
     meaningCol: '释义',
     searchPlaceholder: '搜寻词语 / 拼音 / 释义',
     noMatch: '没有符合的词条',
+  },
+
+  community: {
+    title: '社群',
+    desc: '開源免費，歡迎來交流、提建議、一起改進',
+    githubDesc: '看原始碼、提 issue、參與開發',
+    discordDesc: '和其他學習者一起聊、問問題、打卡',
+  },
+
+  pinyin: {
+    title: '拼音表',
+    desc: '漢語的全部音節：聲母、韻母、整體認讀音節和四個聲調。點任意一格聽發音。',
+    tapHint: '點一下聽發音',
+    initials: '聲母（23 個）',
+    finals: '韻母（24 個）',
+    finalSingle: '單韻母',
+    finalCompound: '複韻母',
+    finalSpecial: '特殊韻母',
+    finalNasal: '鼻韻母',
+    finalFront: '前鼻韻母',
+    finalBack: '後鼻韻母',
+    whole: '整體認讀音節（16 個）',
+    tones: '四個聲調',
+    toneDesc: '同一個音節，四個聲調就是四個不同的字。',
+    toneN: '第{n}聲',
+    quiz: '小測',
+    quizTitle: '拼音小測',
+    quizDesc: '十道題：聽音選拼音，或看拼音選漢字。',
+    qStart: '開始',
+    qProgress: '第 {i}/{n} 題',
+    qScoreShort: '得分 {n}',
+    qListen: '聽發音，選拼音',
+    qRead: '這個拼音是哪個字？',
+    qReplay: '再聽一遍',
+    qRight: '答對了！',
+    qWrong: '正確答案是 {x}',
+    qScore: '答對 {n} / {m}',
+    qAgain: '再來一輪',
+    backChart: '拼音表',
   },
 
   home: {

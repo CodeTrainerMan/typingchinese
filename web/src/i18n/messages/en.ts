@@ -17,6 +17,7 @@ export const en = {
   },
 
   nav: {
+    pinyin: 'Pinyin',
     home: 'Home',
     practice: 'Practice',
     dicts: 'Word Lists',
@@ -53,6 +54,45 @@ export const en = {
     meaningCol: 'Meaning',
     searchPlaceholder: 'Search word / pinyin / meaning',
     noMatch: 'No matches',
+  },
+
+  community: {
+    title: 'Community',
+    desc: 'Free and open source — come say hi, or tell us what to fix.',
+    githubDesc: 'Read the source, report a bug, or send a pull request',
+    discordDesc: 'Chat with other learners, ask questions, share progress',
+  },
+
+  pinyin: {
+    title: 'Pinyin chart',
+    desc: 'Every sound in Mandarin: initials, finals, whole syllables and the four tones. Tap any tile to hear it.',
+    tapHint: 'Tap a tile to hear how it sounds',
+    initials: 'Initials (23)',
+    finals: 'Finals (24)',
+    finalSingle: 'Simple finals',
+    finalCompound: 'Compound finals',
+    finalSpecial: 'Special final',
+    finalNasal: 'Nasal finals',
+    finalFront: 'Front nasal finals',
+    finalBack: 'Back nasal finals',
+    whole: 'Whole syllables (16)',
+    tones: 'The four tones',
+    toneDesc: 'One syllable, four tones — four different words.',
+    toneN: 'Tone {n}',
+    quiz: 'Quiz',
+    quizTitle: 'Pinyin quiz',
+    quizDesc: 'Ten questions: hear it and pick the pinyin, or read the pinyin and pick the character.',
+    qStart: 'Start',
+    qProgress: 'Question {i}/{n}',
+    qScoreShort: 'Score {n}',
+    qListen: 'Listen and pick the pinyin',
+    qRead: 'Which character is this?',
+    qReplay: 'Play again',
+    qRight: 'Correct!',
+    qWrong: 'It was {x}',
+    qScore: 'You got {n} of {m}',
+    qAgain: 'Play again',
+    backChart: 'Pinyin chart',
   },
 
   home: {

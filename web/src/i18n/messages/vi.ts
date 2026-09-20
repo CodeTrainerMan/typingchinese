@@ -8,6 +8,7 @@ export const vi: Messages = {
   },
 
   nav: {
+    pinyin: 'Pinyin',
     home: 'Trang chủ',
     practice: 'Luyện tập',
     dicts: 'Danh sách từ',
@@ -44,6 +45,45 @@ export const vi: Messages = {
     meaningCol: 'Nghĩa',
     searchPlaceholder: 'Tìm từ / pinyin / nghĩa',
     noMatch: 'Không có kết quả',
+  },
+
+  community: {
+    title: 'Cộng đồng',
+    desc: 'Miễn phí và mã nguồn mở — hãy tham gia và góp ý.',
+    githubDesc: 'Xem mã nguồn, báo lỗi hoặc gửi PR',
+    discordDesc: 'Trò chuyện với người học khác, đặt câu hỏi, chia sẻ tiến độ',
+  },
+
+  pinyin: {
+    title: 'Bảng pinyin',
+    desc: 'Mọi âm trong tiếng Trung: phụ âm đầu, vần, âm tiết đọc nguyên và bốn thanh điệu. Nhấn vào ô bất kỳ để nghe.',
+    tapHint: 'Nhấn vào một ô để nghe cách phát âm',
+    initials: 'Phụ âm đầu (23)',
+    finals: 'Vần (24)',
+    finalSingle: 'Vần đơn',
+    finalCompound: 'Vần ghép',
+    finalSpecial: 'Vần đặc biệt',
+    finalNasal: 'Vần mũi',
+    finalFront: 'Vần mũi trước',
+    finalBack: 'Vần mũi sau',
+    whole: 'Âm tiết đọc nguyên (16)',
+    tones: 'Bốn thanh điệu',
+    toneDesc: 'Một âm tiết, bốn thanh — bốn từ khác nhau.',
+    toneN: 'Thanh {n}',
+    quiz: 'Trắc nghiệm',
+    quizTitle: 'Trắc nghiệm pinyin',
+    quizDesc: 'Mười câu hỏi: nghe rồi chọn pinyin, hoặc đọc pinyin rồi chọn chữ Hán.',
+    qStart: 'Bắt đầu',
+    qProgress: 'Câu {i}/{n}',
+    qScoreShort: 'Điểm {n}',
+    qListen: 'Nghe và chọn pinyin',
+    qRead: 'Đây là chữ nào?',
+    qReplay: 'Nghe lại',
+    qRight: 'Đúng rồi!',
+    qWrong: 'Đáp án là {x}',
+    qScore: 'Đúng {n} / {m}',
+    qAgain: 'Chơi lại',
+    backChart: 'Bảng pinyin',
   },
 
   home: {

@@ -25,6 +25,13 @@
 
 <https://www.typingchinese.club>
 
+## Community
+
+Ask questions, share your progress, or report a bug:
+
+- Discord — <https://discord.gg/4kZ7nETEEc>
+- GitHub — <https://github.com/CodeTrainerMan/typingchinese>
+
 ## Features
 
 ### Word Practice

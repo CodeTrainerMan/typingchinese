@@ -6,6 +6,7 @@ import { useBaseStore } from '@/lib/store/base'
 import { useSettingStore } from '@/lib/store/setting'
 import { useHydrated } from '@/lib/useHydrated'
 import NavIcon from '@/components/ui/NavIcon'
+import CommunityLinks from '@/components/CommunityLinks'
 import Page from '@/components/ui/Page'
 import Panel from '@/components/ui/Panel'
 import ProgressBar from '@/components/ui/ProgressBar'
@@ -213,6 +214,11 @@ export default function HomePage() {
           <Feat title={t('home.featFsrsTitle')} desc={t('home.featFsrsDesc')} />
           <Feat title={t('home.featVTitle')} desc={t('home.featVDesc')} />
         </div>
+      </Panel>
+
+      {/* 第五张卡：仓库与社群入口 */}
+      <Panel title={t('community.title')} desc={t('community.desc')}>
+        <CommunityLinks />
       </Panel>
     </Page>
   )

@@ -8,6 +8,7 @@ export const ko: Messages = {
   },
 
   nav: {
+    pinyin: '병음',
     home: '홈',
     practice: '연습',
     dicts: '단어장',
@@ -44,6 +45,45 @@ export const ko: Messages = {
     meaningCol: '뜻',
     searchPlaceholder: '단어 / 병음 / 뜻 검색',
     noMatch: '결과 없음',
+  },
+
+  community: {
+    title: '커뮤니티',
+    desc: '무료 오픈소스입니다 — 함께 참여하고 개선점을 알려주세요.',
+    githubDesc: '코드 보기, 버그 제보, PR 보내기',
+    discordDesc: '다른 학습자와 대화하고, 질문하고, 진행 상황 공유',
+  },
+
+  pinyin: {
+    title: '병음표',
+    desc: '중국어의 모든 소리: 성모, 운모, 전체 인식 음절, 그리고 네 가지 성조. 칸을 누르면 소리를 들을 수 있습니다.',
+    tapHint: '칸을 눌러 발음 듣기',
+    initials: '성모 (23개)',
+    finals: '운모 (24개)',
+    finalSingle: '단운모',
+    finalCompound: '복운모',
+    finalSpecial: '특수 운모',
+    finalNasal: '비음 운모',
+    finalFront: '전비음 운모',
+    finalBack: '후비음 운모',
+    whole: '전체 인식 음절 (16개)',
+    tones: '네 가지 성조',
+    toneDesc: '같은 음절도 성조가 다르면 다른 글자입니다.',
+    toneN: '{n}성',
+    quiz: '퀴즈',
+    quizTitle: '병음 퀴즈',
+    quizDesc: '열 문제: 소리를 듣고 병음을 고르거나, 병음을 읽고 한자를 고르세요.',
+    qStart: '시작',
+    qProgress: '{i}/{n}번 문제',
+    qScoreShort: '점수 {n}',
+    qListen: '듣고 병음 고르기',
+    qRead: '이 병음은 어떤 한자일까요?',
+    qReplay: '다시 듣기',
+    qRight: '정답입니다!',
+    qWrong: '정답은 {x}',
+    qScore: '{m}개 중 {n}개 정답',
+    qAgain: '한 번 더',
+    backChart: '병음표',
   },
 
   home: {

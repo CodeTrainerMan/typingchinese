@@ -8,6 +8,7 @@ export const ja: Messages = {
   },
 
   nav: {
+    pinyin: '拼音',
     home: 'ホーム',
     practice: '練習',
     dicts: '単語リスト',
@@ -44,6 +45,45 @@ export const ja: Messages = {
     meaningCol: '意味',
     searchPlaceholder: '単語 / ピンイン / 意味を検索',
     noMatch: '該当なし',
+  },
+
+  community: {
+    title: 'コミュニティ',
+    desc: '無料・オープンソースです。気軽に参加して、改善点も教えてください。',
+    githubDesc: 'ソースを見る、バグを報告する、PR を送る',
+    discordDesc: '他の学習者と話したり、質問したり、進捗を共有',
+  },
+
+  pinyin: {
+    title: 'ピンイン表',
+    desc: '中国語のすべての音：声母・韻母・全体認読音節・四声。マスをタップすると発音します。',
+    tapHint: 'マスをタップして発音を聞く',
+    initials: '声母（23 個）',
+    finals: '韻母（24 個）',
+    finalSingle: '単韻母',
+    finalCompound: '複韻母',
+    finalSpecial: '特殊韻母',
+    finalNasal: '鼻韻母',
+    finalFront: '前鼻音韻母',
+    finalBack: '後鼻音韻母',
+    whole: '全体認読音節（16 個）',
+    tones: '四声',
+    toneDesc: '同じ音節でも、声調が違えば別の字になります。',
+    toneN: '第{n}声',
+    quiz: '小テスト',
+    quizTitle: 'ピンイン小テスト',
+    quizDesc: '全 10 問：音を聞いてピンインを選ぶ、またはピンインを読んで漢字を選びます。',
+    qStart: 'スタート',
+    qProgress: '第 {i}/{n} 問',
+    qScoreShort: 'スコア {n}',
+    qListen: '音を聞いてピンインを選ぶ',
+    qRead: 'このピンインはどの字？',
+    qReplay: 'もう一度聞く',
+    qRight: '正解！',
+    qWrong: '正解は {x}',
+    qScore: '{m} 問中 {n} 問正解',
+    qAgain: 'もう一度',
+    backChart: 'ピンイン表',
   },
 
   home: {

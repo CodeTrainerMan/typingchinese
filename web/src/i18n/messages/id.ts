@@ -8,6 +8,7 @@ export const id: Messages = {
   },
 
   nav: {
+    pinyin: 'Pinyin',
     home: 'Beranda',
     practice: 'Berlatih',
     dicts: 'Daftar kata',
@@ -44,6 +45,45 @@ export const id: Messages = {
     meaningCol: 'Arti',
     searchPlaceholder: 'Cari kata / pinyin / arti',
     noMatch: 'Tidak ada hasil',
+  },
+
+  community: {
+    title: 'Komunitas',
+    desc: 'Gratis dan open source — gabung dan ceritakan apa yang perlu diperbaiki.',
+    githubDesc: 'Lihat kode, laporkan bug, atau kirim PR',
+    discordDesc: 'Ngobrol dengan pembelajar lain, bertanya, berbagi progres',
+  },
+
+  pinyin: {
+    title: 'Tabel pinyin',
+    desc: 'Semua bunyi dalam Mandarin: awalan, akhiran, suku kata utuh dan empat nada. Ketuk kotak apa pun untuk mendengarnya.',
+    tapHint: 'Ketuk sebuah kotak untuk mendengar bunyinya',
+    initials: 'Awalan (23)',
+    finals: 'Akhiran (24)',
+    finalSingle: 'Akhiran sederhana',
+    finalCompound: 'Akhiran majemuk',
+    finalSpecial: 'Final khusus',
+    finalNasal: 'Akhiran sengau',
+    finalFront: 'Final nasal depan',
+    finalBack: 'Final nasal belakang',
+    whole: 'Suku kata utuh (16)',
+    tones: 'Empat nada',
+    toneDesc: 'Satu suku kata, empat nada — empat kata yang berbeda.',
+    toneN: 'Nada {n}',
+    quiz: 'Kuis',
+    quizTitle: 'Kuis pinyin',
+    quizDesc: 'Sepuluh soal: dengarkan lalu pilih pinyin, atau baca pinyin lalu pilih karakternya.',
+    qStart: 'Mulai',
+    qProgress: 'Soal {i}/{n}',
+    qScoreShort: 'Skor {n}',
+    qListen: 'Dengarkan dan pilih pinyin',
+    qRead: 'Karakter apa ini?',
+    qReplay: 'Putar ulang',
+    qRight: 'Benar!',
+    qWrong: 'Jawabannya {x}',
+    qScore: 'Benar {n} dari {m}',
+    qAgain: 'Satu ronde lagi',
+    backChart: 'Tabel pinyin',
   },
 
   home: {

@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import BrandMark from '@/components/BrandMark'
+import CommunityLinks from '@/components/CommunityLinks'
 import NavIcon from '@/components/ui/NavIcon'
 import { useI18n } from '@/i18n'
 
@@ -12,6 +13,7 @@ const ITEMS = [
   { href: '/practice', key: 'practice', icon: 'keyboard' },
   { href: '/dicts', key: 'dicts', icon: 'book' },
   { href: '/article', key: 'article', icon: 'article' },
+  { href: '/pinyin', key: 'pinyin', icon: 'pinyin' },
   { href: '/wrong', key: 'wrong', icon: 'wrong' },
   { href: '/stats', key: 'stats', icon: 'stats' },
 ] as const
@@ -74,6 +76,8 @@ export default function Nav() {
               {t('nav.setting')}
             </span>
           </Link>
+          {/* 仓库与社群：常驻在侧栏底部，任何页面都能一跳出去 */}
+          <CommunityLinks variant="nav" />
         </div>
       </aside>
       {/* 占位：把内容顶到侧栏右侧（侧栏是 fixed，不占位会压住内容） */}
