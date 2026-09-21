@@ -87,9 +87,6 @@ export const es: Messages = {
   },
 
   home: {
-    heroA: 'Práctica de ',
-    heroBrand: 'pinyin en chino',
-    heroC: '',
     subtitle: 'Copiado y dictado, corrección letra por letra, repaso espaciado que programa tus revisiones, más cuaderno de errores y estadísticas.',
     doneToday: 'Hechas hoy',
     goalHint: 'Meta {n}',
@@ -503,6 +500,10 @@ export const es: Messages = {
     language: 'Idioma de la interfaz',
     languageDesc: 'Solo cambia la interfaz: las palabras, el pinyin y los textos siguen en chino.',
 
+    importMerge: 'Combinar en vez de reemplazar',
+    storageUsage: 'Almacenamiento usado {n}',
+    storageFull: 'El almacenamiento del navegador está lleno: es posible que no se guarde el progreso nuevo. Exporta una copia y borra algunas listas.',
+    tabSynced: 'Actualizado desde otra pestaña.',
     sectionData: 'Datos',
     exportBackup: 'Exportar copia',
     exportBackupDesc: 'Exporta tu progreso, cuaderno de errores y estadísticas.',
@@ -528,5 +529,6 @@ export const es: Messages = {
     badStats: 'El campo statistics no es una lista.',
     badWrong: 'El campo wrongWords no es un objeto.',
     importOk: 'Importación completa: tu progreso ahora es el de la copia.',
+    importOkMerge: 'Importación combinada: se conserva tu progreso y se combina con la copia.',
   },
 }

@@ -87,9 +87,6 @@ export const zhCN: Messages = {
   },
 
   home: {
-    heroA: '中文',
-    heroBrand: '拼音打字',
-    heroC: '练习',
     subtitle: '跟写 / 听写双模式，逐字母实时纠错，记忆曲线自动安排复习，错词本与学习统计',
     doneToday: '今日完成',
     goalHint: '目标 {n} 词',
@@ -502,6 +499,10 @@ export const zhCN: Messages = {
     language: '界面语言',
     languageDesc: '只影响界面文案；词条、拼音、文章仍然是中文。',
 
+    importMerge: '合并导入（保留现有数据）',
+    storageUsage: '已占用存储 {n}',
+    storageFull: '浏览器存储已满——新的进度可能保存不了。请先导出备份，再删掉一些词库。',
+    tabSynced: '已同步其他标签页的改动。',
     sectionData: '数据',
     exportBackup: '导出备份',
     exportBackupDesc: '导出学习进度、错词本与统计',
@@ -527,5 +528,6 @@ export const zhCN: Messages = {
     badStats: 'statistics 字段不是数组',
     badWrong: 'wrongWords 字段不是对象',
     importOk: '导入成功，学习进度已覆盖为备份内容',
+    importOkMerge: '已合并导入：保留原有进度，并与备份合并。',
   },
 }

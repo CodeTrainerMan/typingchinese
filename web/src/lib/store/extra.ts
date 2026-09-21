@@ -4,6 +4,7 @@
 
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
+import { guardedJSONStorage } from '../storage'
 
 /** 一次跟读打分 */
 export interface ReadRecord {
@@ -28,7 +29,7 @@ export interface CustomArticle {
 const MAX_RECORDS = 200
 const MAX_ARTICLES = 50
 
-interface ExtraState {
+export interface ExtraState {
   readRecords: ReadRecord[]
   articles: CustomArticle[]
   /** 记一次跟读；最新的排在最前 */
@@ -66,6 +67,6 @@ export const useExtraStore = create<ExtraState>()(
         set(state => ({ articles: state.articles.filter(a => a.id !== id) }))
       },
     }),
-    { name: 'cn-type-extra-v1', version: 1 }
+    { name: 'cn-type-extra-v1', storage: guardedJSONStorage<Partial<ExtraState>>(), version: 1 }
   )
 )

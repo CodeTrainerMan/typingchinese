@@ -96,9 +96,6 @@ export const en = {
   },
 
   home: {
-    heroA: 'Chinese ',
-    heroBrand: 'Pinyin Typing',
-    heroC: ' Practice',
     subtitle: 'Follow-typing and dictation, live per-letter correction, spaced repetition that schedules your reviews, plus a mistake notebook and stats.',
     doneToday: 'Done today',
     goalHint: 'Goal {n}',
@@ -512,6 +509,10 @@ export const en = {
     language: 'Interface language',
     languageDesc: 'Only the interface changes — words, pinyin and articles stay in Chinese.',
 
+    importMerge: 'Merge instead of replacing',
+    storageUsage: 'Storage used {n}',
+    storageFull: 'Browser storage is full — new progress may not be saved. Export a backup and delete some word lists.',
+    tabSynced: 'Updated from another tab.',
     sectionData: 'Data',
     exportBackup: 'Export backup',
     exportBackupDesc: 'Exports your progress, mistake notebook and stats.',
@@ -537,6 +538,7 @@ export const en = {
     badStats: 'The statistics field is not an array.',
     badWrong: 'The wrongWords field is not an object.',
     importOk: 'Import complete — your progress now matches the backup.',
+    importOkMerge: 'Import merged — your existing progress is kept and combined with the backup.',
   },
 }
 

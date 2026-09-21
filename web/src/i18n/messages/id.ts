@@ -87,9 +87,6 @@ export const id: Messages = {
   },
 
   home: {
-    heroA: 'Latihan ',
-    heroBrand: 'pinyin Mandarin',
-    heroC: '',
     subtitle: 'Mengetik ulang dan dikte, koreksi per huruf, pengulangan berjarak yang menjadwalkan ulanganmu, plus buku kesalahan dan statistik.',
     doneToday: 'Selesai hari ini',
     goalHint: 'Target {n}',
@@ -503,6 +500,10 @@ export const id: Messages = {
     language: 'Bahasa antarmuka',
     languageDesc: 'Hanya antarmuka yang berubah — kata, pinyin dan artikel tetap bahasa Mandarin.',
 
+    importMerge: 'Gabungkan, bukan ganti',
+    storageUsage: 'Penyimpanan terpakai {n}',
+    storageFull: 'Penyimpanan browser penuh — progres baru mungkin tidak tersimpan. Ekspor cadangan dan hapus beberapa daftar.',
+    tabSynced: 'Diperbarui dari tab lain.',
     sectionData: 'Data',
     exportBackup: 'Ekspor cadangan',
     exportBackupDesc: 'Mengekspor progres, buku kesalahan dan statistik.',
@@ -528,5 +529,6 @@ export const id: Messages = {
     badStats: 'Field statistics bukan array.',
     badWrong: 'Field wrongWords bukan objek.',
     importOk: 'Impor selesai — progresmu kini sama dengan cadangan.',
+    importOkMerge: 'Impor digabung: progres yang ada tetap disimpan dan digabung dengan cadangan.',
   },
 }

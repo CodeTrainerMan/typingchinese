@@ -9,6 +9,7 @@ import Page from '@/components/ui/Page'
 import PageHeader from '@/components/ui/PageHeader'
 import Panel from '@/components/ui/Panel'
 import { listZhVoices } from '@/lib/tts'
+import { formatBytes, storageBytes, storageWarnLevel, useStorageStore } from '@/lib/storage'
 import { LOCALES, useI18n, type MessageKey } from '@/i18n'
 import VoicePicker from '@/components/VoicePicker'
 import type { InputMode, NextKey, PracticeMode, ReplayKey, ShortcutAction, ThemeMode, TypingMode } from '@/lib/types'
@@ -20,7 +21,20 @@ export default function SettingPage() {
   const { t, locale, setLocale } = useI18n()
   const [voices, setVoices] = useState<SpeechSynthesisVoice[]>([])
   const [importMsg, setImportMsg] = useState<{ ok: boolean; text: string } | null>(null)
+  /** 导入方式：默认覆盖（与旧行为一致），勾上才是合并 */
+  const [mergeImport, setMergeImport] = useState(false)
   const fileRef = useRef<HTMLInputElement>(null)
+  // 配额写满 / 其它标签页改动过：都要让用户看见，不能静默
+  const writeError = useStorageStore(s => s.writeError)
+  const syncedAt = useStorageStore(s => s.syncedAt)
+  // 存储用量只能在挂载后读：服务端没有 localStorage，直接在渲染里算会导致 hydration 不一致
+  const [storage, setStorage] = useState<{ usage: string; level: 'ok' | 'warn' | 'full' }>({
+    usage: '',
+    level: 'ok',
+  })
+  useEffect(() => {
+    setStorage({ usage: formatBytes(storageBytes()), level: storageWarnLevel() })
+  }, [writeError, syncedAt])
 
   // 同一个键绑到多个动作时后一个不会触发，先提示出来
   const usedKeys = new Set<string>()
@@ -79,6 +93,10 @@ export default function SettingPage() {
             <option value="write">{t('setting.modeWrite')}</option>
           </select>
         </Row>
+        {/* 听写的题目就是发音：没有中文音色时该步骤会退回跟写，先把原因说清楚 */}
+        {voices.length === 0 && (setting.practiceMode === 'dictation' || setting.practiceMode === 'smart') && (
+          <p className="text-xs text-warn mt-2">{t('setting.noVoice')}</p>
+        )}
         <Row label={t('setting.typingMode')} desc={t('setting.typingModeDesc')}>
           <Segmented
             value={setting.typingMode}
@@ -332,6 +350,9 @@ export default function SettingPage() {
             {t('common.export')}
           </button>
         </Row>
+        <Row label={t('setting.importMerge')}>
+          <Toggle checked={mergeImport} onChange={setMergeImport} />
+        </Row>
         <Row label={t('setting.importBackup')}>
           <>
             <input
@@ -342,7 +363,7 @@ export default function SettingPage() {
               onChange={async e => {
                 const file = e.target.files?.[0]
                 if (!file) return
-                const result = base.importData(await file.text())
+                const result = base.importData(await file.text(), mergeImport ? 'merge' : 'replace')
                 setImportMsg({ ok: result.ok, text: t(`errors.${result.code}` as MessageKey) })
                 if (fileRef.current) fileRef.current.value = ''
               }}
@@ -363,6 +384,19 @@ export default function SettingPage() {
             {t('setting.resetBtn')}
           </button>
         </Row>
+
+        {/* 存储与同步状态：全部数据都在 localStorage，这两条不显示出来就是隐患 */}
+        <Row label={t('setting.storageUsage', { n: storage.usage || '-' })}>
+          <span className="text-sm text-dim">
+            {writeError === 'quota' ? t('setting.storageFull') : ''}
+          </span>
+        </Row>
+        {(writeError || storage.level !== 'ok') && (
+          <div className="rounded-lg border border-warn/50 bg-warn/10 px-4 py-3 text-sm text-warn">
+            {t('setting.storageFull')}
+          </div>
+        )}
+        {syncedAt > 0 && <p className="text-xs text-dim mt-2">{t('setting.tabSynced')}</p>}
       </Section>
 
       <Section title={t('community.title')}>

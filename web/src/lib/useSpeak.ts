@@ -1,7 +1,7 @@
 'use client'
 
-import { useCallback } from 'react'
-import { resolveVoiceURI, speak } from './tts'
+import { useCallback, useEffect, useState } from 'react'
+import { listZhVoices, resolveVoiceURI, speak } from './tts'
 import { useSettingStore } from './store/setting'
 import { PINYIN_AUDIO_DIR, pinyinAudioFile } from './pinyinAudio'
 
@@ -26,6 +26,26 @@ export function useSpeak(): (text: string) => void {
     },
     [soundSpeed, soundVolume, voiceURI, voiceByLang, lang]
   )
+}
+
+/**
+ * 浏览器里有没有可用的中文音色：null = 还没探测出来（音色列表是异步就绪的）。
+ * 没有音色时听写步骤必须降级（见 practice/flow 的 withoutAudioStep）。
+ */
+export function useZhVoiceAvailable(): boolean | null {
+  const [available, setAvailable] = useState<boolean | null>(null)
+
+  useEffect(() => {
+    let alive = true
+    listZhVoices().then(voices => {
+      if (alive) setAvailable(voices.length > 0)
+    })
+    return () => {
+      alive = false
+    }
+  }, [])
+
+  return available
 }
 
 /**

@@ -11,6 +11,7 @@ import type {
   TypingMode,
 } from '../types'
 import { DEFAULT_FSRS_LIMITS, DEFAULT_FSRS_PARAMS, type FsrsLimits, type FsrsParams } from '../fsrs'
+import { guardedJSONStorage } from '../storage'
 
 export interface SettingState {
   /** 练习模式：跟写 / 听写 */
@@ -116,6 +117,7 @@ export const useSettingStore = create<SettingState>()(
     }),
     {
       name: 'cn-type-setting-v1',
+      storage: guardedJSONStorage<Partial<SettingState>>(),
       // v0 会按浏览器语言自动写入 lang，现已改为固定英文默认，旧数据统一回到英文
       // v2 新增 shortcuts：旧存档没有该字段，必须与默认值合并，否则解出来是 undefined
       // v3 新增 voiceByLang：同上，按语言记忆的音色

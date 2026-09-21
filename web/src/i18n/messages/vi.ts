@@ -87,9 +87,6 @@ export const vi: Messages = {
   },
 
   home: {
-    heroA: 'Luyện ',
-    heroBrand: 'gõ pinyin tiếng Trung',
-    heroC: '',
     subtitle: 'Chép lại và nghe viết, sửa từng chữ cái, ôn tập ngắt quãng tự lên lịch cho bạn, cùng sổ lỗi và thống kê.',
     doneToday: 'Hoàn thành hôm nay',
     goalHint: 'Mục tiêu {n}',
@@ -503,6 +500,10 @@ export const vi: Messages = {
     language: 'Ngôn ngữ giao diện',
     languageDesc: 'Chỉ giao diện thay đổi — từ, pinyin và bài đọc vẫn là tiếng Trung.',
 
+    importMerge: 'Gộp thay vì thay thế',
+    storageUsage: 'Bộ nhớ đã dùng {n}',
+    storageFull: 'Bộ nhớ trình duyệt đã đầy — tiến độ mới có thể không được lưu. Hãy xuất bản sao lưu và xóa bớt danh sách.',
+    tabSynced: 'Đã cập nhật từ tab khác.',
     sectionData: 'Dữ liệu',
     exportBackup: 'Xuất bản sao lưu',
     exportBackupDesc: 'Xuất tiến độ, sổ lỗi và thống kê.',
@@ -528,5 +529,6 @@ export const vi: Messages = {
     badStats: 'Trường statistics không phải mảng.',
     badWrong: 'Trường wrongWords không phải đối tượng.',
     importOk: 'Nhập xong — tiến độ của bạn giờ khớp với bản sao lưu.',
+    importOkMerge: 'Đã gộp: tiến độ hiện tại được giữ và kết hợp với bản sao lưu.',
   },
 }

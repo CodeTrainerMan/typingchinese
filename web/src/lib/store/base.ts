@@ -4,6 +4,7 @@ import type { CardRecord, CnWord, DictResource, LearningDict, Statistics, StepTy
 import { DEFAULT_SETTING, useSettingStore } from './setting'
 import { gradeByWrongTimes, isDue, reviveCard, reviewCard, serializeCard } from '../fsrs'
 import { stepsOf } from '../practice/flow'
+import { guardedJSONStorage } from '../storage'
 
 /**
  * 备份导入结果：ok 表示已写入，code 是语言包里 errors.* 的 key 后缀。
@@ -13,6 +14,9 @@ export interface ImportResult {
   ok: boolean
   code: string
 }
+
+/** 导入方式：replace = 用备份覆盖现有数据；merge = 与现有数据合并 */
+export type ImportMode = 'replace' | 'merge'
 
 /** 断点续练会话 */
 export interface StudySession {
@@ -102,7 +106,8 @@ interface BaseState {
   removeWrong: (word: string) => void
   resetWrong: () => void
   exportData: () => string
-  importData: (json: string) => ImportResult
+  /** mode 省略时按 replace 处理（与旧行为一致） */
+  importData: (json: string, mode?: ImportMode) => ImportResult
 }
 
 const today = () => new Date().toISOString().slice(0, 10)
@@ -196,7 +201,8 @@ function makeSession(
  * 2. 否则进入流程的下一个步骤，重新跑整组词
  * 3. 没有下一步了 → 整组结束
  */
-function nextStep(
+/** 导出仅用于单测：这里分支最密（补练 / 换步 / 结束），改动最容易静默出错 */
+export function nextStep(
   session: StudySession,
   stepWrong: string[],
   wrongWordClear: boolean
@@ -212,7 +218,7 @@ function nextStep(
 }
 
 /** 提交一个词后推进会话：同一步骤内前进一个词，步骤跑完则切到下一步骤或结束 */
-function advanceSession(
+export function advanceSession(
   session: StudySession,
   word: string,
   wrongTimes: number,
@@ -238,6 +244,137 @@ function advanceSession(
     stepWords: next.stepWords,
     stepWrong: [],
   }
+}
+
+/** 导入前的类型守卫：JSON 里什么都可能，别把 unknown 直接塞进状态 */
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null && !Array.isArray(value)
+}
+
+/** 只收字符串数组；不是数组就返回 undefined（由调用方保留现有值） */
+function strArray(value: unknown): string[] | undefined {
+  if (!Array.isArray(value)) return undefined
+  return value.filter((v): v is string => typeof v === 'string')
+}
+
+/** 词库字段校验：没有 id 或 words 不是数组的整条丢掉，坏词条单独剔除 */
+function sanitizeDicts(value: unknown): LearningDict[] {
+  if (!Array.isArray(value)) return []
+  const out: LearningDict[] = []
+  for (const item of value) {
+    if (!isRecord(item)) continue
+    if (typeof item.id !== 'string' || !item.id) continue
+    if (!Array.isArray(item.words)) continue
+    const words = item.words.filter(
+      w => isRecord(w) && typeof w.word === 'string' && Boolean(w.word)
+    ) as unknown as CnWord[]
+    out.push({ ...(item as unknown as LearningDict), words, length: words.length })
+  }
+  return out
+}
+
+const union = (a: string[], b: string[]) => [...new Set([...a, ...b])]
+
+/** 合并词库：同 id 视为同一本，词条取并集（保留原有顺序，新词接在后面） */
+function mergeDicts(current: LearningDict[], incoming: LearningDict[]): LearningDict[] {
+  const byId = new Map(current.map(d => [d.id, d]))
+  for (const dict of incoming) {
+    const exist = byId.get(dict.id)
+    if (!exist) {
+      byId.set(dict.id, dict)
+      continue
+    }
+    const seen = new Set(exist.words.map(w => w.word))
+    const words = exist.words.concat(dict.words.filter(w => !seen.has(w.word)))
+    byId.set(dict.id, { ...exist, words, length: words.length })
+  }
+  return [...byId.values()]
+}
+
+/** 错词合并：次数与最近时间取较大，避免重复导入把错误次数翻番 */
+function mergeWrong(
+  current: Record<string, WrongRecord>,
+  incoming: Record<string, WrongRecord>
+): Record<string, WrongRecord> {
+  const out = { ...current }
+  for (const [word, rec] of Object.entries(incoming)) {
+    if (!isRecord(rec)) continue
+    const next = rec as unknown as WrongRecord
+    const prev = out[word]
+    out[word] = prev
+      ? {
+          word,
+          dictId: prev.dictId || next.dictId,
+          count: Math.max(prev.count ?? 0, next.count ?? 0),
+          lastWrongAt: Math.max(prev.lastWrongAt ?? 0, next.lastWrongAt ?? 0),
+        }
+      : next
+  }
+  return out
+}
+
+/** 记忆卡片合并：保留复习得更多的那张（reps 相同则取到期更晚的） */
+function mergeCards(
+  current: Record<string, CardRecord>,
+  incoming: Record<string, CardRecord>
+): Record<string, CardRecord> {
+  const out = { ...current }
+  for (const [word, rec] of Object.entries(incoming)) {
+    if (!isRecord(rec)) continue
+    const next = rec as unknown as CardRecord
+    const prev = out[word]
+    if (!prev) {
+      out[word] = next
+      continue
+    }
+    const nextBetter =
+      (next.reps ?? 0) > (prev.reps ?? 0) ||
+      ((next.reps ?? 0) === (prev.reps ?? 0) && (next.due ?? '') > (prev.due ?? ''))
+    out[word] = nextBetter ? next : prev
+  }
+  return out
+}
+
+/**
+ * 统计合并：同一天取各字段的较大值而不是相加。
+ * 同一份备份被导入两次时，相加会把当天数据翻番；取较大值只会保留更完整的那份。
+ */
+function mergeStats(current: Statistics[], incoming: Statistics[]): Statistics[] {
+  const byDate = new Map(current.map(s => [s.date, { ...s }]))
+  for (const item of incoming) {
+    if (!isRecord(item) || typeof item.date !== 'string') continue
+    const inc = item as unknown as Statistics
+    const cur = byDate.get(inc.date)
+    byDate.set(
+      inc.date,
+      cur
+        ? {
+            date: inc.date,
+            spend: Math.max(cur.spend ?? 0, inc.spend ?? 0),
+            total: Math.max(cur.total ?? 0, inc.total ?? 0),
+            correct: Math.max(cur.correct ?? 0, inc.correct ?? 0),
+            wrong: Math.max(cur.wrong ?? 0, inc.wrong ?? 0),
+            keystrokes: Math.max(cur.keystrokes ?? 0, inc.keystrokes ?? 0),
+            newCount: Math.max(cur.newCount ?? 0, inc.newCount ?? 0),
+            reviewCount: Math.max(cur.reviewCount ?? 0, inc.reviewCount ?? 0),
+          }
+        : inc
+    )
+  }
+  return [...byDate.values()].sort((a, b) => a.date.localeCompare(b.date))
+}
+
+/** 持久化出来的形状：migrate 用它给旧存档补字段 */
+interface PersistedBase {
+  dicts?: LearningDict[]
+  currentDictId?: string | null
+  wrongWords?: Record<string, WrongRecord>
+  knownWords?: string[]
+  collect?: string[]
+  ignoreWords?: string[]
+  fsrsData?: Record<string, CardRecord>
+  statistics?: Statistics[]
+  session?: StudySession | null
 }
 
 export const useBaseStore = create<BaseState>()(
@@ -662,44 +799,68 @@ export const useBaseStore = create<BaseState>()(
         )
       },
 
-      importData(json) {
+      importData(json, mode = 'replace') {
         let raw: unknown
         try {
           raw = JSON.parse(json)
         } catch {
           return { ok: false, code: 'notJson' }
         }
-        if (!raw || typeof raw !== 'object' || Array.isArray(raw)) {
-          return { ok: false, code: 'notObject' }
-        }
-        const data = raw as Record<string, unknown>
+        if (!isRecord(raw)) return { ok: false, code: 'notObject' }
+        const data = raw
         const keys = ['dicts', 'wrongWords', 'knownWords', 'collect', 'ignoreWords', 'fsrsData', 'statistics'] as const
-        if (!keys.some(k => k in data)) {
-          return { ok: false, code: 'noFields' }
-        }
+        if (!keys.some(k => k in data)) return { ok: false, code: 'noFields' }
+        // 核心字段类型不对就直接报错，交给用户换文件
         if ('dicts' in data && !Array.isArray(data.dicts)) return { ok: false, code: 'badDicts' }
         if ('knownWords' in data && !Array.isArray(data.knownWords)) return { ok: false, code: 'badKnown' }
         if ('statistics' in data && !Array.isArray(data.statistics)) return { ok: false, code: 'badStats' }
-        if ('wrongWords' in data && (typeof data.wrongWords !== 'object' || data.wrongWords === null)) {
-          return { ok: false, code: 'badWrong' }
-        }
+        if ('wrongWords' in data && !isRecord(data.wrongWords)) return { ok: false, code: 'badWrong' }
+
         const s = get()
+        // 可选字段（collect / ignoreWords / fsrsData）类型不对时保留现有值，
+        // 不报错也不写入，避免一份坏备份把状态清空
+        const incoming = {
+          dicts: sanitizeDicts(data.dicts),
+          knownWords: strArray(data.knownWords) ?? s.knownWords,
+          collect: strArray(data.collect) ?? s.collect,
+          ignoreWords: strArray(data.ignoreWords) ?? s.ignoreWords,
+          wrongWords: isRecord(data.wrongWords) ? (data.wrongWords as Record<string, WrongRecord>) : s.wrongWords,
+          fsrsData: isRecord(data.fsrsData) ? (data.fsrsData as Record<string, CardRecord>) : s.fsrsData,
+          statistics: Array.isArray(data.statistics) ? (data.statistics as Statistics[]) : s.statistics,
+        }
+
+        const merged =
+          mode === 'merge'
+            ? {
+                dicts: mergeDicts(s.dicts, incoming.dicts),
+                knownWords: union(s.knownWords, incoming.knownWords),
+                collect: union(s.collect, incoming.collect),
+                ignoreWords: union(s.ignoreWords, incoming.ignoreWords),
+                wrongWords: mergeWrong(s.wrongWords, incoming.wrongWords),
+                fsrsData: mergeCards(s.fsrsData, incoming.fsrsData),
+                statistics: mergeStats(s.statistics, incoming.statistics),
+              }
+            : incoming
+
+        const dicts = merged.dicts
         set({
-          dicts: Array.isArray(data.dicts) ? (data.dicts as LearningDict[]) : s.dicts,
-          wrongWords: (data.wrongWords as Record<string, WrongRecord>) ?? s.wrongWords,
-          knownWords: (data.knownWords as string[]) ?? s.knownWords,
-          collect: (data.collect as string[]) ?? s.collect,
-          ignoreWords: (data.ignoreWords as string[]) ?? s.ignoreWords,
-          fsrsData: (data.fsrsData as Record<string, CardRecord>) ?? s.fsrsData,
-          statistics: (data.statistics as Statistics[]) ?? s.statistics,
-          currentDictId: s.dicts.some(d => d.id === s.currentDictId) ? s.currentDictId : (s.dicts[0]?.id ?? null),
+          dicts,
+          wrongWords: merged.wrongWords,
+          knownWords: merged.knownWords,
+          collect: merged.collect,
+          ignoreWords: merged.ignoreWords,
+          fsrsData: merged.fsrsData,
+          statistics: merged.statistics,
+          currentDictId: dicts.some(d => d.id === s.currentDictId) ? s.currentDictId : (dicts[0]?.id ?? null),
           session: null,
         })
-        return { ok: true, code: 'importOk' }
+        return { ok: true, code: mode === 'merge' ? 'importOkMerge' : 'importOk' }
       },
     }),
     {
       name: 'cn-type-base-v1',
+      // 体积最大、最容易顶到配额，写入失败要能看见（见 lib/storage.ts）
+      storage: guardedJSONStorage<Partial<BaseState>>(),
       partialize: state => ({
         dicts: state.dicts,
         currentDictId: state.currentDictId,
@@ -711,6 +872,35 @@ export const useBaseStore = create<BaseState>()(
         statistics: state.statistics,
         session: state.session,
       }),
+      // v1：登记版本号，旧存档（此前没写 version，读出来是 0）统一补字段。
+      // 以后再加字段就在这里接着补，别散在业务代码里写「旧数据没有 xx 就按 yy 处理」。
+      version: 1,
+      migrate: (persisted, version) => {
+        const old = (persisted ?? {}) as PersistedBase
+        if (version >= 1) return old as Partial<BaseState>
+        const session = old.session
+        return {
+          ...old,
+          dicts: old.dicts ?? [],
+          knownWords: old.knownWords ?? [],
+          collect: old.collect ?? [],
+          // v1 新增：忽略的词
+          ignoreWords: old.ignoreWords ?? [],
+          wrongWords: old.wrongWords ?? {},
+          fsrsData: old.fsrsData ?? {},
+          statistics: old.statistics ?? [],
+          // 流程编排：旧存档没有 steps / stepWords，按单步跟写还原
+          session: session
+            ? {
+                ...session,
+                steps: session.steps ?? ['spell'],
+                stepIndex: session.stepIndex ?? 0,
+                stepWords: session.stepWords ?? session.wordIds ?? [],
+                stepWrong: session.stepWrong ?? [],
+              }
+            : null,
+        } as Partial<BaseState>
+      },
     }
   )
 )

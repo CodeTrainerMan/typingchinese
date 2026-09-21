@@ -87,9 +87,6 @@ export const de: Messages = {
   },
 
   home: {
-    heroA: 'Chinesische ',
-    heroBrand: 'Pinyin-Übung',
-    heroC: '',
     subtitle: 'Abschreiben und Diktat, Korrektur Buchstabe für Buchstabe, verteilte Wiederholung, die deine Termine plant, dazu Fehlerheft und Statistik.',
     doneToday: 'Heute geschafft',
     goalHint: 'Ziel {n}',
@@ -503,6 +500,10 @@ export const de: Messages = {
     language: 'Sprache der Oberfläche',
     languageDesc: 'Nur die Oberfläche wechselt – Wörter, Pinyin und Texte bleiben chinesisch.',
 
+    importMerge: 'Zusammenführen statt ersetzen',
+    storageUsage: 'Speicher belegt {n}',
+    storageFull: 'Der Speicher des Browsers ist voll — neuer Fortschritt wird eventuell nicht gespeichert. Exportiere ein Backup und lösche einige Listen.',
+    tabSynced: 'Aus einem anderen Tab aktualisiert.',
     sectionData: 'Daten',
     exportBackup: 'Sicherung exportieren',
     exportBackupDesc: 'Exportiert Fortschritt, Fehlerheft und Statistik.',
@@ -528,5 +529,6 @@ export const de: Messages = {
     badStats: 'Das Feld statistics ist keine Liste.',
     badWrong: 'Das Feld wrongWords ist kein Objekt.',
     importOk: 'Import abgeschlossen – dein Fortschritt entspricht jetzt der Sicherung.',
+    importOkMerge: 'Zusammengeführt: dein Fortschritt bleibt erhalten und wird mit dem Backup kombiniert.',
   },
 }

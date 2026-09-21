@@ -37,5 +37,32 @@
     "level": 3,
     "length": 40,
     "url": "idiom.json"
+  },
+  {
+    "id": "hsk1",
+    "name": "HSK 一级",
+    "description": "HSK 一级常用词，零基础起步：人称、时间、日常物品与基本动作",
+    "category": "HSK",
+    "tags": [
+      "HSK",
+      "一级",
+      "入门"
+    ],
+    "level": 1,
+    "length": 150,
+    "url": "hsk1.json"
+  },
+  {
+    "id": "hsk2",
+    "name": "HSK 二级",
+    "description": "HSK 二级常用词：动作、感受、形容与方位，适合打完一级接着练",
+    "category": "HSK",
+    "tags": [
+      "HSK",
+      "二级"
+    ],
+    "level": 2,
+    "length": 150,
+    "url": "hsk2.json"
   }
 ]

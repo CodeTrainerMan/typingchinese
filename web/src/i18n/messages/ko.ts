@@ -87,9 +87,6 @@ export const ko: Messages = {
   },
 
   home: {
-    heroA: '중국어 ',
-    heroBrand: '병음 타이핑',
-    heroC: ' 연습',
     subtitle: '받아쓰기와 듣고 쓰기, 글자 단위 실시간 교정, 복습 날짜를 자동으로 잡아주는 간격 반복, 오답 노트와 통계까지.',
     doneToday: '오늘 완료',
     goalHint: '목표 {n}',
@@ -503,6 +500,10 @@ export const ko: Messages = {
     language: '화면 언어',
     languageDesc: '바뀌는 것은 화면 문구뿐입니다 — 단어, 병음, 지문은 중국어 그대로입니다.',
 
+    importMerge: '덮어쓰지 않고 병합',
+    storageUsage: '사용한 저장 공간 {n}',
+    storageFull: '브라우저 저장 공간이 가득 찼습니다. 새로운 진행 상황이 저장되지 않을 수 있습니다. 백업을 내보내고 단어장을 일부 삭제하세요.',
+    tabSynced: '다른 탭의 변경을 반영했습니다.',
     sectionData: '데이터',
     exportBackup: '백업 내보내기',
     exportBackupDesc: '진도, 오답 노트, 통계를 내보냅니다.',
@@ -528,5 +529,6 @@ export const ko: Messages = {
     badStats: 'statistics 필드가 배열이 아닙니다.',
     badWrong: 'wrongWords 필드가 객체가 아닙니다.',
     importOk: '가져오기 완료 — 진도가 백업과 같아졌습니다.',
+    importOkMerge: '병합 가져오기: 기존 진행 상황을 유지한 채 백업과 합쳤습니다.',
   },
 }

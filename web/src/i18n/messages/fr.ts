@@ -87,9 +87,6 @@ export const fr: Messages = {
   },
 
   home: {
-    heroA: 'Pratique de ',
-    heroBrand: 'pinyin chinois',
-    heroC: '',
     subtitle: 'Recopie et dictée, correction lettre par lettre, révision espacée qui planifie vos révisions, plus un carnet d’erreurs et des statistiques.',
     doneToday: 'Fait aujourd’hui',
     goalHint: 'Objectif {n}',
@@ -503,6 +500,10 @@ export const fr: Messages = {
     language: 'Langue de l’interface',
     languageDesc: 'Seule l’interface change — les mots, le pinyin et les textes restent en chinois.',
 
+    importMerge: 'Fusionner au lieu de remplacer',
+    storageUsage: 'Stockage utilisé {n}',
+    storageFull: 'Le stockage du navigateur est plein — la nouvelle progression risque de ne pas être enregistrée. Exportez une sauvegarde et supprimez des listes.',
+    tabSynced: 'Mis à jour depuis un autre onglet.',
     sectionData: 'Données',
     exportBackup: 'Exporter la sauvegarde',
     exportBackupDesc: 'Exporte votre progression, carnet d’erreurs et statistiques.',
@@ -528,5 +529,6 @@ export const fr: Messages = {
     badStats: 'Le champ statistics n’est pas une liste.',
     badWrong: 'Le champ wrongWords n’est pas un objet.',
     importOk: 'Import terminé — votre progression correspond maintenant à la sauvegarde.',
+    importOkMerge: 'Import fusionné : votre progression est conservée et combinée avec la sauvegarde.',
   },
 }

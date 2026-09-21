@@ -87,9 +87,6 @@ export const ja: Messages = {
   },
 
   home: {
-    heroA: '中国語 ',
-    heroBrand: 'ピンインタイピング',
-    heroC: ' 練習',
     subtitle: '書き写しとディクテーション、1文字ごとの判定、復習日を自動で組む分散復習、さらに間違いノートと統計。',
     doneToday: '今日の完了',
     goalHint: '目標 {n}',
@@ -503,6 +500,10 @@ export const ja: Messages = {
     language: '表示言語',
     languageDesc: '変わるのは画面の文言だけです — 単語・ピンイン・文章は中国語のままです。',
 
+    importMerge: '置き換えずに統合する',
+    storageUsage: '使用ストレージ {n}',
+    storageFull: 'ブラウザーの保存領域が満杯です。新しい進捗が保存されない可能性があります。バックアップを書き出し、いくつか単語帳を削除してください。',
+    tabSynced: '別のタブの変更を同期しました。',
     sectionData: 'データ',
     exportBackup: 'バックアップを書き出し',
     exportBackupDesc: '進捗・間違いノート・統計を書き出します。',
@@ -528,5 +529,6 @@ export const ja: Messages = {
     badStats: 'statistics フィールドが配列ではありません。',
     badWrong: 'wrongWords フィールドがオブジェクトではありません。',
     importOk: '取り込み完了 — 進捗はバックアップと同じになりました。',
+    importOkMerge: '統合インポート：現在の進捗を保持したままバックアップと結合しました。',
   },
 }

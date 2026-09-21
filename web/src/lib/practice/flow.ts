@@ -35,3 +35,10 @@ export const isAudioStep = (step: StepType) => step === 'dictation'
 
 /** 只有跟写与自测给出拼音提示 */
 export const showsPinyinStep = (step: StepType) => step === 'spell' || step === 'test'
+
+/**
+ * 没有中文音色时的降级：听写步骤的题目就是发音，发不出声等于没有题目，
+ * 整步退回跟写（露出汉字与拼音），而不是让用户对着空气猜。
+ */
+export const withoutAudioStep = (steps: StepType[], hasVoice: boolean): StepType[] =>
+  hasVoice ? steps : steps.map(step => (step === 'dictation' ? 'spell' : step))

@@ -7,6 +7,8 @@ import { useRouter } from 'next/navigation'
 import { useBaseStore } from '@/lib/store/base'
 import { useSettingStore } from '@/lib/store/setting'
 import { useHydrated } from '@/lib/useHydrated'
+import { useZhVoiceAvailable } from '@/lib/useSpeak'
+import { withoutAudioStep } from '@/lib/practice/flow'
 import PracticeBoard from '@/components/PracticeBoard'
 import Page from '@/components/ui/Page'
 import EmptyState from '@/components/ui/EmptyState'
@@ -43,8 +45,10 @@ export default function PracticePage() {
 
   const words = useMemo<CnWord[]>(() => (session ? base.getSessionWords() : []), [session, base.dicts]) // eslint-disable-line react-hooks/exhaustive-deps
 
+  // 浏览器没有中文音色时听写发不出声，整步退回跟写（音色列表是异步就绪的，未探测完前保持原样）
+  const hasVoice = useZhVoiceAvailable()
   // 当前步骤（流程编排）：旧存档没有 steps 时按单步处理
-  const steps = session?.steps ?? ['spell']
+  const steps = withoutAudioStep(session?.steps ?? ['spell'], hasVoice !== false)
   const stepIndex = session?.stepIndex ?? 0
   const step = {
     index: stepIndex,
