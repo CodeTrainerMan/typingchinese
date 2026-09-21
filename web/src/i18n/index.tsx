@@ -3,6 +3,7 @@
 import { createContext, useContext, useEffect, useMemo, type ReactNode } from 'react'
 import type { Locale } from '@/lib/types'
 import { useSettingStore } from '@/lib/store/setting'
+import { recommendLocale } from '@/lib/geo'
 import { en, type Messages } from './messages/en'
 import { zhCN } from './messages/zh-CN'
 import { zhTW } from './messages/zh-TW'
@@ -98,6 +99,22 @@ export function I18nProvider({ children }: { children: ReactNode }) {
   const locale = useSettingStore(s => s.lang)
   const patch = useSettingStore(s => s.patch)
 
+  // 首次进入且未手动选过语言时，按访客地区推荐界面语言；只跑一次
+  useEffect(() => {
+    if (!useSettingStore.getState().langAuto) return
+    let cancelled = false
+    recommendLocale().then(rec => {
+      if (cancelled) return
+      const st = useSettingStore.getState()
+      if (!st.langAuto) return
+      if (rec && rec !== st.lang) st.patch({ lang: rec, langAuto: false })
+      else st.patch({ langAuto: false })
+    })
+    return () => {
+      cancelled = true
+    }
+  }, [])
+
   // html lang 跟随界面语言（TTS 的发音语言是显式指定的 zh-CN，不受影响）
   useEffect(() => {
     document.documentElement.lang = htmlLangOf(locale)
@@ -112,7 +129,7 @@ export function I18nProvider({ children }: { children: ReactNode }) {
         const text = lookup(pack, key) ?? lookup(en, key) ?? key
         return interpolate(text, params)
       }) as TFn,
-      setLocale: next => patch({ lang: next }),
+      setLocale: next => patch({ lang: next, langAuto: false }),
     }
   }, [locale, patch])
 

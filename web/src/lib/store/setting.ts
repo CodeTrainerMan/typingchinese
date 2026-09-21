@@ -58,8 +58,10 @@ export interface SettingState {
   /** 复习比：复习词数量 = 每日学习量 × 该值；0 = 不安排复习 */
   reviewRatio: number
   fsrsParams: FsrsParams
-  /** 界面语言（默认英文：产品面向英语母语者学中文；只由用户在设置页手动切换） */
+  /** 界面语言（默认英文：产品面向英语母语者学中文） */
   lang: Locale
+  /** 是否允许根据访客地区自动推荐语言：首次推荐后或用户手动切换即置 false */
+  langAuto: boolean
   patch: (patch: Partial<SettingState>) => void
   reset: () => void
 }
@@ -102,6 +104,7 @@ export const DEFAULT_SETTING = {
   reviewRatio: 3,
   fsrsParams: DEFAULT_FSRS_PARAMS,
   lang: 'en' as Locale,
+  langAuto: true,
 }
 
 export const useSettingStore = create<SettingState>()(
