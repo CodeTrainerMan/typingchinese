@@ -97,9 +97,9 @@ export const FINAL_GROUPS: { key: MessageKey; items: PinyinItem[] }[] = [
     ],
   },
   {
-    // 例外：er 没有第一声（ēr 无字），只能用最常用的 ér「儿」
+    // er 是特殊韵母，不与声母相拼、只能单独成音节；示范音统一取第一声「er er er」
     key: 'pinyin.finalSpecial',
-    items: [{ symbol: 'er', py: 'ér', hanzi: '儿' }],
+    items: [{ symbol: 'er', py: 'ēr', hanzi: '儿' }],
   },
   {
     key: 'pinyin.finalFront',

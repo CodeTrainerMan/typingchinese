@@ -19,8 +19,8 @@ const ALIAS: Record<string, string> = {
   y: 'i', w: 'u', yi: 'i', wu: 'u', yu: 'v',
 }
 
-/** 这几格没有标准录音，退回「音节 + 声调」的命名 */
-const NO_RECORDING = new Set(['er'])
+/** 所有格子都有「本体名」录音（er 也已补上标准示范音），此为占位空集 */
+const NO_RECORDING = new Set<string>()
 
 /** 带调字母 → [基字母, 声调] */
 const TONED: Record<string, [string, number]> = {
