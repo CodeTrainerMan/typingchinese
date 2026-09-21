@@ -11,13 +11,12 @@
 export const PINYIN_AUDIO_DIR = '/audio/pinyin'
 
 /**
- * 本体写法与录音文件名不一致的几格：
- * y / w / yi / wu 用的是 i、u 的录音（y、w 的名称音就是 i、u）；
- * ye / yue / yuan / yin / yun / ying 与对应韵母同音，共用一份录音。
+ * 只有这几格的录音文件不叫本体名：y / w 与 yi / wu 名称音就是 i / u，
+ * 共用 i.mp3 / u.mp3；yu 复用 ü 的 v.mp3。其余格子都用「本体名.mp3」，
+ * 同音格（ye 与 ie、yue 与 üe、yin 与 in…）是各自存了一份相同录音。
  */
 const ALIAS: Record<string, string> = {
   y: 'i', w: 'u', yi: 'i', wu: 'u', yu: 'v',
-  ye: 'ie', yue: 've', yuan: 'van', yin: 'in', yun: 'vn', ying: 'ing',
 }
 
 /** 这几格没有标准录音，退回「音节 + 声调」的命名 */
