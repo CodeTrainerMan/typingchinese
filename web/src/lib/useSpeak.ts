@@ -32,13 +32,13 @@ export function useSpeak(): (text: string) => void {
  * 念一个拼音示范音：优先播放真人录音 mp3，没有录音或播放失败时退回浏览器 TTS。
  * 速查表和小测都走这个，TTS 只当兜底。
  */
-export function usePinyinSound(): (item: { py: string; hanzi: string }) => void {
+export function usePinyinSound(): (item: { symbol: string; py: string; hanzi: string }) => void {
   const tts = useSpeak()
   const soundVolume = useSettingStore(s => s.soundVolume)
 
   return useCallback(
-    (item: { py: string; hanzi: string }) => {
-      const file = pinyinAudioFile(item.py)
+    (item: { symbol: string; py: string; hanzi: string }) => {
+      const file = pinyinAudioFile(item.symbol, item.py)
       if (!file) {
         tts(item.hanzi)
         return

@@ -8,7 +8,8 @@ import type { MessageKey } from '@/i18n'
  * - py：示范音（带声调），只在点击后和 hover 时露出来，不占格子版面；
  * - hanzi：示范汉字，说明这个音对应什么字。
  *
- * 点击播放的是真人录音 mp3（见 public/audio/pinyin），由 py 直接换算成文件名；
+ * 点击播放的是标准发音录音 mp3（见 public/audio/pinyin），录音按「声母/韵母/整体认读
+ * 本体」命名（b.mp3、ui.mp3、zhi.mp3），听到的就是这个音本身，不是借来的某个字；
  * 录音缺失或加载失败时退回浏览器 TTS 念 hanzi。
  *
  * 声母一律用教材的「呼读音」（b 念作 bo「玻」，不是 bā「八」），
