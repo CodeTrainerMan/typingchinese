@@ -1,6 +1,6 @@
 'use client'
 
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
 import Link from 'next/link'
 import type { CardRecord, CnWord, LearningDict, ShortcutAction, Statistics, StepType } from '@/lib/types'
 import type { SettingState } from '@/lib/store/setting'
@@ -55,6 +55,8 @@ interface Props {
   onRestartSession: () => void
   /** 重新开始：回到本组第 1 词 */
   onResetSession: () => void
+  /** 顶部提示条（可选）：文章会话用它说明来源并给出回到词库的出口 */
+  notice?: ReactNode
 }
 
 export default function PracticeBoard({
@@ -78,6 +80,7 @@ export default function PracticeBoard({
   counts,
   onRestartSession,
   onResetSession,
+  notice,
 }: Props) {
   const { t } = useI18n()
   const boardTitle = title ?? dict?.name ?? t('board.defaultTitle')
@@ -363,6 +366,7 @@ export default function PracticeBoard({
 
   return (
     <Page width="sm">
+      {notice}
       {/* 进度区：与词卡同一层皮（白卡片），上面「在练什么 + 实时数据」，中间粗进度条，下面两端对齐说明 */}
       <div className="mb-6 rounded-xl border border-line bg-surface p-4 shadow-[var(--shadow-card)] sm:p-5">
         <div className="flex flex-wrap items-start justify-between gap-x-4 gap-y-2">

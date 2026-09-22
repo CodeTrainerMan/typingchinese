@@ -218,6 +218,7 @@ export default function DictDetailPage() {
             </button>
             <Link
               href="/practice"
+              onClick={() => base.startDictSession(dict.id)}
               className="inline-flex h-9 items-center rounded-lg bg-brand px-3 text-sm text-white"
             >
               {t('common.goPractice')}

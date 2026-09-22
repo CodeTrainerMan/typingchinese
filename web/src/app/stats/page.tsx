@@ -131,6 +131,7 @@ export default function StatsPage() {
         actions={
           <Link
             href="/practice"
+            onClick={() => base.startDictSession()}
             className="inline-flex h-9 items-center rounded-lg bg-brand px-4 text-sm text-white"
           >
             {t('common.goPractice')}

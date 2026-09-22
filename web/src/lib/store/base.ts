@@ -74,6 +74,13 @@ interface BaseState {
   updateDict: (id: string, patch: Partial<LearningDict>) => void
 
   startSession: (dictId: string, perDayStudyNumber?: number) => void
+  /**
+   * 从词库入口（词库页 / 词库详情）点「去练习」时开一组：
+   * 先结束不属于该词库的会话（文章句子 / 错词 / 收藏 / 别的词库），
+   * 否则练习页会一直停在上一份内容上——文章会话不属于任何词库，尤其明显。
+   * dictId 省略时按当前词库开。
+   */
+  startDictSession: (dictId?: string) => void
   /** 错词本专项练习：取错误次数最多的若干词组成一组，返回是否成功开组 */
   startWrongSession: (limit?: number) => boolean
   /** 收藏本专项练习：取收藏的词组成一组，返回是否成功开组 */
@@ -558,6 +565,16 @@ export const useBaseStore = create<BaseState>()(
             words: list,
           },
         })
+      },
+
+      startDictSession(dictId) {
+        const id = dictId ?? get().currentDictId
+        if (!id) return
+        // 只清掉不属于目标词库的会话；同一词库未练完的组由 startSession 自己保留
+        const current = get().session
+        if (current && current.dictId !== id) set({ session: null })
+        set({ currentDictId: id })
+        get().startSession(id, useSettingStore.getState().perDayStudyNumber)
       },
 
       clearSession() {

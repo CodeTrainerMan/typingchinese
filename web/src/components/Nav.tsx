@@ -14,6 +14,7 @@ const ITEMS = [
   { href: '/dicts', key: 'dicts', icon: 'book' },
   { href: '/article', key: 'article', icon: 'article' },
   { href: '/pinyin', key: 'pinyin', icon: 'pinyin' },
+  { href: '/write', key: 'write', icon: 'pen' },
   { href: '/wrong', key: 'wrong', icon: 'wrong' },
   { href: '/stats', key: 'stats', icon: 'stats' },
 ] as const

@@ -186,6 +186,7 @@ export default function DictsPage() {
             {base.dicts.length > 0 && (
               <Link
                 href="/practice"
+                onClick={() => base.startDictSession()}
                 className="inline-flex h-11 items-center rounded-lg md:h-9 bg-brand px-3 text-sm text-white"
               >
                 {t('common.goPractice')}

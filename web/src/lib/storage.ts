@@ -14,6 +14,7 @@ export const STORAGE_KEYS = {
   base: 'cn-type-base-v1',
   setting: 'cn-type-setting-v1',
   extra: 'cn-type-extra-v1',
+  write: 'cn-type-write-v1',
 } as const
 
 export type StorageKey = (typeof STORAGE_KEYS)[keyof typeof STORAGE_KEYS]

@@ -93,6 +93,16 @@ export default function PracticePage() {
   }, [base, dict, setting.perDayStudyNumber, isWrongSession, isCollectSession, isArticleSession, router])
   const resetSession = useCallback(() => base.restartSession(), [base])
 
+  /**
+   * 文章（句子）会话是「断点续练」，会一直占着练习页——练完才会自动回到词库。
+   * 中途想练词库时给个出口：清掉文章会话，立刻按当前词库开一组。
+   */
+  const exitArticle = useCallback(() => {
+    base.clearSession()
+    if (base.currentDictId) base.startSession(base.currentDictId, setting.perDayStudyNumber)
+    else router.push('/dicts')
+  }, [base, setting.perDayStudyNumber, router])
+
   // 全部词都标记为已掌握时没有可练内容
   const allKnown = Boolean(dict && dict.words.length && dict.words.every(w => base.knownWords.includes(w.word)))
 
@@ -198,6 +208,20 @@ export default function PracticePage() {
       onToggleCollect={toggleCollect}
       onRestartSession={restartSession}
       onResetSession={resetSession}
+      notice={
+        isArticleSession ? (
+          <div className="mb-4 flex flex-wrap items-center justify-between gap-2 rounded-xl border border-line bg-surface px-4 py-3 text-sm text-ink2">
+            <span className="min-w-0">{t('practice.articleNotice', { title: sessionTitle ?? '' })}</span>
+            <button
+              type="button"
+              onClick={exitArticle}
+              className="inline-flex h-9 shrink-0 items-center rounded-lg border border-line px-3 text-sm text-ink hover:bg-hover"
+            >
+              {t('practice.exitArticle')}
+            </button>
+          </div>
+        ) : undefined
+      }
     />
   )
 }
