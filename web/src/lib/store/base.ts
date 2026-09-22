@@ -93,6 +93,11 @@ interface BaseState {
   clearSession: () => void
   /** 回到本组第 1 词重练 */
   restartSession: () => void
+  /**
+   * 练习模式改了（跟写 → 默写 …）就按新流程重排当前组。
+   * 步骤序列是开组那一刻固化在会话里的，不重排会一直按老模式跑。
+   */
+  rescheduleSession: (steps: StepType[]) => void
   getSessionWords: () => CnWord[]
   /**
    * 会话结束/离开时把用时与击键数并入当日统计（内部按增量累加，可重复调用）。
@@ -600,6 +605,28 @@ export const useBaseStore = create<BaseState>()(
             startedAt: Date.now(),
             flushedMs: 0,
             flushedKeys: 0,
+            done: false,
+          },
+        })
+      },
+
+      /**
+       * 按新的步骤序列重排当前组：词表和用时基准都保留，只换流程并回到第 1 步第 1 词。
+       * 不重置 startedAt，这样旧会话的用时统计还能正常并入当日数据。
+       */
+      rescheduleSession(steps) {
+        const s = get().session
+        if (!s) return
+        set({
+          session: {
+            ...s,
+            steps,
+            index: 0,
+            stepIndex: 0,
+            patch: false,
+            stepWords: s.wordIds,
+            stepWrong: [],
+            wrongTimes: {},
             done: false,
           },
         })

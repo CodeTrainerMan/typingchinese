@@ -489,6 +489,8 @@ export default function PracticeBoard({
             cursor={session.input.length}
             shakeKey={shakeKey}
             masked={masked}
+            // 自测步骤卡片上本来就有拼音，输入区跟着显示；听写 / 默写要连字母一起遮
+            maskPinyin={!showsPinyinStep(mode)}
           />
         )}
       </div>

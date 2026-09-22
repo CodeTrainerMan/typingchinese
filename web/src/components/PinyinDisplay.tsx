@@ -10,13 +10,25 @@ interface Props {
   shakeKey: number
   /** 非跟写模式：汉字用占位符代替，避免把答案直接摊开 */
   masked?: boolean
+  /**
+   * 默写 / 听写：连未输入的拼音字母也换成占位符。
+   * 只遮汉字不遮拼音的话，照着摊开的字母敲一遍就行，步骤本身就没意义了。
+   */
+  maskPinyin?: boolean
 }
 
 /**
  * 逐字母染色的拼音输入区：一个汉字对应一块拼音（音节）。
  * 与英文打字体验一致：对的绿色、错的红色、未输入的灰色、当前光标高亮。
  */
-export default function PinyinDisplay({ hanzi, groups, cursor, shakeKey, masked = false }: Props) {
+export default function PinyinDisplay({
+  hanzi,
+  groups,
+  cursor,
+  shakeKey,
+  masked = false,
+  maskPinyin = false,
+}: Props) {
   return (
     <div className={`flex flex-wrap justify-center gap-3 no-select sm:gap-4 ${shakeKey ? 'shake' : ''}`} key={shakeKey}>
       {groups.map((group, gi) => {
@@ -46,7 +58,7 @@ export default function PinyinDisplay({ hanzi, groups, cursor, shakeKey, masked 
                       cls
                     } ${isCursor ? 'ring-1 ring-brand' : ''}`}
                   >
-                    {typed ? typed.char : prettyFlat(targetChar)}
+                    {typed ? typed.char : maskPinyin ? '·' : prettyFlat(targetChar)}
                   </span>
                 )
               })}

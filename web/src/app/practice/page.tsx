@@ -8,7 +8,7 @@ import { useBaseStore } from '@/lib/store/base'
 import { useSettingStore } from '@/lib/store/setting'
 import { useHydrated } from '@/lib/useHydrated'
 import { useZhVoiceAvailable } from '@/lib/useSpeak'
-import { withoutAudioStep } from '@/lib/practice/flow'
+import { stepsOf, withoutAudioStep } from '@/lib/practice/flow'
 import PracticeBoard from '@/components/PracticeBoard'
 import Page from '@/components/ui/Page'
 import EmptyState from '@/components/ui/EmptyState'
@@ -44,6 +44,22 @@ export default function PracticePage() {
   }, [needNewSession, base.currentDictId])
 
   const words = useMemo<CnWord[]>(() => (session ? base.getSessionWords() : []), [session, base.dicts]) // eslint-disable-line react-hooks/exhaustive-deps
+
+  /**
+   * 步骤序列在开组那一刻就固化进会话了，而 startSession 遇到「同词库、未练完」的会话会直接复用。
+   * 所以中途改过练习模式（比如跟写 → 默写）必须重排，否则页面一直跑开组时的老流程。
+   * 文章（句子）会话固定跟写，不参与重排。
+   */
+  const wantedSteps = stepsOf(setting.practiceMode, isWrongSession || isCollectSession)
+  const sessionSteps = session?.steps ?? []
+  const staleSteps =
+    !isArticleSession && sessionSteps.length > 0 && sessionSteps.join(',') !== wantedSteps.join(',')
+
+  useEffect(() => {
+    if (!hydrated || !staleSteps || !session) return
+    base.rescheduleSession(wantedSteps)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [hydrated, staleSteps, session])
 
   // 浏览器没有中文音色时听写发不出声，整步退回跟写（音色列表是异步就绪的，未探测完前保持原样）
   const hasVoice = useZhVoiceAvailable()
@@ -187,7 +203,7 @@ export default function PracticePage() {
 
   return (
     <PracticeBoard
-      key={session.startedAt}
+      key={`${session.startedAt}-${session.steps?.join(',') ?? ''}`}
       dict={dict}
       title={sessionTitle}
       words={words}
