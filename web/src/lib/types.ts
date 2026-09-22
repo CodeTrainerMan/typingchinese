@@ -22,6 +22,8 @@ export interface CnWord {
   example?: string
   /** 例句的翻译 / 解释 */
   exampleTrans?: string
+  /** 多条例句，每条含中文与英文翻译（enrich 脚本生成，优先于 example / exampleTrans 渲染） */
+  examples?: { zh: string; en: string }[]
   /** 同义词，按 、/,/;/ 分隔 */
   synonyms?: string
   /** 反义词，同上 */

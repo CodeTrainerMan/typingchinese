@@ -110,12 +110,18 @@ export function RichInfo({ word }: { word: CnWord }) {
   const syn = tags(word.synonyms)
   const ant = tags(word.antonyms)
   const col = tags(word.collocations)
+  const examples =
+    word.examples && word.examples.length
+      ? word.examples
+      : word.example
+        ? [{ zh: word.example, en: word.exampleTrans ?? '' }]
+        : []
 
   if (
     !word.pos &&
     !word.traditional &&
     !word.radical &&
-    !word.example &&
+    !examples.length &&
     !syn.length &&
     !ant.length &&
     !col.length
@@ -147,10 +153,14 @@ export function RichInfo({ word }: { word: CnWord }) {
         </div>
       )}
 
-      {word.example && (
-        <div className="rounded-lg border border-line bg-surface2/60 px-3 py-2">
-          <div>{word.example}</div>
-          {word.exampleTrans && <div className="text-dim text-xs mt-1">{word.exampleTrans}</div>}
+      {examples.length > 0 && (
+        <div className="space-y-2">
+          {examples.map((ex, i) => (
+            <div key={i} className="rounded-lg border border-line bg-surface2/60 px-3 py-2">
+              <div>{ex.zh}</div>
+              {ex.en && <div className="text-dim text-xs mt-1">{ex.en}</div>}
+            </div>
+          ))}
         </div>
       )}
 
