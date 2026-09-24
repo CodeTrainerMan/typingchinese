@@ -472,7 +472,7 @@ export const fr: Messages = {
 
     sectionKeyboard: 'Clavier',
     virtualKeyboard: 'Clavier à l’écran',
-    virtualKeyboardDesc: 'Affiché automatiquement sur tactile ; vous pouvez aussi le forcer.',
+    virtualKeyboardDesc: 'Affiché uniquement sur ordinateur ; les appareils tactiles utilisent le clavier système.',
     replayKey: 'Réécouter l’audio',
     replayKeyDesc: 'Appuyez sur cette touche pour réécouter le mot en cours.',
     nextKey: 'Mot suivant',

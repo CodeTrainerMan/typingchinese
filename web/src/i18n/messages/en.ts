@@ -481,7 +481,7 @@ export const en = {
 
     sectionKeyboard: 'Keyboard',
     virtualKeyboard: 'On-screen keyboard',
-    virtualKeyboardDesc: 'Shown automatically on touch devices; you can also force it on.',
+    virtualKeyboardDesc: 'Desktop only — touch devices use the system keyboard.',
     replayKey: 'Replay audio',
     replayKeyDesc: 'Press this key to replay the current word.',
     nextKey: 'Next word',

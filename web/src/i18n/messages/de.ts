@@ -472,7 +472,7 @@ export const de: Messages = {
 
     sectionKeyboard: 'Tastatur',
     virtualKeyboard: 'Bildschirmtastatur',
-    virtualKeyboardDesc: 'Auf Touch-Geräten automatisch sichtbar; du kannst sie auch erzwingen.',
+    virtualKeyboardDesc: 'Nur auf dem Desktop sichtbar; Touch-Geräte nutzen die Systemtastatur.',
     replayKey: 'Audio wiederholen',
     replayKeyDesc: 'Mit dieser Taste wiederholst du das aktuelle Wort.',
     nextKey: 'Nächstes Wort',

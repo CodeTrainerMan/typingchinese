@@ -472,7 +472,7 @@ export const th: Messages = {
 
     sectionKeyboard: 'แป้นพิมพ์',
     virtualKeyboard: 'แป้นพิมพ์บนหน้าจอ',
-    virtualKeyboardDesc: 'แสดงเองบนอุปกรณ์สัมผัส หรือเปิดบังคับก็ได้',
+    virtualKeyboardDesc: 'แสดงเฉพาะบนเดสก์ท็อป อุปกรณ์สัมผัสใช้คีย์บอร์ดของระบบ',
     replayKey: 'ฟังเสียงซ้ำ',
     replayKeyDesc: 'กดแป้นนี้เพื่อฟังคำปัจจุบันซ้ำ',
     nextKey: 'คำถัดไป',

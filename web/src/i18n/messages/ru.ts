@@ -472,7 +472,7 @@ export const ru: Messages = {
 
     sectionKeyboard: 'Клавиатура',
     virtualKeyboard: 'Экранная клавиатура',
-    virtualKeyboardDesc: 'На сенсорных устройствах показывается сама; можно включить принудительно.',
+    virtualKeyboardDesc: 'Только на компьютере; на сенсорных устройствах используется системная клавиатура.',
     replayKey: 'Повтор звука',
     replayKeyDesc: 'Эта клавиша повторяет текущее слово.',
     nextKey: 'Следующее слово',

@@ -472,7 +472,7 @@ export const ko: Messages = {
 
     sectionKeyboard: '키보드',
     virtualKeyboard: '화면 키보드',
-    virtualKeyboardDesc: '터치 기기에서는 자동으로 보입니다. 항상 켤 수도 있습니다.',
+    virtualKeyboardDesc: '데스크톱에서만 표시됩니다. 터치 기기는 시스템 키보드를 사용합니다.',
     replayKey: '소리 다시 듣기',
     replayKeyDesc: '이 키를 누르면 현재 단어를 다시 들려줍니다.',
     nextKey: '다음 단어',

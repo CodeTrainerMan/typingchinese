@@ -472,7 +472,7 @@ export const uk: Messages = {
 
     sectionKeyboard: 'Клавіатура',
     virtualKeyboard: 'Екранна клавіатура',
-    virtualKeyboardDesc: 'На сенсорних пристроях показується сама; можна увімкнути примусово.',
+    virtualKeyboardDesc: 'Лише на компʼютері; на сенсорних пристроях використовується системна клавіатура.',
     replayKey: 'Повтор звуку',
     replayKeyDesc: 'Ця клавіша повторює поточне слово.',
     nextKey: 'Наступне слово',

@@ -472,7 +472,7 @@ export const id: Messages = {
 
     sectionKeyboard: 'Keyboard',
     virtualKeyboard: 'Keyboard di layar',
-    virtualKeyboardDesc: 'Muncul otomatis di perangkat sentuh; kamu juga bisa memaksanya tampil.',
+    virtualKeyboardDesc: 'Hanya di desktop; perangkat sentuh memakai keyboard sistem.',
     replayKey: 'Ulangi audio',
     replayKeyDesc: 'Tekan tombol ini untuk mengulang kata saat ini.',
     nextKey: 'Kata berikutnya',

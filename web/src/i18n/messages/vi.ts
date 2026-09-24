@@ -472,7 +472,7 @@ export const vi: Messages = {
 
     sectionKeyboard: 'Bàn phím',
     virtualKeyboard: 'Bàn phím ảo',
-    virtualKeyboardDesc: 'Tự hiện trên thiết bị cảm ứng; bạn cũng có thể bật bắt buộc.',
+    virtualKeyboardDesc: 'Chỉ hiện trên máy tính; thiết bị cảm ứng dùng bàn phím hệ thống.',
     replayKey: 'Nghe lại âm thanh',
     replayKeyDesc: 'Nhấn phím này để nghe lại từ hiện tại.',
     nextKey: 'Từ tiếp theo',

@@ -472,7 +472,7 @@ export const ja: Messages = {
 
     sectionKeyboard: 'キーボード',
     virtualKeyboard: '画面キーボード',
-    virtualKeyboardDesc: 'タッチ端末では自動表示。常に表示することもできます。',
+    virtualKeyboardDesc: 'デスクトップのみ表示。タッチ端末はシステムキーボードを使います。',
     replayKey: '音声を再生',
     replayKeyDesc: 'このキーで現在の単語を再生します。',
     nextKey: '次の単語',

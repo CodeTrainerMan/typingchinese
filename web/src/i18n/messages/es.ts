@@ -472,7 +472,7 @@ export const es: Messages = {
 
     sectionKeyboard: 'Teclado',
     virtualKeyboard: 'Teclado en pantalla',
-    virtualKeyboardDesc: 'Se muestra solo en dispositivos táctiles; puedes forzarlo.',
+    virtualKeyboardDesc: 'Solo en escritorio; en dispositivos táctiles se usa el teclado del sistema.',
     replayKey: 'Repetir audio',
     replayKeyDesc: 'Pulsa esta tecla para repetir la palabra actual.',
     nextKey: 'Palabra siguiente',

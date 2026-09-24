@@ -101,8 +101,10 @@ export default function PracticeBoard({
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setCoarsePointer(window.matchMedia('(pointer: coarse)').matches)
   }, [])
-  // 汉字模式由真实输入框承接 IME，屏幕键盘没有意义
-  const showKeyboard = (setting.virtualKeyboard || coarsePointer) && setting.inputMode === 'pinyin'
+  // 屏幕键盘只留给桌面端手动开启：手机上再画一排键纯属遮挡，直接用系统软键盘
+  const showVirtualKeyboard = setting.virtualKeyboard && !coarsePointer && setting.inputMode === 'pinyin'
+  // 触屏 + 拼音模式：靠一个盖在输入区上的透明输入框唤起并承接系统软键盘
+  const useSoftInput = coarsePointer && setting.inputMode === 'pinyin'
 
   // 承接手机软键盘输入：靠一个隐藏 input 拿到字符与退格
   const softInputRef = useRef<HTMLInputElement>(null)
@@ -223,14 +225,15 @@ export default function PracticeBoard({
     return () => window.removeEventListener('keydown', onKey)
   }, [session.finished, session.word, session.skip, setting, onToggleKnown, onToggleCollect])
 
-  // 移动端：保持隐藏输入框聚焦，软键盘才不会收起
+  // 触屏：进练习页与每次切词都重新聚焦，系统软键盘才会弹出 / 不收起
   useEffect(() => {
-    if (!showKeyboard || session.finished) return
+    if (!useSoftInput || session.finished) return
     softInputRef.current?.focus()
     const refocus = () => softInputRef.current?.focus()
     window.addEventListener('click', refocus)
     return () => window.removeEventListener('click', refocus)
-  }, [showKeyboard, session.finished])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [useSoftInput, session.finished, session.progress.index])
 
   const handleSoftInput = (e: React.FormEvent<HTMLInputElement>) => {
     if (composingRef.current) return
@@ -472,7 +475,34 @@ export default function PracticeBoard({
         />
       )}
 
-      <div className="mt-8">
+      <div className="relative mt-8">
+        {/* 触屏：透明输入框盖在输入区上，点一下就唤起系统软键盘 */}
+        {useSoftInput && (
+          <input
+            ref={softInputRef}
+            className="absolute inset-0 z-10 h-full w-full opacity-0"
+            inputMode="text"
+            enterKeyHint="go"
+            autoCapitalize="off"
+            autoCorrect="off"
+            autoComplete="off"
+            spellCheck={false}
+            aria-label={t('board.ariaPinyinInput')}
+            onInput={handleSoftInput}
+            onKeyDown={e => {
+              // 字母与退格已经由 input 事件处理，别再冒泡给全局 keydown，否则一个字母会被敲两遍
+              if (e.key.length === 1 || e.key === 'Backspace') e.stopPropagation()
+            }}
+            onCompositionStart={() => {
+              composingRef.current = true
+            }}
+            onCompositionEnd={e => {
+              composingRef.current = false
+              e.currentTarget.value = ''
+              softLenRef.current = 0
+            }}
+          />
+        )}
         {hanziMode && session.word ? (
           <HanziInput
             word={session.word}
@@ -510,36 +540,14 @@ export default function PracticeBoard({
         </div>
       )}
 
-      {showKeyboard && (
-        <>
-          <input
-            ref={softInputRef}
-            className="fixed bottom-2 left-2 h-6 w-6 opacity-0"
-            inputMode="text"
-            enterKeyHint="go"
-            autoCapitalize="off"
-            autoCorrect="off"
-            autoComplete="off"
-            spellCheck={false}
-            aria-label={t('board.ariaPinyinInput')}
-            onInput={handleSoftInput}
-            onCompositionStart={() => {
-              composingRef.current = true
-            }}
-            onCompositionEnd={e => {
-              composingRef.current = false
-              e.currentTarget.value = ''
-              softLenRef.current = 0
-            }}
-          />
-          <VirtualKeyboard
-            onKey={key => session.type(key)}
-            onBackspace={() => session.type('Backspace')}
-            onSkip={session.skip}
-            onPlay={session.playCurrent}
-            withDigits={setting.typingMode === 'tone'}
-          />
-        </>
+      {showVirtualKeyboard && (
+        <VirtualKeyboard
+          onKey={key => session.type(key)}
+          onBackspace={() => session.type('Backspace')}
+          onSkip={session.skip}
+          onPlay={session.playCurrent}
+          withDigits={setting.typingMode === 'tone'}
+        />
       )}
 
       {/* 操作 + 键位提示：收进一张卡片，别散在页面底部 */}

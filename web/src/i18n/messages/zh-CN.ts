@@ -471,7 +471,7 @@ export const zhCN: Messages = {
 
     sectionKeyboard: '键盘',
     virtualKeyboard: '屏幕虚拟键盘',
-    virtualKeyboardDesc: '手机 / 触屏设备会自动显示，也可手动开启',
+    virtualKeyboardDesc: '仅桌面端显示；手机 / 平板使用系统键盘。',
     replayKey: '重听发音',
     replayKeyDesc: '按这个键重放当前词的发音',
     nextKey: '进入下一词',
