@@ -25,6 +25,10 @@
 
 <https://www.typingchinese.club>
 
+<p align="center">
+  <img src="web/public/demo.gif" width="800" alt="TypingChinese demo: HSK word practice with pinyin typing">
+</p>
+
 ## Community
 
 Ask questions, share your progress, or report a bug:
