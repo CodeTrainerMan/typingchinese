@@ -69,7 +69,9 @@ Ask questions, share your progress, or report a bug:
 
 ### Dictionaries
 
-Built in: **Daily Words** (59), **Advanced Vocabulary** (51), **Four-character Idioms** (40).
+Built in: **Daily Words** (59), **Advanced Vocabulary** (51), **Four-character Idioms** (40), and the **complete HSK 1–6 vocabulary** (150 / 150 / 298 / 584 / 1311 / 2511 words).
+
+Every HSK level also has a public word list with pinyin and English meanings: <https://www.typingchinese.club/hsk/1> … <https://www.typingchinese.club/hsk/6>.
 
 Bring your own: paste a list or upload `.json` / `.csv` / `.txt`. One entry per line, in any of these shapes — pinyin is generated automatically:
 
@@ -111,7 +113,7 @@ web/                    Next.js application (the only deployable unit)
   src/lib/              Dictionaries, pinyin, TTS, FSRS scheduling, local storage
   public/dicts/         Pre-generated dictionaries
   public/articles/      Built-in practice texts
-  scripts/              Seed word list and dictionary generator
+  scripts/              Seed word list, HSK source data and dictionary generator
 sample-words.csv        Example file for importing your own dictionary
 ```
 

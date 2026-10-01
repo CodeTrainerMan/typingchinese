@@ -6,6 +6,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useBaseStore } from '@/lib/store/base'
 import { useSettingStore } from '@/lib/store/setting'
+import { getAttribution } from '@/lib/attribution'
 import { useHydrated } from '@/lib/useHydrated'
 import { useZhVoiceAvailable } from '@/lib/useSpeak'
 import { stepsOf, withoutAudioStep } from '@/lib/practice/flow'
@@ -79,8 +80,8 @@ export default function PracticePage() {
   const finish = useCallback((spendMs: number, keys: number) => {
     base.finishSession(spendMs, keys)
     const done = Boolean(useBaseStore.getState().session?.done)
-    // 整组（含多步骤流程）真正跑完才上报一次，用于渠道转化归因
-    if (done) track('practice_finished')
+    // 整组（含多步骤流程）真正跑完才上报一次；带上首次进入的渠道，用于转化归因
+    if (done) track('practice_finished', { ...getAttribution() })
     return done
   }, [base])
   const flush = useCallback(

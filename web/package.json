@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "eslint",
     "gen:dict": "node scripts/gen-dict.mjs",
+    "gen:dict:full": "node scripts/gen-dict.mjs && node scripts/enrich-dict.mjs daily && node scripts/enrich-dict.mjs advanced && node scripts/enrich-dict.mjs idiom && node scripts/enrich-dict.mjs hsk2 && node scripts/enrich-hsk1.mjs",
     "gen:hanzi": "node scripts/gen-hanzi.mjs",
     "test": "vitest run",
     "test:watch": "vitest"

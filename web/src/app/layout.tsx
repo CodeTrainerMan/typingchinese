@@ -5,6 +5,7 @@ import Nav, { MobileNav } from '@/components/Nav'
 import ThemeEffect from '@/components/ThemeEffect'
 import PersistSync from '@/components/PersistSync'
 import { I18nProvider } from '@/i18n'
+import AttributionCapture from '@/components/AttributionCapture'
 
 // 默认英文；用户在设置页切换语言后由 I18nProvider 同步 html lang 与 title
 export const metadata: Metadata = {
@@ -37,6 +38,7 @@ export default function RootLayout({ children }: LayoutProps<'/'>) {
       <body className="min-h-full">
         <I18nProvider>
           <ThemeEffect />
+          <AttributionCapture />
           <PersistSync />
           <MobileNav />
           {/* 侧栏（fixed）+ 占位 + 内容区，桌面端横排；移动端侧栏不渲染，内容独占一行 */}

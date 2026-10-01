@@ -64,5 +64,57 @@
     "level": 2,
     "length": 150,
     "url": "hsk2.json"
+  },
+  {
+    "id": "hsk3",
+    "name": "HSK 三级",
+    "description": "HSK 三级词汇：日常交际扩展，有基础后系统提速（298 词）",
+    "category": "HSK",
+    "tags": [
+      "HSK",
+      "HSK3"
+    ],
+    "level": 3,
+    "length": 298,
+    "url": "hsk3.json"
+  },
+  {
+    "id": "hsk4",
+    "name": "HSK 四级",
+    "description": "HSK 四级词汇：话题更广，含常见抽象词与书面表达（584 词）",
+    "category": "HSK",
+    "tags": [
+      "HSK",
+      "HSK4"
+    ],
+    "level": 4,
+    "length": 584,
+    "url": "hsk4.json"
+  },
+  {
+    "id": "hsk5",
+    "name": "HSK 五级",
+    "description": "HSK 五级词汇：新闻与正式场合高频词，适合进阶（1311 词）",
+    "category": "HSK",
+    "tags": [
+      "HSK",
+      "HSK5"
+    ],
+    "level": 5,
+    "length": 1311,
+    "url": "hsk5.json"
+  },
+  {
+    "id": "hsk6",
+    "name": "HSK 六级",
+    "description": "HSK 六级词汇：高阶书面语与成语，难度最高（2511 词）",
+    "category": "HSK",
+    "tags": [
+      "HSK",
+      "HSK6"
+    ],
+    "level": 6,
+    "length": 2511,
+    "url": "hsk6.json"
   }
 ]
