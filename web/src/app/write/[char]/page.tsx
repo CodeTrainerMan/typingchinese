@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { existsSync, readFileSync } from 'node:fs'
 import { join } from 'node:path'
 import WriteBoard from '@/components/WriteBoard'
+import { DICT_LABEL, getCharDictId, getCharSources, getRelatedChars } from '@/lib/write/char-index'
 import { PILOT_CHARS } from '@/lib/write/pilot-chars'
 
 /**
@@ -15,30 +16,16 @@ import { PILOT_CHARS } from '@/lib/write/pilot-chars'
  *
  * 数据来源：
  * - 笔顺：public/hanzi/<字>.json（hanzi-writer 格式，本地数据，离线可用）
- * - 拼音 / 释义 / 例词：public/dicts/*.json
+ * - 拼音 / 释义 / 例词 / HSK 归属：public/dicts/*.json（经 char-index 建索引）
  */
 
-const DICT_IDS = ['hsk1', 'hsk2', 'hsk3', 'hsk4', 'hsk5', 'hsk6', 'daily', 'idiom', 'advanced']
-const DICT_LABEL: Record<string, string> = {
-  hsk1: 'HSK 1', hsk2: 'HSK 2', hsk3: 'HSK 3',
-  hsk4: 'HSK 4', hsk5: 'HSK 5', hsk6: 'HSK 6',
-  daily: 'Daily', idiom: 'Idioms', advanced: 'Advanced',
-}
-
-interface SourceWord {
-  dictId: string
-  dictLabel: string
-  word: string
-  pinyin: string
-  trans: string
-}
 interface CharData {
   char: string
   strokeCount: number
   pinyin: string
   meaning: string
   hskLevel: string | null
-  sourceWords: SourceWord[]
+  sourceWords: ReturnType<typeof getCharSources>
 }
 
 function loadCharData(char: string): CharData | null {
@@ -60,45 +47,18 @@ function loadCharData(char: string): CharData | null {
     return null
   }
 
-  // 2) 从词库收集：拼音、释义、例词、HSK 归属
-  let pinyin = ''
-  let meaning = ''
-  let hskLevel: string | null = null
-  const sourceWords: SourceWord[] = []
-
-  for (const id of DICT_IDS) {
-    const file = join(process.cwd(), 'public', 'dicts', `${id}.json`)
-    if (!existsSync(file)) continue
-    let dict: { name?: string; words?: Array<Record<string, unknown>> }
-    try {
-      dict = JSON.parse(readFileSync(file, 'utf-8'))
-    } catch {
-      continue
-    }
-    for (const w of dict.words ?? []) {
-      const word = String(w.word ?? '')
-      if (!word || !word.includes(key)) continue
-      const idx = Array.from(word).indexOf(key)
-      const py = Array.isArray(w.pinyin) ? String(w.pinyin[idx] ?? '') : ''
-      const trans = String(w.trans ?? '')
-      if (!pinyin && py) pinyin = py
-      if (!meaning && trans) meaning = trans
-      if (!hskLevel && /^hsk[1-6]$/.test(id)) hskLevel = DICT_LABEL[id]
-      sourceWords.push({
-        dictId: id,
-        dictLabel: DICT_LABEL[id] ?? id,
-        word,
-        pinyin: Array.isArray(w.pinyin) ? (w.pinyin as string[]).join(' ') : '',
-        trans,
-      })
-      if (sourceWords.length >= 8) break
-    }
-    if (sourceWords.length >= 8) break
-  }
+  // 2) 拼音 / 释义 / 例词 / HSK 归属走共享索引（避免每页重复解析 9 个词库）
+  const sourceWords = getCharSources(key)
   if (!sourceWords.length) return null
+  const pinyin = sourceWords[0].pinyin.split(' ').find(Boolean) ?? ''
+  const meaning = sourceWords[0].trans
+  const dictId = getCharDictId(key)
+  const hskLevel = dictId && /^hsk[1-6]$/.test(dictId) ? DICT_LABEL[dictId] : null
+
   return { char: key, strokeCount, pinyin, meaning, hskLevel, sourceWords }
 }
 
+/** 试点批次：先发 10 个高频字验证收录，后续放开全量只需把这里换成 listCharPages() */
 export function generateStaticParams() {
   return PILOT_CHARS.map((char) => ({ char }))
 }
@@ -126,7 +86,8 @@ export default async function CharPage({ params }: { params: Promise<{ char: str
   const data = loadCharData(char)
   if (!data) notFound()
 
-  const others = PILOT_CHARS.filter((c) => c !== data.char).slice(0, 8)
+  // 相关字：同一词库里的其他字（每页不重复，也不是固定前几个）
+  const others = getRelatedChars(data.char, 8)
 
   const jsonLd = {
     '@context': 'https://schema.org',
@@ -254,8 +215,8 @@ export default async function CharPage({ params }: { params: Promise<{ char: str
         ))}
       </ol>
 
-      {/* 内链：同批试点字 + HSK 页 */}
-      <h2 className="mt-10 text-lg font-semibold">Other common characters</h2>
+      {/* 内链：同词库的相关字 + HSK 页 */}
+      <h2 className="mt-10 text-lg font-semibold">Related characters</h2>
       <div className="mt-3 flex flex-wrap gap-2">
         {others.map((c) => (
           <Link

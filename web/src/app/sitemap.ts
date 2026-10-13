@@ -15,18 +15,18 @@ export default function sitemap(): MetadataRoute.Sitemap {
     changeFrequency: 'monthly' as const,
     priority: 0.8,
   }))
-  // 单字落地页：长尾 "X 笔顺 / X 怎么写"
+  // 单字落地页：长尾 "X 笔顺 / X 怎么写"——先发试点批次，验证收录后再放开全量
   const charPages = PILOT_CHARS.map((ch) => ({
     url: `${BASE}/write/${encodeURIComponent(ch)}`,
     lastModified: now,
     changeFrequency: 'monthly' as const,
-    priority: 0.7,
+    priority: 0.6,
   }))
 
   return [
     { url: BASE, lastModified: now, changeFrequency: 'weekly', priority: 1 },
     { url: `${BASE}/dicts`, lastModified: now, changeFrequency: 'monthly', priority: 0.6 },
-    ...charPages,
     ...levels,
+    ...charPages,
   ]
 }
