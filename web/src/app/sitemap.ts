@@ -1,5 +1,6 @@
 import type { MetadataRoute } from 'next'
 import { PILOT_CHARS } from '@/lib/write/pilot-chars'
+import { REGION_PAGES } from '@/lib/geo-pages'
 
 const BASE = 'https://www.typingchinese.club'
 
@@ -23,10 +24,19 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.6,
   }))
 
+  // Geo 落地页：按地区/语言承接本地化搜索词
+  const regionPages = REGION_PAGES.map((p) => ({
+    url: `${BASE}/region/${p.code}`,
+    lastModified: now,
+    changeFrequency: 'monthly' as const,
+    priority: 0.5,
+  }))
+
   return [
     { url: BASE, lastModified: now, changeFrequency: 'weekly', priority: 1 },
     { url: `${BASE}/dicts`, lastModified: now, changeFrequency: 'monthly', priority: 0.6 },
     ...levels,
     ...charPages,
+    ...regionPages,
   ]
 }
