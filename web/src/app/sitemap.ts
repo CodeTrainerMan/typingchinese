@@ -1,6 +1,7 @@
 import type { MetadataRoute } from 'next'
 import { PILOT_CHARS } from '@/lib/write/pilot-chars'
 import { REGION_PAGES } from '@/lib/geo-pages'
+import { GUIDES } from '@/lib/guides'
 
 const BASE = 'https://www.typingchinese.club'
 
@@ -32,11 +33,21 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.5,
   }))
 
+  // 指南内容层：承接 "how to type chinese on <device>" 类需求
+  const guidePages = GUIDES.map((g) => ({
+    url: `${BASE}/guides/${g.slug}`,
+    lastModified: now,
+    changeFrequency: 'monthly' as const,
+    priority: 0.7,
+  }))
+
   return [
     { url: BASE, lastModified: now, changeFrequency: 'weekly', priority: 1 },
     { url: `${BASE}/dicts`, lastModified: now, changeFrequency: 'monthly', priority: 0.6 },
+    { url: `${BASE}/guides`, lastModified: now, changeFrequency: 'weekly', priority: 0.7 },
     ...levels,
     ...charPages,
     ...regionPages,
+    ...guidePages,
   ]
 }
