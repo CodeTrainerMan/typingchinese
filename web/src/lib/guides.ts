@@ -179,6 +179,118 @@ export const GUIDES: Guide[] = [
       },
     ],
   },
+  {
+    slug: 'type-chinese-in-any-app',
+    title: 'How to Type Chinese in WhatsApp, WeChat or Any App',
+    description:
+      'Apps do not handle Chinese input — your operating system does. Once the keyboard is installed, switching works the same in every app, on desktop and mobile.',
+    keyword: 'how to type chinese in whatsapp',
+    intro:
+      'A common misconception is that each app needs its own Chinese setting. It does not: input methods belong to the operating system. Install one at the system level and every app can use it.',
+    sections: [
+      {
+        h2: 'Why the app does not matter',
+        body: [
+          'When you type, the app only receives finished text. Deciding which characters your keystrokes become is the input method’s job, and that lives in Windows, macOS, iOS or Android — not in WhatsApp, WeChat, or your browser.',
+          'So the setup step is per device, not per app. Do it once and it works everywhere.',
+        ],
+      },
+      {
+        h2: 'On a phone',
+        body: [
+          'Enable the Chinese keyboard in system settings (see the iPhone and Android guides), then switch with the globe key whenever you are in a text field.',
+          'Long-pressing the globe key lets you jump straight to Chinese instead of cycling.',
+        ],
+      },
+      {
+        h2: 'On a computer',
+        body: [
+          'Windows: Win + Space. macOS: Control + Space or the Globe key. The menu bar or taskbar shows which input method is active.',
+          'If typing produces Latin letters instead of characters, you are simply on the wrong input method — switch again.',
+        ],
+      },
+      {
+        h2: 'If you see empty boxes',
+        body: [
+          'Empty rectangles (tofu) mean a missing font, not a typing problem. On desktop, installing the language pack with the input method usually fixes it; on mobile it is rare.',
+        ],
+      },
+    ],
+  },
+  {
+    slug: 'chinese-keyboard-online',
+    title: 'Type Chinese Online Without Installing an Input Method',
+    description:
+      'Options for typing Chinese when you cannot install software: browser-based input tools, copy-paste workflows, and why pinyin practice only needs a normal English keyboard.',
+    keyword: 'chinese keyboard online',
+    intro:
+      'On a locked-down work machine, a shared library computer, or a borrowed laptop, installing an input method may not be an option. You still have ways to produce Chinese text.',
+    sections: [
+      {
+        h2: 'Browser-based input tools',
+        body: [
+          'Web-based IMEs let you type pinyin into a page and copy the resulting characters out. They are slower than a native input method and depend on the site staying up, but they need no installation.',
+          'They are fine for occasional use — writing one message, filling in a form — and frustrating for anything longer.',
+        ],
+      },
+      {
+        h2: 'The copy-paste workflow',
+        body: [
+          'For one-off needs, typing into an online tool and pasting the result is often faster than fighting with settings you cannot change.',
+        ],
+      },
+      {
+        h2: 'For practising, you need nothing installed',
+        body: [
+          'Practising pinyin is different from producing Chinese text: you only need to type Latin letters. TypingChinese grades each letter you type, so a plain English keyboard is enough — no input method, no admin rights, nothing to install.',
+          'That also makes it usable on locked-down machines where a real IME cannot be added.',
+        ],
+      },
+      {
+        h2: 'When you should install a real input method',
+        body: [
+          'If you write Chinese regularly, a native IME is worth the two minutes: it learns your habits, handles punctuation properly, and works offline and everywhere.',
+        ],
+      },
+    ],
+  },
+  {
+    slug: 'pinyin-u-umlaut-v-rule',
+    title: 'How to Type ü in Pinyin (It Is Just the v Key)',
+    description:
+      'There is no ü key on a keyboard. Every pinyin input method types it as v — plus the cases where ü is simply written as u.',
+    keyword: 'how to type u umlaut in pinyin',
+    intro:
+      'The two dots look like a problem, and then you learn the rule: on a keyboard, ü is v. Every real pinyin input method follows it, including the one this site grades against.',
+    sections: [
+      {
+        h2: 'The rule',
+        body: ['Type v wherever a syllable has ü. The input method turns it into ü on screen.'],
+        list: ['女 (woman) → nv', '绿 (green) → lv', '略 (brief) → lve'],
+      },
+      {
+        h2: 'When ü is written as u',
+        body: [
+          'After j, q, x and y, the two dots are dropped in writing even though the sound is still ü. You type the plain letter u, and it is still correct.',
+          'This trips people up because the spelling and the pronunciation disagree — the spelling is conventional, not phonetic.',
+        ],
+        list: ['句 (sentence) → ju', '去 (go) → qu', '学 (learn) → xue', '鱼 (fish) → yu'],
+      },
+      {
+        h2: 'After n and l, keep the dots',
+        body: [
+          'With n and l the ü stays written as ü (typed as v), because plain u is already a different sound there.',
+          'Compare: 路 lù (road) is lu, but 绿 lǜ (green) is lv. Mixing them up changes the word.',
+        ],
+      },
+      {
+        h2: 'Practising it',
+        body: [
+          'TypingChinese grades against the same convention, so what you learn here transfers directly to Microsoft Pinyin, Gboard and every other IME.',
+        ],
+      },
+    ],
+  },
 ]
 
 export function getGuide(slug: string): Guide | undefined {
