@@ -1,6 +1,7 @@
 # 参考资料（第三方/对标项目源码，不入库）
 /ref/
-
+/.codebuddy/
+/tools/
 # 音频素材工作目录（下载的原始音源、中间产物与复核页，不入库）
 /_audio_src/
 /_audio_backup/
@@ -32,6 +33,9 @@ yarn-error.log*
 .vercel
 *.tsbuildinfo
 next-env.d.ts
+
+# 作者原始照片素材（仅作抠图源，处理成品 coder-trainer-cutout.png 才入库/公开）
+/web/public/brand/coder-trainer-original.png
 
 # 编辑器 / 系统
 .vscode/

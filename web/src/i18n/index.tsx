@@ -4,6 +4,7 @@ import { createContext, useContext, useEffect, useMemo, type ReactNode } from 'r
 import type { Locale } from '@/lib/types'
 import { useSettingStore } from '@/lib/store/setting'
 import { recommendLocale } from '@/lib/geo'
+import { unlockSpeech } from '@/lib/tts'
 import { en, type Messages } from './messages/en'
 import { zhCN } from './messages/zh-CN'
 import { zhTW } from './messages/zh-TW'
@@ -112,6 +113,17 @@ export function I18nProvider({ children }: { children: ReactNode }) {
     })
     return () => {
       cancelled = true
+    }
+  }, [])
+
+  // 移动端语音引擎要在首次用户手势里解锁，否则进入练习后的自动发音会被静默拦截
+  useEffect(() => {
+    const unlock = () => unlockSpeech()
+    window.addEventListener('pointerdown', unlock, { once: true })
+    window.addEventListener('keydown', unlock, { once: true })
+    return () => {
+      window.removeEventListener('pointerdown', unlock)
+      window.removeEventListener('keydown', unlock)
     }
   }, [])
 

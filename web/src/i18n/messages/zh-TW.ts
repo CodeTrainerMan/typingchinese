@@ -1,5 +1,5 @@
 /** 繁体中文（台湾）语言包：与 zh-CN 同义，改用繁体字形与台湾习惯用词（档案 / 预设 / 介面 …） */
-import type { Messages } from './en'
+import { en, type Messages } from './en'
 
 export const zhTW: Messages = {
   app: {
@@ -8,8 +8,10 @@ export const zhTW: Messages = {
   },
 
   nav: {
+    course: "課程",
     pinyin: '拼音',
     home: '首页',
+    dashboard: '訓練台',
     practice: '练习',
     dicts: '词库',
     article: '文章',
@@ -565,6 +567,14 @@ export const zhTW: Messages = {
     practice: '練這個字',
     min: '{n} 分鐘',
     sec: '{n} 秒',
+  },
+
+  landing: {
+    ...en.landing,
+  },
+
+  course: {
+    ...en.course,
   },
 
 }

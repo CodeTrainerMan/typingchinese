@@ -10,8 +10,10 @@ import { useI18n } from '@/i18n'
 /** 侧栏顺序：学习主流程在上，设置沉底（对齐 TypeWords 的 aside 编排） */
 const ITEMS = [
   { href: '/', key: 'home', icon: 'home' },
+  { href: '/dashboard', key: 'dashboard', icon: 'grid' },
   { href: '/practice', key: 'practice', icon: 'keyboard' },
   { href: '/dicts', key: 'dicts', icon: 'book' },
+  { href: '/course', key: 'course', icon: 'course' },
   { href: '/article', key: 'article', icon: 'article' },
   { href: '/pinyin', key: 'pinyin', icon: 'pinyin' },
   { href: '/write', key: 'write', icon: 'pen' },

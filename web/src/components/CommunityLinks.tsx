@@ -3,9 +3,12 @@
 import NavIcon from '@/components/ui/NavIcon'
 import { useI18n } from '@/i18n'
 
-/** 官方入口：仓库与 Discord 社群。外链地址只在这里定义，改地址只改一处 */
+/** 官方入口：仓库 / 社群 / 作者。外链地址只在这里定义，改地址只改一处 */
 export const GITHUB_URL = 'https://github.com/CodeTrainerMan/typingchinese'
 export const DISCORD_URL = 'https://discord.gg/4kZ7nETEEc'
+export const REDDIT_URL = 'https://www.reddit.com/r/ChinesePractice/'
+export const X_URL = 'https://x.com/TrainCodeMan'
+export const X_HANDLE = '@TrainCodeMan'
 
 /**
  * 社区入口的三种形态：

@@ -38,19 +38,52 @@ function localeFromTimeZone(tz: string | undefined): Locale | null {
   return 'en'
 }
 
-/** 探测访客国家码，失败返回 null */
+const CACHE_KEY = 'tc-geo-cc'
+let inflight: Promise<string | null> | null = null
+
+function remember(cc: string | null) {
+  try {
+    sessionStorage.setItem(CACHE_KEY, cc ?? 'none')
+  } catch {
+    // 隐私模式下不可用，忽略
+  }
+}
+
+/**
+ * 探测访客国家码，失败返回 null。
+ * 结果按会话缓存（含失败），并合并并发请求：免费接口限流很严，
+ * 每个页面挂载都打一次会稳定拿到 429，既刷控制台又拖慢首屏。
+ */
 async function detectCountry(): Promise<string | null> {
   try {
-    const ctrl = new AbortController()
-    const timer = setTimeout(() => ctrl.abort(), 3000)
-    const res = await fetch('https://ipapi.co/json/', { signal: ctrl.signal })
-    clearTimeout(timer)
-    if (!res.ok) return null
-    const data = (await res.json()) as { country_code?: string }
-    return data.country_code ?? null
+    const cached = sessionStorage.getItem(CACHE_KEY)
+    if (cached) return cached === 'none' ? null : cached
   } catch {
-    return null
+    // 继续走网络
   }
+  if (inflight) return inflight
+  inflight = (async () => {
+    try {
+      const ctrl = new AbortController()
+      const timer = setTimeout(() => ctrl.abort(), 3000)
+      const res = await fetch('https://ipapi.co/json/', { signal: ctrl.signal })
+      clearTimeout(timer)
+      if (!res.ok) {
+        remember(null)
+        return null
+      }
+      const data = (await res.json()) as { country_code?: string }
+      const cc = data.country_code ?? null
+      remember(cc)
+      return cc
+    } catch {
+      remember(null)
+      return null
+    } finally {
+      inflight = null
+    }
+  })()
+  return inflight
 }
 
 /**

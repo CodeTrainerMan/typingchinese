@@ -1,4 +1,4 @@
-export default {
+const data = {
   "中国": { "trans": "China", "ex": [["我来自中国。","I am from China."],["中国很大。","China is very big."],["他在中国工作。","He works in China."]] },
   "人民": { "trans": "people", "ex": [["中国人民很友好。","The Chinese people are friendly."],["为人民服务。","Serve the people."],["人民公园很漂亮。","People's Park is beautiful."]] },
   "时间": { "trans": "time", "ex": [["时间很宝贵。","Time is precious."],["我没有时间。","I have no time."],["请准时，时间很重要。","Please be on time; time matters."]] },
@@ -59,3 +59,5 @@ export default {
   "图书": { "trans": "books", "ex": [["图书馆有很多图书。","The library has many books."],["我喜欢图书。","I like books."],["请爱护图书。","Please take care of books."]] },
   "报纸": { "trans": "newspaper", "ex": [["我读报纸。","I read the newspaper."],["报纸上有新闻。","There is news in the newspaper."],["他买了一份报纸。","He bought a newspaper."]] }
 }
+
+export default data

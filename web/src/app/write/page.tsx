@@ -27,6 +27,9 @@ import { sortedWrongChars, todayStat } from '@/lib/write/stats'
 
 const MODES: WriteMode[] = ['trace', 'animate', 'quiz']
 
+/** 时间只在事件 / effect 里取：集中到模块级，避免渲染路径上直接调用不纯的 Date.now */
+const now = () => Date.now()
+
 const BTN = 'rounded-lg border border-line bg-surface px-3 py-1.5 text-sm text-ink2 transition-colors hover:bg-hover disabled:opacity-40'
 const BTN_ON = 'rounded-lg border border-brand bg-brand-soft px-3 py-1.5 text-sm text-brand'
 /** 发音按钮：只有图标，靠 title 说明念的是字还是词 */
@@ -54,7 +57,7 @@ export default function WritePage() {
   const [runKey, setRunKey] = useState(0)
   const [resetKey, setResetKey] = useState(0)
   const [mistakes, setMistakes] = useState<number | null>(null)
-  const startedAt = useRef(Date.now())
+  const startedAt = useRef(now())
 
   // 可练字清单：只练生成过笔顺数据的字，没有数据的字直接不出现
   useEffect(() => {
@@ -97,7 +100,7 @@ export default function WritePage() {
     setMistakes(null)
     setIndex(next)
     setResetKey(k => k + 1)
-    startedAt.current = Date.now()
+    startedAt.current = now()
   }
 
   const goto = (next: number) => reset(Math.max(0, Math.min(next, queue.length)))
@@ -110,7 +113,7 @@ export default function WritePage() {
   /** 记完本字（时长 + 错笔）再进入下一个；错笔只在测验模式下有值 */
   const finish = () => {
     if (!char) return
-    addSpend(Date.now() - startedAt.current)
+    addSpend(now() - startedAt.current)
     commitChar(char, mistakes ?? 0)
     if (index + 1 < queue.length) goto(index + 1)
     else {
@@ -130,7 +133,7 @@ export default function WritePage() {
     setOverride(target)
     setMistakes(null)
     setResetKey(k => k + 1)
-    startedAt.current = Date.now()
+    startedAt.current = now()
   }
 
   const switchMode = (next: WriteMode) => {

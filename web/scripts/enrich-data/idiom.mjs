@@ -1,4 +1,4 @@
-export default {
+const data = {
   "一心一意": { "trans": "wholeheartedly; with full attention", "ex": [["他一心一意地学习。","He studies with full attention."],["请一心一意地工作。","Please work wholeheartedly."],["她一心一意地画画。","She paints with full attention."]] },
   "三心二意": { "trans": "half-hearted; absent-minded", "ex": [["学习不能三心二意。","You cannot study half-heartedly."],["他做事三心二意。","He does things absent-mindedly."],["别三心二意了。","Stop being half-hearted."]] },
   "四面八方": { "trans": "from all sides; in all directions", "ex": [["人们从四面八方赶来。","People came from all directions."],["消息传遍四面八方。","The news spread everywhere."],["四面八方都是山。","There are mountains in all directions."]] },
@@ -40,3 +40,5 @@ export default {
   "一举成名": { "trans": "rise to fame overnight", "ex": [["他一举成名。","He rose to fame overnight."],["这位歌手一举成名。","This singer became famous at once."],["希望你能一举成名。","Hope you become famous overnight."]] },
   "坐井观天": { "trans": "limited outlook (frog in a well)", "ex": [["别坐井观天。","Don't have a limited outlook."],["坐井观天见识短。","A narrow view sees little."],["他坐井观天，不知世界大。","He has a narrow view of the world."]] }
 }
+
+export default data

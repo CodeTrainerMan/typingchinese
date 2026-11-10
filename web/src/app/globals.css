@@ -198,3 +198,73 @@ button:not(:disabled):active {
     transform: none;
   }
 }
+
+/* ==========================================================================
+   课程模块（/course）：只写语义令牌，浅色/深色自动跟随，不硬编码颜色
+   ========================================================================== */
+.course-crumb { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; font-size: 12px; color: var(--dim); }
+.course-crumb a { color: var(--dim); text-decoration: none; }
+.course-crumb a:hover { color: var(--brand); text-decoration: underline; }
+
+.course-header { margin-top: 20px; }
+.course-kicker { font-family: ui-monospace, Consolas, monospace; font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--brand); }
+.course-header h1 { margin: 10px 0 0; font-size: clamp(26px, 4vw, 36px); font-weight: 700; letter-spacing: -0.02em; color: var(--ink); }
+.course-header > p { margin: 12px 0 0; font-size: 15px; line-height: 1.8; color: var(--ink-2); }
+.course-header-badges { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.course-today-badge { display: inline-flex; align-items: center; padding: 4px 10px; border-radius: 999px; background: var(--brand-soft); color: var(--brand); font-size: 11px; font-weight: 600; }
+.course-lesson-no { font-family: ui-monospace, Consolas, monospace; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--faint); }
+.course-label { font-family: ui-monospace, Consolas, monospace; font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--dim); }
+.course-meta { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; font-size: 12px; color: var(--dim); }
+.course-goal { margin-top: 20px; padding: 14px 16px; border-left: 3px solid var(--brand); border-radius: 0 8px 8px 0; background: var(--surface-2); }
+.course-goal p { margin: 6px 0 0; font-size: 15px; line-height: 1.7; color: var(--ink); }
+
+.course-list { display: flex; flex-direction: column; gap: 14px; margin-top: 28px; }
+.course-list-card { display: block; padding: 20px; border: 1px solid var(--line); border-radius: 12px; background: var(--surface-2); box-shadow: var(--shadow-card); text-decoration: none; transition: transform 0.18s ease, border-color 0.18s ease; }
+.course-list-card:hover { transform: translateY(-2px); border-color: var(--brand); }
+.course-list-top { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px; }
+.course-list-card h2 { margin: 12px 0 0; font-size: 19px; font-weight: 700; color: var(--ink); }
+.course-list-card > p { margin: 8px 0 0; font-size: 14px; line-height: 1.7; color: var(--dim); }
+.course-cta { display: inline-block; margin-top: 16px; font-size: 13px; font-weight: 600; color: var(--brand); }
+
+.course-words { display: flex; flex-direction: column; gap: 18px; margin-top: 28px; }
+.course-word-card { padding: 20px; border: 1px solid var(--line); border-radius: 12px; background: var(--surface-2); box-shadow: var(--shadow-card); }
+.course-word-head { display: flex; align-items: flex-start; gap: 16px; }
+.course-word-no { flex: 0 0 auto; padding-top: 10px; font-family: ui-monospace, Consolas, monospace; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--faint); }
+.course-word-main { min-width: 0; }
+.course-hanzi-row { display: flex; align-items: center; gap: 12px; }
+.course-hanzi { font-family: var(--font-hanzi); font-size: 38px; font-weight: 700; line-height: 1.2; color: var(--ink); }
+.course-pinyin { display: block; margin-top: 4px; font-family: ui-monospace, Consolas, monospace; font-size: 14px; letter-spacing: 0.04em; color: var(--brand); }
+.course-speak { display: grid; place-items: center; width: 32px; height: 32px; border: 1px solid var(--line); border-radius: 8px; background: var(--solid); font-size: 14px; cursor: pointer; }
+.course-speak:hover { border-color: var(--brand); background: var(--brand-soft); }
+
+.course-meaning { display: flex; flex-wrap: wrap; align-items: baseline; gap: 10px; margin-top: 18px; font-size: 15px; color: var(--ink-2); }
+.course-examples { display: flex; flex-direction: column; gap: 10px; margin-top: 16px; }
+.course-example { padding: 14px 16px; border-left: 3px solid var(--brand); border-radius: 0 8px 8px 0; background: var(--solid); }
+.course-example-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.course-example-hanzi { margin: 8px 0 0; font-family: var(--font-hanzi); font-size: 19px; line-height: 1.6; color: var(--ink); }
+.course-example-pinyin { margin: 4px 0 0; font-family: ui-monospace, Consolas, monospace; font-size: 12px; color: var(--dim); }
+.course-example-meaning { margin: 8px 0 0; font-size: 13px; line-height: 1.7; color: var(--ink-2); }
+.course-usage { margin-top: 16px; font-size: 13px; line-height: 1.7; color: var(--dim); }
+.course-usage p { margin: 6px 0 0; }
+
+.course-quote { margin-top: 18px; padding: 16px; border: 1px solid var(--line); border-radius: 10px; background: var(--solid); }
+.course-quote-head { display: flex; align-items: center; gap: 10px; }
+.course-quote-mark { display: grid; place-items: center; width: 22px; height: 22px; color: var(--ink); }
+.course-quote-mark svg { width: 14px; height: 14px; }
+.course-quote-author { margin-left: auto; font-family: ui-monospace, Consolas, monospace; font-size: 11px; color: var(--dim); }
+.course-quote blockquote { margin: 12px 0 0; font-size: 19px; font-weight: 600; line-height: 1.6; color: var(--ink); }
+.course-quote-context { margin: 8px 0 0; font-size: 13px; line-height: 1.7; color: var(--dim); }
+.course-quote-link { display: inline-block; margin-top: 12px; font-size: 12px; font-weight: 600; color: var(--brand); text-decoration: none; }
+.course-quote-link:hover { text-decoration: underline; }
+
+.course-bottom-links { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 32px; }
+.course-primary-link, .course-ghost-link { display: inline-flex; align-items: center; min-height: 44px; padding: 0 18px; border-radius: 8px; font-size: 13px; font-weight: 600; text-decoration: none; }
+.course-primary-link { background: var(--brand); color: #fff; }
+.course-primary-link:hover { opacity: 0.9; }
+.course-ghost-link { border: 1px solid var(--line); background: var(--solid); color: var(--ink-2); }
+.course-ghost-link:hover { background: var(--hover); }
+
+@media (max-width: 620px) {
+  .course-hanzi { font-size: 32px; }
+  .course-word-card, .course-list-card { padding: 16px; }
+}

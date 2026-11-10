@@ -1,5 +1,5 @@
 /** 日语语言包（结构须与 en.ts 一致，缺 key 会编译报错） */
-import type { Messages } from './en'
+import { en, type Messages } from './en'
 
 export const ja: Messages = {
   app: {
@@ -8,8 +8,10 @@ export const ja: Messages = {
   },
 
   nav: {
+    course: "コース",
     pinyin: '拼音',
     home: 'ホーム',
+    dashboard: 'ダッシュボード',
     practice: '練習',
     dicts: '単語リスト',
     article: '文章',
@@ -566,6 +568,14 @@ export const ja: Messages = {
     practice: 'この字を練習する',
     min: '{n} 分',
     sec: '{n} 秒',
+  },
+
+  landing: {
+    ...en.landing,
+  },
+
+  course: {
+    ...en.course,
   },
 
 }

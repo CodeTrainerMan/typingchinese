@@ -1,5 +1,5 @@
 /** 俄语语言包（结构须与 en.ts 一致，缺 key 会编译报错） */
-import type { Messages } from './en'
+import { en, type Messages } from './en'
 
 export const ru: Messages = {
   app: {
@@ -8,8 +8,10 @@ export const ru: Messages = {
   },
 
   nav: {
+    course: "Курс",
     pinyin: 'Пиньинь',
     home: 'Главная',
+    dashboard: 'Панель',
     practice: 'Практика',
     dicts: 'Списки',
     article: 'Тексты',
@@ -566,6 +568,14 @@ export const ru: Messages = {
     practice: 'Тренировать этот иероглиф',
     min: '{n} мин',
     sec: '{n} с',
+  },
+
+  landing: {
+    ...en.landing,
+  },
+
+  course: {
+    ...en.course,
   },
 
 }

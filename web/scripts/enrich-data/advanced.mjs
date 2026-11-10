@@ -1,4 +1,4 @@
-export default {
+const data = {
   "经验": { "trans": "experience", "ex": [["他很有经验。","He is very experienced."],["我从经验中学到很多。","I learned a lot from experience."],["工作经验很重要。","Work experience is important."]] },
   "知识": { "trans": "knowledge", "ex": [["知识就是力量。","Knowledge is power."],["他有很多知识。","He has a lot of knowledge."],["我们要学习知识。","We should learn knowledge."]] },
   "能力": { "trans": "ability; capability", "ex": [["他有能力完成任务。","He has the ability to finish the task."],["学习能力很重要。","The ability to learn is important."],["她展现出很强的能力。","She showed strong ability."]] },
@@ -51,3 +51,5 @@ export default {
   "美食": { "trans": "delicious food; cuisine", "ex": [["中国美食很好吃。","Chinese food is delicious."],["我喜欢美食。","I like good food."],["这里有美食。","There is good food here."]] },
   "传统": { "trans": "tradition; traditional", "ex": [["这是传统。","This is a tradition."],["文化传统。","Cultural tradition."],["尊重传统。","Respect tradition."]] }
 }
+
+export default data

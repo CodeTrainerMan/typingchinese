@@ -1,5 +1,5 @@
 /** 印尼语语言包（结构须与 en.ts 一致，缺 key 会编译报错） */
-import type { Messages } from './en'
+import { en, type Messages } from './en'
 
 export const id: Messages = {
   app: {
@@ -8,8 +8,10 @@ export const id: Messages = {
   },
 
   nav: {
+    course: "Kursus",
     pinyin: 'Pinyin',
     home: 'Beranda',
+    dashboard: 'Dasbor',
     practice: 'Berlatih',
     dicts: 'Daftar kata',
     article: 'Artikel',
@@ -566,6 +568,14 @@ export const id: Messages = {
     practice: 'Latih karakter ini',
     min: '{n} mnt',
     sec: '{n} d',
+  },
+
+  landing: {
+    ...en.landing,
+  },
+
+  course: {
+    ...en.course,
   },
 
 }

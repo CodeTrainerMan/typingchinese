@@ -1,5 +1,5 @@
 /** 德语语言包（结构须与 en.ts 一致，缺 key 会编译报错） */
-import type { Messages } from './en'
+import { en, type Messages } from './en'
 
 export const de: Messages = {
   app: {
@@ -8,8 +8,10 @@ export const de: Messages = {
   },
 
   nav: {
+    course: "Kurs",
     pinyin: 'Pinyin',
     home: 'Start',
+    dashboard: 'Übersicht',
     practice: 'Üben',
     dicts: 'Listen',
     article: 'Texte',
@@ -566,6 +568,14 @@ export const de: Messages = {
     practice: 'Dieses Zeichen üben',
     min: '{n} Min',
     sec: '{n} s',
+  },
+
+  landing: {
+    ...en.landing,
+  },
+
+  course: {
+    ...en.course,
   },
 
 }

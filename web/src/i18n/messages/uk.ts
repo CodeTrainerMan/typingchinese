@@ -1,5 +1,5 @@
 /** 乌克兰语语言包（结构须与 en.ts 一致，缺 key 会编译报错） */
-import type { Messages } from './en'
+import { en, type Messages } from './en'
 
 export const uk: Messages = {
   app: {
@@ -8,8 +8,10 @@ export const uk: Messages = {
   },
 
   nav: {
+    course: "Курс",
     pinyin: 'Піньїнь',
     home: 'Головна',
+    dashboard: 'Панель',
     practice: 'Практика',
     dicts: 'Списки',
     article: 'Тексти',
@@ -566,6 +568,14 @@ export const uk: Messages = {
     practice: 'Тренувати цей ієрогліф',
     min: '{n} хв',
     sec: '{n} с',
+  },
+
+  landing: {
+    ...en.landing,
+  },
+
+  course: {
+    ...en.course,
   },
 
 }

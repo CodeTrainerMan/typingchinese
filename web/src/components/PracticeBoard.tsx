@@ -144,7 +144,7 @@ export default function PracticeBoard({
       replayKey: setting.replayKey,
       nextKey: setting.nextKey,
     }),
-    [setting]
+    [setting, hanziMode, mode]
   )
 
   const session = useTypingSession({
@@ -161,11 +161,12 @@ export default function PracticeBoard({
   })
 
   // 计时（每秒推进，仅用于界面展示；统计落盘用 session.elapsed() 的真实时间）
+  const { finished: sessionFinished, elapsed: sessionElapsed } = session
   useEffect(() => {
-    if (session.finished) return
-    const timer = setInterval(() => setSpend(session.elapsed()), 1000)
+    if (sessionFinished) return
+    const timer = setInterval(() => setSpend(sessionElapsed()), 1000)
     return () => clearInterval(timer)
-  }, [session.finished, session.elapsed])
+  }, [sessionFinished, sessionElapsed])
 
   // 中途离开 / 切后台：把已产生的用时与击键数写进当日统计，避免白练
   const flushRef = useRef(onFlush)
@@ -223,7 +224,7 @@ export default function PracticeBoard({
     }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
-  }, [session.finished, session.word, session.skip, setting, onToggleKnown, onToggleCollect])
+  }, [session, setting, onToggleKnown, onToggleCollect])
 
   // 触屏：进练习页与每次切词都重新聚焦，系统软键盘才会弹出 / 不收起
   useEffect(() => {
@@ -232,7 +233,6 @@ export default function PracticeBoard({
     const refocus = () => softInputRef.current?.focus()
     window.addEventListener('click', refocus)
     return () => window.removeEventListener('click', refocus)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [useSoftInput, session.finished, session.progress.index])
 
   const handleSoftInput = (e: React.FormEvent<HTMLInputElement>) => {

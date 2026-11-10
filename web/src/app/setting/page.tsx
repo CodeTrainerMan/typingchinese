@@ -33,7 +33,11 @@ export default function SettingPage() {
     level: 'ok',
   })
   useEffect(() => {
-    setStorage({ usage: formatBytes(storageBytes()), level: storageWarnLevel() })
+    // 下一帧再读：避免在 effect 主体里同步 setState 引发级联渲染
+    const id = requestAnimationFrame(() => {
+      setStorage({ usage: formatBytes(storageBytes()), level: storageWarnLevel() })
+    })
+    return () => cancelAnimationFrame(id)
   }, [writeError, syncedAt])
 
   // 同一个键绑到多个动作时后一个不会触发，先提示出来

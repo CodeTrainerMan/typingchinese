@@ -88,6 +88,23 @@ const PATHS: Record<string, ReactNode> = {
       <path d="M10.4 13.6 21 3" />
     </>
   ),
+  // 工作台：四宫格
+  grid: (
+    <>
+      <rect x="3.2" y="3.2" width="7.4" height="7.4" rx="1.4" />
+      <rect x="13.4" y="3.2" width="7.4" height="7.4" rx="1.4" />
+      <rect x="3.2" y="13.4" width="7.4" height="7.4" rx="1.4" />
+      <rect x="13.4" y="13.4" width="7.4" height="7.4" rx="1.4" />
+    </>
+  ),
+  // 课程：学士帽
+  course: (
+    <>
+      <path d="M12 4 2.5 8.5 12 13l9.5-4.5z" />
+      <path d="M6 11v5c0 1.5 2.7 3 6 3s6-1.5 6-3v-5" />
+      <path d="M21.5 8.5V15" />
+    </>
+  ),
 }
 
 export type NavIconName = keyof typeof PATHS

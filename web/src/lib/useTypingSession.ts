@@ -385,7 +385,7 @@ export function useTypingSession({
     }
     window.addEventListener('keydown', onKeyDown)
     return () => window.removeEventListener('keydown', onKeyDown)
-  }, [handleKey, skip, playCurrent])
+  }, [handleKey, skip, playCurrent, config.replayKey, config.nextKey, config.inputMode])
 
   const restart = useCallback(() => {
     clearTimer()

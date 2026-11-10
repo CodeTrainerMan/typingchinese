@@ -1,5 +1,5 @@
 /** 葡萄牙语语言包（结构须与 en.ts 一致，缺 key 会编译报错） */
-import type { Messages } from './en'
+import { en, type Messages } from './en'
 
 export const pt: Messages = {
   app: {
@@ -8,8 +8,10 @@ export const pt: Messages = {
   },
 
   nav: {
+    course: "Curso",
     pinyin: 'Pinyin',
     home: 'Início',
+    dashboard: 'Painel',
     practice: 'Praticar',
     dicts: 'Listas',
     article: 'Textos',
@@ -566,6 +568,14 @@ export const pt: Messages = {
     practice: 'Praticar este caractere',
     min: '{n} min',
     sec: '{n} s',
+  },
+
+  landing: {
+    ...en.landing,
+  },
+
+  course: {
+    ...en.course,
   },
 
 }

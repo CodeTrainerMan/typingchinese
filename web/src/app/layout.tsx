@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { Analytics } from '@vercel/analytics/react'
 import './globals.css'
+import './cyber.css'
 import Nav, { MobileNav } from '@/components/Nav'
 import ThemeEffect from '@/components/ThemeEffect'
 import PersistSync from '@/components/PersistSync'
@@ -13,7 +14,8 @@ export const metadata: Metadata = {
   description:
     'Type pinyin to learn Chinese: follow-typing and dictation, live per-letter feedback, spaced-repetition reviews, mistake notebook and progress stats.',
   metadataBase: new URL('https://www.typingchinese.club'),
-  alternates: { canonical: '/' },
+  // canonical 不在这里写：layout 的 alternates 会被所有子页面继承，
+  // 导致 /pinyin、/dicts 等页面错误地把规范地址指向首页。改由各页面自己声明。
   openGraph: {
     type: 'website',
     siteName: 'TypingChinese',

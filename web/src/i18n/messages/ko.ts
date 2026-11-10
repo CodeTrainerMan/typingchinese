@@ -1,5 +1,5 @@
 /** 韩语语言包（结构须与 en.ts 一致，缺 key 会编译报错） */
-import type { Messages } from './en'
+import { en, type Messages } from './en'
 
 export const ko: Messages = {
   app: {
@@ -8,8 +8,10 @@ export const ko: Messages = {
   },
 
   nav: {
+    course: "코스",
     pinyin: '병음',
     home: '홈',
+    dashboard: '대시보드',
     practice: '연습',
     dicts: '단어장',
     article: '지문',
@@ -566,6 +568,14 @@ export const ko: Messages = {
     practice: '이 글자 연습',
     min: '{n}분',
     sec: '{n}초',
+  },
+
+  landing: {
+    ...en.landing,
+  },
+
+  course: {
+    ...en.course,
   },
 
 }

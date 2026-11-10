@@ -2,6 +2,7 @@ import type { MetadataRoute } from 'next'
 import { PILOT_CHARS } from '@/lib/write/pilot-chars'
 import { REGION_PAGES } from '@/lib/geo-pages'
 import { GUIDES } from '@/lib/guides'
+import { COURSES } from '@/lib/courses'
 
 const BASE = 'https://www.typingchinese.club'
 
@@ -41,14 +42,24 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.7,
   }))
 
+  // 中文课程：索引页 + 每课详情
+  const coursePages = COURSES.map(c => ({
+    url: `${BASE}/course/${c.slug}`,
+    lastModified: now,
+    changeFrequency: 'weekly' as const,
+    priority: 0.7,
+  }))
+
   return [
     { url: BASE, lastModified: now, changeFrequency: 'weekly', priority: 1 },
     { url: `${BASE}/dicts`, lastModified: now, changeFrequency: 'monthly', priority: 0.6 },
     { url: `${BASE}/guides`, lastModified: now, changeFrequency: 'weekly', priority: 0.7 },
+    { url: `${BASE}/course`, lastModified: now, changeFrequency: 'weekly', priority: 0.7 },
     { url: `${BASE}/region`, lastModified: now, changeFrequency: 'monthly', priority: 0.5 },
     ...levels,
     ...charPages,
     ...regionPages,
     ...guidePages,
+    ...coursePages,
   ]
 }

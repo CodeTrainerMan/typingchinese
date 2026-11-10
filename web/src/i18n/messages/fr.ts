@@ -1,5 +1,5 @@
 /** 法语语言包（结构须与 en.ts 一致，缺 key 会编译报错） */
-import type { Messages } from './en'
+import { en, type Messages } from './en'
 
 export const fr: Messages = {
   app: {
@@ -8,8 +8,10 @@ export const fr: Messages = {
   },
 
   nav: {
+    course: "Cours",
     pinyin: 'Pinyin',
     home: 'Accueil',
+    dashboard: 'Tableau de bord',
     practice: 'Pratiquer',
     dicts: 'Listes',
     article: 'Textes',
@@ -566,6 +568,14 @@ export const fr: Messages = {
     practice: 'Travailler ce caractère',
     min: '{n} min',
     sec: '{n} s',
+  },
+
+  landing: {
+    ...en.landing,
+  },
+
+  course: {
+    ...en.course,
   },
 
 }

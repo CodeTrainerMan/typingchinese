@@ -1,5 +1,5 @@
 /** 泰语语言包（结构须与 en.ts 一致，缺 key 会编译报错） */
-import type { Messages } from './en'
+import { en, type Messages } from './en'
 
 export const th: Messages = {
   app: {
@@ -8,8 +8,10 @@ export const th: Messages = {
   },
 
   nav: {
+    course: "คอร์ส",
     pinyin: 'พินอิน',
     home: 'หน้าแรก',
+    dashboard: 'แดชบอร์ด',
     practice: 'ฝึกพิมพ์',
     dicts: 'รายการคำ',
     article: 'บทความ',
@@ -566,6 +568,14 @@ export const th: Messages = {
     practice: 'ฝึกตัวอักษรนี้',
     min: '{n} นาที',
     sec: '{n} วินาที',
+  },
+
+  landing: {
+    ...en.landing,
+  },
+
+  course: {
+    ...en.course,
   },
 
 }

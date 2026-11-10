@@ -10,6 +10,7 @@
 !.yarn/releases
 !.yarn/versions
 
+/web/logs
 # testing
 /coverage
 
@@ -40,6 +41,22 @@ dev.log
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# 运营内容统一放 ../ref/（根 .gitignore 的 /ref/ 已排除，不进 GitHub）。
+# 项目自身的造词库/汉字数据脚本不在此列，仍需提交。
+/logs/
+/_tmp_*
+/scripts/_disabled/
+/scripts/cp-*.mjs
+/scripts/cf-*.mjs
+/scripts/gsc-*.mjs
+/scripts/hn-*.mjs
+/scripts/ph-*.mjs
+/scripts/browser.mjs
+/scripts/login-setup.mjs
+/scripts/check-login.mjs
+/scripts/stealth-check.mjs
+/scripts/demo-capture.mjs
 
 .vercel
 .env*

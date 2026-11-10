@@ -1,5 +1,5 @@
 /** 越南语语言包（结构须与 en.ts 一致，缺 key 会编译报错） */
-import type { Messages } from './en'
+import { en, type Messages } from './en'
 
 export const vi: Messages = {
   app: {
@@ -8,8 +8,10 @@ export const vi: Messages = {
   },
 
   nav: {
+    course: "Khóa học",
     pinyin: 'Pinyin',
     home: 'Trang chủ',
+    dashboard: 'Bảng điều khiển',
     practice: 'Luyện tập',
     dicts: 'Danh sách từ',
     article: 'Bài đọc',
@@ -566,6 +568,14 @@ export const vi: Messages = {
     practice: 'Luyện chữ này',
     min: '{n} phút',
     sec: '{n} giây',
+  },
+
+  landing: {
+    ...en.landing,
+  },
+
+  course: {
+    ...en.course,
   },
 
 }

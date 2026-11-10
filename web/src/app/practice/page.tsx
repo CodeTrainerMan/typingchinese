@@ -107,7 +107,7 @@ export default function PracticePage() {
     }
     if (!dict) return
     base.startSession(dict.id, setting.perDayStudyNumber)
-  }, [base, dict, setting.perDayStudyNumber, isWrongSession, isCollectSession, isArticleSession, router])
+  }, [base, dict, setting.perDayStudyNumber, isWrongSession, isCollectSession, isArticleSession, router, t])
   const resetSession = useCallback(() => base.restartSession(), [base])
 
   /**

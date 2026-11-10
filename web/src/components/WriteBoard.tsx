@@ -104,18 +104,27 @@ export default function WriteBoard({
   const [failed, setFailed] = useState(false)
   const [ready, setReady] = useState(false)
 
-  completeRef.current = onQuizComplete
+  // 回调只存 ref，避免实例重建时拿到旧闭包；ref 赋值放到 effect 而非渲染期
+  useEffect(() => {
+    completeRef.current = onQuizComplete
+  }, [onQuizComplete])
 
   // 建实例：只依赖字和尺寸，切模式不重建（否则描红笔迹会闪掉）
   useEffect(() => {
     let disposed = false
-    setFailed(false)
-    setReady(false)
+    const host = hostRef.current
+    // 重建时重置状态放到下一帧，避免 effect 主体同步 setState 引发级联渲染
+    const resetId = requestAnimationFrame(() => {
+      if (!disposed) {
+        setFailed(false)
+        setReady(false)
+      }
+    })
     void (async () => {
       const { default: HanziWriter } = await import('hanzi-writer')
-      if (disposed || !hostRef.current) return
-      hostRef.current.innerHTML = ''
-      writerRef.current = HanziWriter.create(hostRef.current, char, {
+      if (disposed || !host) return
+      host.innerHTML = ''
+      writerRef.current = HanziWriter.create(host, char, {
         width: size,
         height: size,
         padding: 20,
@@ -130,9 +139,10 @@ export default function WriteBoard({
     })()
     return () => {
       disposed = true
+      cancelAnimationFrame(resetId)
       writerRef.current?.cancelQuiz()
       writerRef.current = null
-      if (hostRef.current) hostRef.current.innerHTML = ''
+      if (host) host.innerHTML = ''
     }
   }, [char, size])
 

@@ -1,5 +1,5 @@
 /** 西班牙语语言包（结构须与 en.ts 一致，缺 key 会编译报错） */
-import type { Messages } from './en'
+import { en, type Messages } from './en'
 
 export const es: Messages = {
   app: {
@@ -8,8 +8,10 @@ export const es: Messages = {
   },
 
   nav: {
+    course: "Curso",
     pinyin: 'Pinyin',
     home: 'Inicio',
+    dashboard: 'Panel',
     practice: 'Practicar',
     dicts: 'Listas',
     article: 'Textos',
@@ -566,6 +568,14 @@ export const es: Messages = {
     practice: 'Practicar este carácter',
     min: '{n} min',
     sec: '{n} s',
+  },
+
+  landing: {
+    ...en.landing,
+  },
+
+  course: {
+    ...en.course,
   },
 
 }

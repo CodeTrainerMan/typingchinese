@@ -1,4 +1,4 @@
-export default {
+const data = {
   "认识": { "trans": "to know (a person); be familiar with", "ex": [["我认识他。","I know him."],["你认识这位老师吗？","Do you know this teacher?"],["他认识很多汉字。","He knows many Chinese characters."]] },
   "知道": { "trans": "to know; to be aware of", "ex": [["我知道答案。","I know the answer."],["你知道吗？","Do you know?"],["他不知道这件事。","He does not know about this."]] },
   "明白": { "trans": "to understand; clear", "ex": [["我明白了。","I understand."],["请说清楚，我要明白。","Please be clear so I understand."],["这个道理很明白。","This principle is clear."]] },
@@ -150,3 +150,5 @@ export default {
   "习惯": { "trans": "habit", "ex": [["好习惯。","A good habit."],["我有早起的习惯。","I have the habit of rising early."],["改掉坏习惯。","Break bad habits."]] },
   "生活": { "trans": "life; to live", "ex": [["生活很美好。","Life is beautiful."],["他的生活好。","His life is good."],["快乐地生活。","Live happily."]] }
 }
+
+export default data
