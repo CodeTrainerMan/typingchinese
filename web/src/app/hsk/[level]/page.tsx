@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { readFileSync } from 'node:fs'
 import { join } from 'node:path'
+import { ogImages, twitterImages } from '@/lib/seo'
 
 /**
  * HSK 等级词表落地页（服务端渲染的静态页）
@@ -53,8 +54,8 @@ export async function generateMetadata({ params }: { params: Promise<{ level: st
     title,
     description,
     alternates: { canonical: `/hsk/${level}` },
-    openGraph: { title, description, url: `/hsk/${level}`, type: 'article' },
-    twitter: { card: 'summary_large_image', title, description },
+    openGraph: { title, description, url: `/hsk/${level}`, type: 'article', images: ogImages },
+    twitter: { card: 'summary_large_image', title, description, images: twitterImages },
   }
 }
 

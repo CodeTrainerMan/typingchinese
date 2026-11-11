@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { GUIDES, getGuide } from '@/lib/guides'
+import { ogImages, twitterImages } from '@/lib/seo'
 
 /**
  * 指南落地页（服务端渲染的静态页）
@@ -23,8 +24,8 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     title: g.title,
     description: g.description,
     alternates: { canonical: `/guides/${g.slug}` },
-    openGraph: { title: g.title, description: g.description, url: `/guides/${g.slug}`, type: 'article' },
-    twitter: { card: 'summary_large_image', title: g.title, description: g.description },
+    openGraph: { title: g.title, description: g.description, url: `/guides/${g.slug}`, type: 'article', images: ogImages },
+    twitter: { card: 'summary_large_image', title: g.title, description: g.description, images: twitterImages },
   }
 }
 

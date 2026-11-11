@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { REGION_PAGES } from '@/lib/geo-pages'
+import { ogImages, twitterImages } from '@/lib/seo'
 
 /**
  * Geo 落地页索引：15 个 /region/[code] 之前只存在于 sitemap，站内没有任何入口
@@ -16,7 +17,9 @@ export const metadata: Metadata = {
     description: 'Free pinyin typing practice, localised for learners in 15 countries and regions.',
     url: '/region',
     type: 'website',
+    images: ogImages,
   },
+  twitter: { card: 'summary_large_image', images: twitterImages },
 }
 
 export default function RegionIndexPage() {

@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { GUIDES } from '@/lib/guides'
+import { ogImages, twitterImages } from '@/lib/seo'
 
 /** 指南索引页：内链枢纽，让每篇指南都能被爬虫与用户走到 */
 export const metadata: Metadata = {
@@ -13,7 +14,9 @@ export const metadata: Metadata = {
     description: 'Set up Chinese typing on any device, then practise pinyin with live feedback.',
     url: '/guides',
     type: 'website',
+    images: ogImages,
   },
+  twitter: { card: 'summary_large_image', images: twitterImages },
 }
 
 export default function GuidesPage() {

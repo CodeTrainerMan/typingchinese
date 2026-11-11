@@ -6,6 +6,7 @@ import { join } from 'node:path'
 import WriteBoard from '@/components/WriteBoard'
 import { DICT_LABEL, getCharDictId, getCharSources, getRelatedChars } from '@/lib/write/char-index'
 import { PILOT_CHARS } from '@/lib/write/pilot-chars'
+import { ogImages, twitterImages } from '@/lib/seo'
 
 /**
  * 单字落地页（服务端渲染的静态页）
@@ -76,8 +77,8 @@ export async function generateMetadata({ params }: { params: Promise<{ char: str
     title,
     description,
     alternates: { canonical: `/write/${encodeURIComponent(data.char)}` },
-    openGraph: { title, description, url: `/write/${encodeURIComponent(data.char)}`, type: 'article' },
-    twitter: { card: 'summary_large_image', title, description },
+    openGraph: { title, description, url: `/write/${encodeURIComponent(data.char)}`, type: 'article', images: ogImages },
+    twitter: { card: 'summary_large_image', title, description, images: twitterImages },
   }
 }
 

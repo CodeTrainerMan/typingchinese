@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import CourseLesson from '@/components/CourseLesson'
 import { COURSES, getCourse } from '@/lib/courses'
+import { ogImageFor, twitterImageFor } from '@/lib/seo'
 
 /** 课程落地页：静态生成，带 Article / BreadcrumbList / ItemList 结构化数据 */
 export function generateStaticParams() {
@@ -25,8 +26,14 @@ export async function generateMetadata({
       description: c.description.en,
       url: `/course/${c.slug}`,
       type: 'article',
+      images: ogImageFor(`/og/course-${c.slug}.png`),
     },
-    twitter: { card: 'summary_large_image', title: c.title.en, description: c.description.en },
+    twitter: {
+      card: 'summary_large_image',
+      title: c.title.en,
+      description: c.description.en,
+      images: twitterImageFor(`/og/course-${c.slug}.png`),
+    },
   }
 }
 

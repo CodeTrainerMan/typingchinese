@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { REGION_PAGES, getRegionPage } from '@/lib/geo-pages'
+import { ogImages, twitterImages } from '@/lib/seo'
 import { t, htmlLangOf } from '@/i18n/server'
 
 /**
@@ -34,8 +35,9 @@ export async function generateMetadata({ params }: { params: Promise<{ code: str
       url: `/region/${page.code}`,
       type: 'website',
       locale: htmlLangOf(page.locale),
+      images: ogImages,
     },
-    twitter: { card: 'summary_large_image', title, description },
+    twitter: { card: 'summary_large_image', title, description, images: twitterImages },
   }
 }
 
