@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import { useI18n } from '@/i18n'
 import { useSpeak } from '@/lib/useSpeak'
-import { localized, type Course, type CourseWord, type Localized } from '@/lib/courses'
+import { isLatestCourse, localized, type Course, type CourseWord, type Localized } from '@/lib/courses'
 import type { MessageKey } from '@/i18n'
 
 function XMark() {
@@ -119,7 +119,7 @@ export default function CourseLesson({ course, index }: { course: Course; index:
 
       <header className="course-header">
         <div className="course-header-badges">
-          <span className="course-today-badge">{t('course.today')}</span>
+          {isLatestCourse(course.slug) && <span className="course-today-badge">{t('course.today')}</span>}
           <span className="course-lesson-no">{t('course.lesson', { n: index + 1 })}</span>
         </div>
         <h1>{text(course.title)}</h1>

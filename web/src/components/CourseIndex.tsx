@@ -2,12 +2,15 @@
 
 import Link from 'next/link'
 import { useI18n } from '@/i18n'
-import { COURSES, localized } from '@/lib/courses'
+import { COURSES, isLatestCourse, localized } from '@/lib/courses'
 import type { MessageKey } from '@/i18n'
 
 /** 课程中心：列出全部课程，今天的课排第一并标注「今日课程」 */
 export default function CourseIndex() {
   const { t, locale } = useI18n()
+
+  // 最新一课排最前；课号按发布日期升序固定，不随展示顺序变化
+  const lessons = [...COURSES].reverse()
 
   return (
     <div className="mx-auto w-full max-w-3xl px-4 py-8">
@@ -24,7 +27,8 @@ export default function CourseIndex() {
       </header>
 
       <div className="course-list">
-        {COURSES.map((c, i) => {
+        {lessons.map((c, i) => {
+          const n = COURSES.length - i
           const levelKey: MessageKey =
             c.level === 'beginner'
               ? 'course.levelBeginner'
@@ -34,8 +38,8 @@ export default function CourseIndex() {
           return (
             <Link key={c.slug} href={`/course/${c.slug}`} className="course-list-card">
               <div className="course-list-top">
-                <span className="course-lesson-no">{t('course.lesson', { n: i + 1 })}</span>
-                {i === 0 && <span className="course-today-badge">{t('course.today')}</span>}
+                <span className="course-lesson-no">{t('course.lesson', { n })}</span>
+                {isLatestCourse(c.slug) && <span className="course-today-badge">{t('course.today')}</span>}
               </div>
               <h2>{localized(c.title, locale)}</h2>
               <p>{localized(c.description, locale)}</p>

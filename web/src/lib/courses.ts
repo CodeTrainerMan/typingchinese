@@ -339,10 +339,294 @@ export const COURSES: Course[] = [
       },
     ],
   },
+  {
+    slug: '10-most-common-chinese-words',
+    date: '2026-11-11',
+    level: 'beginner',
+    title: {
+      en: '10 Most Common Chinese Words in Daily Conversation',
+      zh: '日常对话里最高频的 10 个中文词',
+    },
+    description: {
+      en: 'Ten expressions native speakers use dozens of times a day: greetings, thanks, apologies, replies and question openers. Each with pinyin, three real sentences, and the register notes textbooks skip. No overlap with Lesson 1.',
+      zh: '母语者每天要说几十遍的十个表达：打招呼、道谢、道歉、应答、开口提问。每个都配拼音、三句真实例句，以及教材很少讲的语域区别。与第 1 课不重复。',
+    },
+    goal: {
+      en: "Today's goal: master 10 high-frequency everyday words, with three sentences each you can use right away.",
+      zh: '今日目标：掌握 10 个日常最高频的词，每个配三句能直接拿去用的句子。',
+    },
+    words: [
+      {
+        word: '你好',
+        pinyin: 'nǐ hǎo',
+        meaning: { en: 'hello, hi', zh: '你好、打招呼' },
+        sentences: [
+          {
+            text: '你好，我是小李。',
+            pinyin: 'Nǐ hǎo, wǒ shì Xiǎo Lǐ.',
+            meaning: { en: "Hi, I'm Xiao Li.", zh: '见面自我介绍，最标准的开场。' },
+          },
+          {
+            text: '你好，请问地铁站在哪儿？',
+            pinyin: 'Nǐ hǎo, qǐngwèn dìtiězhàn zài nǎr?',
+            meaning: { en: "Hello, where's the subway station?", zh: '向陌生人问路，先打招呼再提问更礼貌。' },
+          },
+          {
+            text: '老师，您好！',
+            pinyin: 'Lǎoshī, nín hǎo!',
+            meaning: { en: 'Hello, teacher!', zh: '「您」是「你」的敬称，对长辈、老师、客户用。' },
+          },
+        ],
+        note: {
+          en: 'Literally "you good". Slightly formal: best for first meetings, strangers and shop staff. With friends, people prefer 嗨, 早啊 or just calling your name — saying 你好 to a close friend sounds oddly distant.',
+          zh: '字面是「你 + 好」。偏正式，适合第一次见面、陌生人和店员；朋友之间更常说「嗨」「早啊」或直接叫名字，对很熟的人说「你好」反而显得见外。',
+        },
+      },
+      {
+        word: '谢谢',
+        pinyin: 'xiè xie',
+        meaning: { en: 'thank you, thanks', zh: '谢谢、感谢' },
+        sentences: [
+          {
+            text: '谢谢你！',
+            pinyin: 'Xièxie nǐ!',
+            meaning: { en: 'Thank you!', zh: '最通用的道谢，加「你」点明对象。' },
+          },
+          {
+            text: '太谢谢了，帮大忙了。',
+            pinyin: 'Tài xièxie le, bāng dà máng le.',
+            meaning: { en: 'Thanks so much, that was a huge help.', zh: '加「太…了」加强语气，对方帮了大忙时说。' },
+          },
+          {
+            text: '谢谢，不用了。',
+            pinyin: 'Xièxie, búyòng le.',
+            meaning: { en: 'Thanks, but no thanks.', zh: '婉拒时先说谢谢，语气不生硬。' },
+          },
+        ],
+        note: {
+          en: "The second 谢 is neutral tone. More formal: 非常感谢. Casual: 谢啦. Unlike English, Chinese doesn't thank people for every small routine favour — over-thanking close friends can make you sound like a stranger.",
+          zh: '第二个「谢」读轻声。更正式说「非常感谢」，随口道谢说「谢啦」。中文不像英文那样每件事都道谢，对很熟的人频繁说反而显得生分。',
+        },
+      },
+      {
+        word: '不客气',
+        pinyin: 'bú kè qi',
+        meaning: { en: "you're welcome, no problem", zh: '不客气、别客气' },
+        sentences: [
+          {
+            text: '谢谢！——不客气。',
+            pinyin: 'Xièxie! — Bú kèqi.',
+            meaning: { en: "Thanks! — You're welcome.", zh: '回应感谢最常用的一句。' },
+          },
+          {
+            text: '不客气，举手之劳。',
+            pinyin: 'Bú kèqi, jǔ shǒu zhī láo.',
+            meaning: { en: 'No problem, it was nothing.', zh: '「举手之劳」＝小事一桩，很地道的客气话。' },
+          },
+          {
+            text: '不客气，有事再找我。',
+            pinyin: 'Bú kèqi, yǒu shì zài zhǎo wǒ.',
+            meaning: { en: 'Anytime, just come to me if you need anything.', zh: '帮完忙留个口子，显得热心。' },
+          },
+        ],
+        note: {
+          en: 'Literally "don\'t be polite". Safe with anyone, from a shop assistant to your boss. Casual alternatives: 没事儿, 客气啥. Note the tone change on 不 (bú) before a fourth-tone syllable.',
+          zh: '字面是「别客气」，对谁都能用，店员、老板、朋友都合适。更随意说「没事儿」「客气啥」。注意「不」在去声前变调读 bú。',
+        },
+      },
+      {
+        word: '对不起',
+        pinyin: 'duì bù qǐ',
+        meaning: { en: "sorry, I'm sorry", zh: '对不起、道歉' },
+        sentences: [
+          {
+            text: '对不起，我迟到了。',
+            pinyin: 'Duìbùqǐ, wǒ chídào le.',
+            meaning: { en: "Sorry I'm late.", zh: '正式、明确的道歉。' },
+          },
+          {
+            text: '对不起，能再说一遍吗？',
+            pinyin: 'Duìbùqǐ, néng zài shuō yí biàn ma?',
+            meaning: { en: 'Sorry, could you say that again?', zh: '打断别人、请对方重复时的开场。' },
+          },
+          {
+            text: '真对不起，把你的杯子打碎了。',
+            pinyin: 'Zhēn duìbùqǐ, bǎ nǐ de bēizi dǎ suì le.',
+            meaning: { en: "I'm really sorry, I broke your cup.", zh: '加「真」表示郑重，适合造成实际损失时。' },
+          },
+        ],
+        note: {
+          en: 'Heavier than 不好意思 from Lesson 1: use it when you actually did something wrong or caused trouble. For small bumps and interruptions, 不好意思 fits better. The standard reply is 没关系 (also Lesson 1).',
+          zh: '比第 1 课的「不好意思」重：真做错事、给别人添了麻烦才用；轻微磕碰、打断别人用「不好意思」更合适。回应道歉用「没关系」（也在第 1 课）。',
+        },
+      },
+      {
+        word: '好的',
+        pinyin: 'hǎo de',
+        meaning: { en: 'okay, sure, got it', zh: '好的、收到' },
+        sentences: [
+          {
+            text: '帮我发一下文件。——好的。',
+            pinyin: 'Bāng wǒ fā yíxià wénjiàn. — Hǎo de.',
+            meaning: { en: 'Send me the file. — Sure.', zh: '工作里最常见的应答，等于「收到」。' },
+          },
+          {
+            text: '好的，我马上到。',
+            pinyin: 'Hǎo de, wǒ mǎshàng dào.',
+            meaning: { en: "Okay, I'll be right there.", zh: '答应后补一句具体行动，显得靠谱。' },
+          },
+          {
+            text: '好的好的，知道了。',
+            pinyin: 'Hǎo de hǎo de, zhīdào le.',
+            meaning: { en: 'Okay okay, got it.', zh: '重复表示连声答应，常带安抚语气。' },
+          },
+        ],
+        note: {
+          en: '好 plus the softening particle 的 — politer and warmer than a bare 好. Ubiquitous in WeChat and at work. A bare 好 sounds more like a superior acknowledging a subordinate, or two close friends.',
+          zh: '「好」加语气词「的」，比单说「好」更客气、更软，微信和职场里几乎天天用。单说「好」更像上级对下级，或是很熟的朋友之间。',
+        },
+      },
+      {
+        word: '请问',
+        pinyin: 'qǐng wèn',
+        meaning: { en: 'excuse me, may I ask', zh: '请问、礼貌提问的开场' },
+        sentences: [
+          {
+            text: '请问，洗手间在哪儿？',
+            pinyin: 'Qǐngwèn, xǐshǒujiān zài nǎr?',
+            meaning: { en: "Excuse me, where's the restroom?", zh: '问路、问事的标准开场。' },
+          },
+          {
+            text: '请问您贵姓？',
+            pinyin: 'Qǐngwèn nín guì xìng?',
+            meaning: { en: 'May I ask your name?', zh: '「贵姓」是问姓名的礼貌说法，配「您」更正式。' },
+          },
+          {
+            text: '请问这个多少钱？',
+            pinyin: 'Qǐngwèn zhège duōshao qián?',
+            meaning: { en: 'Excuse me, how much is this?', zh: '买东西问价，礼貌又自然。' },
+          },
+        ],
+        note: {
+          en: 'Literally "please allow me to ask". Only used before a question — it is not a general "excuse me" for squeezing past someone. Often dropped entirely with people you know.',
+          zh: '字面是「请允许我问」，只放在提问前；想挤过去让别人让路，不能只说「请问」，要说「借过」「麻烦一下」。熟人之间通常直接问，省略也不失礼。',
+        },
+      },
+      {
+        word: '可以',
+        pinyin: 'kě yǐ',
+        meaning: { en: 'can, may, okay', zh: '可以、能、行' },
+        sentences: [
+          {
+            text: '可以帮我一下吗？',
+            pinyin: 'Kěyǐ bāng wǒ yíxià ma?',
+            meaning: { en: 'Could you give me a hand?', zh: '「可以…吗」是请人帮忙最礼貌的句式之一。' },
+          },
+          {
+            text: '这儿可以拍照吗？',
+            pinyin: 'Zhèr kěyǐ pāizhào ma?',
+            meaning: { en: 'Can I take photos here?', zh: '问规则、问允许不允许。' },
+          },
+          {
+            text: '可以，没问题。',
+            pinyin: 'Kěyǐ, méi wèntí.',
+            meaning: { en: 'Sure, no problem.', zh: '单独回答表示许可，比「行」稍正式。' },
+          },
+        ],
+        note: {
+          en: 'Works both as a question (可以…吗) and as the answer (可以). 行 / 成 are more casual; 能 leans toward ability or physical possibility, 可以 toward permission — though in casual speech natives mix them freely.',
+          zh: '既能提问（「可以…吗」）也能当回答（「可以」）。「行」「成」更随意；「能」偏能力或客观条件，「可以」偏许可，日常混用大多也没人计较。',
+        },
+      },
+      {
+        word: '不知道',
+        pinyin: 'bù zhī dào',
+        meaning: { en: "I don't know, no idea", zh: '不知道、不清楚' },
+        sentences: [
+          {
+            text: '我不知道。',
+            pinyin: 'Wǒ bù zhīdào.',
+            meaning: { en: "I don't know.", zh: '最直接的回答。' },
+          },
+          {
+            text: '这个我也不太清楚。',
+            pinyin: 'Zhège wǒ yě bú tài qīngchu.',
+            meaning: { en: "I'm not too sure about that either.", zh: '想说得委婉，用「不太清楚」代替。' },
+          },
+          {
+            text: '不知道他今天来不来。',
+            pinyin: 'Bù zhīdào tā jīntiān lái bu lái.',
+            meaning: { en: "I wonder if he's coming today.", zh: '放句首也可表示「不晓得、说不定」，不一定在回答别人。' },
+          },
+        ],
+        note: {
+          en: 'Refers to missing information, not to failing to understand — for that, use 听不懂 / 不懂. In fast speech the middle syllable is often swallowed, sounding close to "bù dao".',
+          zh: '指「没有这个信息」，不是「没听懂」；没听懂要说「听不懂」「不懂」。口语快读时中间常吞音，听起来像「不道」。',
+        },
+      },
+      {
+        word: '真的',
+        pinyin: 'zhēn de',
+        meaning: { en: 'really, for real', zh: '真的、确实' },
+        sentences: [
+          {
+            text: '真的吗？',
+            pinyin: 'Zhēn de ma?',
+            meaning: { en: 'Really?', zh: '表示惊讶或求证，超高频的一句。' },
+          },
+          {
+            text: '这家店真的很好吃。',
+            pinyin: 'Zhè jiā diàn zhēn de hěn hǎochī.',
+            meaning: { en: 'This place is really good.', zh: '放在形容词前加强语气。' },
+          },
+          {
+            text: '我真的是第一次来。',
+            pinyin: 'Wǒ zhēn de shì dì-yī cì lái.',
+            meaning: { en: "It's honestly my first time here.", zh: '强调真实性，替自己解释时常用。' },
+          },
+        ],
+        note: {
+          en: 'Both a question on its own (真的吗？) and an adverb before a verb or adjective (真的很好). For playful disbelief, 真的假的？ is very common (you saw it in Lesson 1). More written equivalents: 确实, 的确.',
+          zh: '既能单独成问句（「真的吗？」），也能作副词（「真的很好」）。带点调侃地表示怀疑说「真的假的？」（第 1 课出现过）。书面一点的对应词是「确实」「的确」。',
+        },
+      },
+      {
+        word: '怎么样',
+        pinyin: 'zěn me yàng',
+        meaning: { en: 'how is it, how about', zh: '怎么样、如何' },
+        sentences: [
+          {
+            text: '最近怎么样？',
+            pinyin: 'Zuìjìn zěnmeyàng?',
+            meaning: { en: 'How have you been lately?', zh: '见面寒暄，等于「最近好吗」。' },
+          },
+          {
+            text: '这家店怎么样？',
+            pinyin: 'Zhè jiā diàn zěnmeyàng?',
+            meaning: { en: "How's this place?", zh: '问对方的评价。' },
+          },
+          {
+            text: '周末去看电影怎么样？',
+            pinyin: 'Zhōumò qù kàn diànyǐng zěnmeyàng?',
+            meaning: { en: 'How about a movie this weekend?', zh: '放句尾表示提建议，「…怎么样？」' },
+          },
+        ],
+        note: {
+          en: 'One phrase, three jobs: asking how someone is, asking for an opinion, and making a suggestion. In northern China you will also hear the colloquial 咋样. Unlike 好不好, it asks for an open opinion rather than a yes/no.',
+          zh: '一个词三种用途：问近况、问评价、提建议。北方口语也说「咋样」。与「好不好」不同，它要的是开放评价，不是点头或摇头。',
+        },
+      },
+    ],
+  },
 ]
 
 export function getCourse(slug: string): Course | undefined {
   return COURSES.find(c => c.slug === slug)
+}
+
+/** 课程按发布日期升序维护，最后一门即「今日课程」 */
+export function isLatestCourse(slug: string): boolean {
+  return COURSES.length > 0 && COURSES[COURSES.length - 1].slug === slug
 }
 
 /** 按界面语言取本地化字段；中文界面用中文，其余回退英文 */

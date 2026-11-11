@@ -30,12 +30,26 @@ COURSES = [
     {
         "slug": "10-everyday-chinese-words",
         "no": "01",
+        "n_words": 10,
+        "n_sentences": 30,
         "title_en": "10 Everyday Chinese Words",
         "sub_en": "with real sentences people actually say",
         "words": [("牛逼", "niú bī"), ("厉害", "lì hai"), ("加油", "jiā yóu")],
         "sentence": "这也太牛逼了！",
         "pinyin": "Zhè yě tài niú bī le!",
         "sentence2": "他一个人把项目做完了，太牛逼了。",
+    },
+    {
+        "slug": "10-most-common-chinese-words",
+        "no": "02",
+        "n_words": 10,
+        "n_sentences": 30,
+        "title_en": "10 Most-Used Chinese Words",
+        "sub_en": "the words you'll hear dozens of times a day",
+        "words": [("你好", "nǐ hǎo"), ("谢谢", "xiè xie"), ("好的", "hǎo de")],
+        "sentence": "你好，请问地铁站在哪儿？",
+        "pinyin": "Nǐ hǎo, qǐngwèn dìtiězhàn zài nǎr?",
+        "sentence2": "太谢谢了，帮大忙了。",
     },
 ]
 
@@ -71,7 +85,7 @@ def render(c: dict) -> None:
         d.line([(x0, y0), (x0, y0 + dy * L)], fill=CYAN, width=3)
 
     x = 72
-    d.text((x, 56), f"// TYPINGCHINESE · COURSE {c['no']} — 10 WORDS · 30 SENTENCES", font=F("consola.ttf", 24), fill=CYAN)
+    d.text((x, 56), f"// TYPINGCHINESE · COURSE {c['no']} — {c['n_words']} WORDS · {c['n_sentences']} SENTENCES", font=F("consola.ttf", 24), fill=CYAN)
     d.text((x, 96), c["title_en"], font=F("msyhbd.ttc", 54), fill=WHITE)
     d.text((x, 172), c["sub_en"], font=F("msyh.ttc", 30), fill=GREY)
 
