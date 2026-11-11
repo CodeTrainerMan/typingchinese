@@ -37,7 +37,9 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: LayoutProps<'/'>) {
   return (
     <html lang="en" className="h-full antialiased">
-      <body className="min-h-full">
+      {/* 浏览器扩展（如 ColorZilla）会在 hydrate 前往 body 注入 cz-shortcut-listen 等属性，
+          导致 SSR HTML 与客户端属性不匹配的告警。只抑制 body 自身属性差异，子组件仍正常校验。 */}
+      <body className="min-h-full" suppressHydrationWarning>
         <I18nProvider>
           <ThemeEffect />
           <AttributionCapture />
