@@ -7,6 +7,8 @@
 也避免了上一轮 AI 插画风格不佳的问题。
 新增课程时在 COURSES 里加一条并重跑：python web/scripts/generate-course-og.py
 """
+import re
+import sys
 from pathlib import Path
 
 from PIL import Image, ImageDraw, ImageFont
@@ -91,6 +93,17 @@ def render(c: dict) -> None:
     OUT.mkdir(parents=True, exist_ok=True)
     img.save(OUT / f"course-{c['slug']}.png", optimize=True)
 
+
+# 防线：课程数据里每门课都必须有卡，否则分享出去 og:image 会是 404（X 又不显示图）。
+# 新增课程时先在这里补 COURSES 配置，再重跑本脚本。
+src_slugs = set(re.findall(r"slug:\s*'([^']+)'", (WEB / "src/lib/courses.ts").read_text(encoding="utf-8")))
+card_slugs = {c["slug"] for c in COURSES}
+if src_slugs != card_slugs:
+    print("课程 slug 与卡配置不一致：", file=sys.stderr)
+    print(f"  courses.ts      : {sorted(src_slugs)}", file=sys.stderr)
+    print(f"  generate-og.py  : {sorted(card_slugs)}", file=sys.stderr)
+    print("请更新本脚本的 COURSES 后重跑。", file=sys.stderr)
+    sys.exit(1)
 
 for c in COURSES:
     render(c)

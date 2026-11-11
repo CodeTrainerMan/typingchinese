@@ -34,7 +34,7 @@ export async function generateMetadata({ params }: { params: Promise<{ code: str
       description,
       url: `/region/${page.code}`,
       type: 'website',
-      locale: htmlLangOf(page.locale),
+      locale: htmlLangOf(page.locale).replace('-', '_'),
       images: ogImages,
     },
     twitter: { card: 'summary_large_image', title, description, images: twitterImages },

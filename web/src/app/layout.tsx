@@ -23,7 +23,7 @@ export const metadata: Metadata = {
     title: 'TypingChinese · Learn Chinese by Typing',
     description:
       'Free, open-source, no-account pinyin typing practice for Chinese learners, with FSRS review for the words you miss.',
-    images: [{ url: '/og.png', width: 1200, height: 630, alt: 'TypingChinese practice board' }],
+    images: [{ url: '/og.png', width: 2400, height: 1260, alt: 'TypingChinese practice board' }],
   },
   twitter: {
     card: 'summary_large_image',
