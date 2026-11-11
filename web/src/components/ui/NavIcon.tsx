@@ -105,6 +105,13 @@ const PATHS: Record<string, ReactNode> = {
       <path d="M21.5 8.5V15" />
     </>
   ),
+  // 群聊：对话气泡
+  chat: (
+    <>
+      <path d="M20.4 12.2a7.6 7.6 0 0 1-8 7.4 8.7 8.7 0 0 1-2.6-.4L5.2 20.6l1.4-4a7 7 0 0 1-1.9-4.6 7.6 7.6 0 0 1 8-7.4 7.6 7.6 0 0 1 7.7 7.6z" />
+      <path d="M8.6 12h.01M12 12h.01M15.4 12h.01" />
+    </>
+  ),
 }
 
 export type NavIconName = keyof typeof PATHS

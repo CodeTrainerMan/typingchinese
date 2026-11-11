@@ -9,6 +9,8 @@ export const DISCORD_URL = 'https://discord.gg/4kZ7nETEEc'
 export const REDDIT_URL = 'https://www.reddit.com/r/ChinesePractice/'
 export const X_URL = 'https://x.com/TrainCodeMan'
 export const X_HANDLE = '@TrainCodeMan'
+/** X 群聊（chat 聊天室）邀请链接 */
+export const X_CHAT_URL = 'https://x.com/i/chat/group_join/g2119675125503312340/s7sggVZdnK'
 
 /**
  * 社区入口的三种形态：

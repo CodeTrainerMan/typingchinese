@@ -453,6 +453,94 @@ html[data-cyber='on'] :where(a, button, input, select, textarea, [tabindex]):foc
   50% { box-shadow: 0 0 38px rgba(88, 101, 242, 0.34), inset 0 0 26px rgba(88, 101, 242, 0.1); }
 }
 
+/* 首屏两个社群入口并排：作者 X 大卡在上，社群小卡在下，三层都留在首屏 */
+.cyber-hero-socials {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+.cyber-hero-socials > a { min-width: 0; }
+.cyber-hero-socials .cyber-discord-icon,
+.cyber-hero-socials .cyber-xchat-icon { width: 36px; height: 36px; }
+.cyber-hero-socials .cyber-discord-icon svg { width: 19px; height: 19px; }
+.cyber-hero-socials .cyber-xchat-icon svg { width: 18px; height: 18px; }
+.cyber-hero-socials .cyber-discord-kicker,
+.cyber-hero-socials .cyber-xchat-kicker {
+  font-size: 9px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.cyber-hero-socials .cyber-discord-title,
+.cyber-hero-socials .cyber-xchat-title {
+  font-size: 15px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.cyber-hero-socials .cyber-discord-desc,
+.cyber-hero-socials .cyber-xchat-desc,
+.cyber-hero-socials .cyber-discord-arrow,
+.cyber-hero-socials .cyber-xchat-arrow { display: none; }
+
+/* ------------------------------------- X 群聊卡（青色，与品红 X / 蓝紫 Discord 区分） */
+.cyber-xchat-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-top: 12px;
+  padding: 14px 16px;
+  border: 1px solid rgba(34, 230, 255, 0.55);
+  background: linear-gradient(100deg, rgba(34, 230, 255, 0.15), rgba(255, 46, 151, 0.07));
+  box-shadow: 0 0 24px rgba(34, 230, 255, 0.16), inset 0 0 22px rgba(34, 230, 255, 0.05);
+  text-decoration: none;
+  clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 12px 100%, 0 calc(100% - 12px));
+  animation: cyber-xchat-glow 4.4s ease-in-out infinite;
+  transition: transform 0.2s ease;
+}
+.cyber-xchat-card:hover { transform: translateY(-3px); }
+.cyber-xchat-icon {
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  width: 46px;
+  height: 46px;
+  border: 1px solid rgba(34, 230, 255, 0.45);
+  background: rgba(34, 230, 255, 0.1);
+  color: #eafdff;
+}
+.cyber-xchat-icon svg { width: 22px; height: 22px; fill: currentColor; }
+.cyber-xchat-body { min-width: 0; flex: 1; }
+.cyber-xchat-kicker {
+  display: block;
+  font-family: var(--cy-mono);
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--cy-cyan);
+}
+.cyber-xchat-title {
+  display: block;
+  margin-top: 2px;
+  font-size: 19px;
+  font-weight: 800;
+  color: #fff;
+  text-shadow: 0 0 16px rgba(34, 230, 255, 0.55);
+}
+.cyber-xchat-desc { display: block; margin-top: 2px; font-size: 11px; color: #a6b2c8; }
+.cyber-xchat-arrow {
+  flex: 0 0 auto;
+  font-family: var(--cy-mono);
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  color: #fff;
+  white-space: nowrap;
+}
+@keyframes cyber-xchat-glow {
+  0%, 100% { box-shadow: 0 0 20px rgba(34, 230, 255, 0.14), inset 0 0 20px rgba(34, 230, 255, 0.04); }
+  50% { box-shadow: 0 0 34px rgba(34, 230, 255, 0.3), inset 0 0 24px rgba(34, 230, 255, 0.09); }
+}
+
 /* ------------------------------------------------------------------ 区块 */
 .cyber-section { padding: 68px 0 20px; border-top: 1px solid var(--cy-line); }
 .cyber-section-head { margin-bottom: 34px; }
@@ -723,7 +811,7 @@ html[data-cyber='on'] :where(a, button, input, select, textarea, [tabindex]):foc
 /* -------------------------------------------------------------- 社区链接 */
 .cyber-social {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 14px;
 }
 .cyber-social-card {
@@ -783,6 +871,25 @@ html[data-cyber='on'] :where(a, button, input, select, textarea, [tabindex]):foc
   letter-spacing: 0.12em;
   vertical-align: middle;
   color: #cfd4ff;
+}
+
+/* X Chat 在社区区同样要跳出来 */
+.cyber-social-card.is-xchat {
+  border-color: rgba(34, 230, 255, 0.55);
+  background: linear-gradient(100deg, rgba(34, 230, 255, 0.12), rgba(9, 15, 25, 0.78));
+  box-shadow: 0 0 20px rgba(34, 230, 255, 0.12);
+}
+.cyber-social-card.is-xchat:hover {
+  border-color: var(--cy-cyan);
+  background: rgba(34, 230, 255, 0.16);
+}
+.cyber-social-card.is-xchat .cyber-social-mark {
+  border-color: rgba(34, 230, 255, 0.6);
+  color: #eafdff;
+}
+.cyber-social-card.is-xchat .cyber-social-badge {
+  border-color: rgba(34, 230, 255, 0.6);
+  color: #bff4ff;
 }
 
 .cyber-x-wide {
@@ -888,7 +995,8 @@ html[data-cyber='on'] :where(a, button, input, select, textarea, [tabindex]):foc
     border: 1px solid rgba(34, 230, 255, 0.4);
     color: #e9f7fb;
   }
-  .cyber-hud-social a:last-child { border-color: rgba(150, 160, 255, 0.6); color: #cfd4ff; }
+  .cyber-hud-social a:nth-child(2) { border-color: rgba(150, 160, 255, 0.6); color: #cfd4ff; }
+  .cyber-hud-social a:nth-child(3) { border-color: rgba(34, 230, 255, 0.7); color: #bff4ff; }
   .cyber-hud-social svg { width: 14px; height: 14px; }
   .cyber-title { font-size: clamp(34px, 10vw, 48px); }
   .cyber-features, .cyber-social { grid-template-columns: 1fr; }
@@ -901,10 +1009,13 @@ html[data-cyber='on'] :where(a, button, input, select, textarea, [tabindex]):foc
   .cy-memory-mobile-note { display: block; }
   .cy-svg-label { display: none; }
   .cy-svg-tick { font-size: 18px; }
+  .cyber-hero-socials { grid-template-columns: 1fr; }
   .cyber-x-card,
-  .cyber-discord-card { flex-wrap: wrap; gap: 12px; }
+  .cyber-discord-card,
+  .cyber-xchat-card { flex-wrap: wrap; gap: 12px; }
   .cyber-x-arrow,
-  .cyber-discord-arrow { width: 100%; text-align: right; }
+  .cyber-discord-arrow,
+  .cyber-xchat-arrow { width: 100%; text-align: right; }
   .cyber-x-wide { flex-wrap: wrap; }
   .cyber-x-wide .cyber-x-arrow { margin-left: 0; }
   .cyber-figure-tag { display: none; }

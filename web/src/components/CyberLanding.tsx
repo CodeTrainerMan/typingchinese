@@ -10,6 +10,7 @@ import {
   DISCORD_URL,
   GITHUB_URL,
   REDDIT_URL,
+  X_CHAT_URL,
   X_HANDLE,
   X_URL,
 } from '@/components/CommunityLinks'
@@ -133,6 +134,13 @@ export default function CyberLanding() {
       desc: t('landing.redditDesc'),
       href: REDDIT_URL,
     },
+    {
+      icon: 'text',
+      mark: '𝕏',
+      name: 'X Chat',
+      desc: t('landing.xChatDesc'),
+      href: X_CHAT_URL,
+    },
   ]
 
   return (
@@ -162,6 +170,9 @@ export default function CyberLanding() {
             </a>
             <a href={DISCORD_URL} target="_blank" rel="noreferrer" aria-label={t('landing.a11yDiscord')}>
               <NavIcon name="discord" />
+            </a>
+            <a href={X_CHAT_URL} target="_blank" rel="noreferrer" aria-label={t('landing.a11yXChat')}>
+              <NavIcon name="chat" />
             </a>
           </div>
         </div>
@@ -223,18 +234,32 @@ export default function CyberLanding() {
               <span className="cyber-x-arrow">{t('landing.xFollow')} ↗</span>
             </a>
 
-            {/* Discord 社群 —— 与 X 同处首屏、同等醒目 */}
-            <a href={DISCORD_URL} target="_blank" rel="noreferrer" className="cyber-discord-card">
-              <span className="cyber-discord-icon">
-                <NavIcon name="discord" />
-              </span>
-              <span className="cyber-discord-body">
-                <span className="cyber-discord-kicker">{'//'} {t('landing.discordKicker')}</span>
-                <span className="cyber-discord-title">{t('landing.discordTitle')}</span>
-                <span className="cyber-discord-desc">{t('landing.discordDesc')}</span>
-              </span>
-              <span className="cyber-discord-arrow">{t('landing.discordJoin')} ↗</span>
-            </a>
+            {/* 两个社群入口并排，避免三张卡堆叠把首屏撑得过长；完整说明在社区区 */}
+            <div className="cyber-hero-socials">
+              <a href={DISCORD_URL} target="_blank" rel="noreferrer" className="cyber-discord-card">
+                <span className="cyber-discord-icon">
+                  <NavIcon name="discord" />
+                </span>
+                <span className="cyber-discord-body">
+                  <span className="cyber-discord-kicker">{'//'} {t('landing.discordKicker')}</span>
+                  <span className="cyber-discord-title">{t('landing.discordTitle')}</span>
+                  <span className="cyber-discord-desc">{t('landing.discordDesc')}</span>
+                </span>
+                <span className="cyber-discord-arrow">{t('landing.discordJoin')} ↗</span>
+              </a>
+
+              <a href={X_CHAT_URL} target="_blank" rel="noreferrer" className="cyber-xchat-card">
+                <span className="cyber-xchat-icon">
+                  <XLogo />
+                </span>
+                <span className="cyber-xchat-body">
+                  <span className="cyber-xchat-kicker">{'//'} {t('landing.xChatKicker')}</span>
+                  <span className="cyber-xchat-title">{t('landing.xChatTitle')}</span>
+                  <span className="cyber-xchat-desc">{t('landing.xChatDesc')}</span>
+                </span>
+                <span className="cyber-xchat-arrow">{t('landing.xChatJoin')} ↗</span>
+              </a>
+            </div>
           </div>
 
           <div className="cyber-figure">
@@ -300,7 +325,7 @@ export default function CyberLanding() {
                 href={s.href}
                 target="_blank"
                 rel="noreferrer"
-                className={`cyber-social-card${s.href === DISCORD_URL ? ' is-discord' : ''}`}
+                className={`cyber-social-card${s.href === DISCORD_URL ? ' is-discord' : ''}${s.href === X_CHAT_URL ? ' is-xchat' : ''}`}
               >
                 <span className="cyber-social-mark">
                   {s.icon === 'text' ? s.mark : <NavIcon name={s.icon} />}
@@ -308,7 +333,9 @@ export default function CyberLanding() {
                 <span>
                   <span className="cyber-social-name">
                     {s.name}
-                    {s.href === DISCORD_URL && <span className="cyber-social-badge">{t('landing.badgeJoin')}</span>}
+                    {(s.href === DISCORD_URL || s.href === X_CHAT_URL) && (
+                      <span className="cyber-social-badge">{t('landing.badgeJoin')}</span>
+                    )}
                   </span>
                   <span className="cyber-social-desc" style={{ display: 'block' }}>
                     {s.desc}
