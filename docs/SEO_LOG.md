@@ -43,11 +43,30 @@
 
 ---
 
-## 三、后续核验时间节点与复盘检查项
+## 三、AnkiWeb 全球共享牌组发布台账
 
-### 阶段 1：48 小时后核验（约 2026-11-15）
-- [ ] **Sitemap 抓取状态**：进入 GSC 的“站点地图”，确认 `sitemap.xml` 的状态转为绿色的 **“成功 (Success)”**，并查看识别出的网址数量。
-- [ ] **`/write` 收录确认**：在 GSC 顶部检查 `https://www.typingchinese.club/write`，确认状态由“未收录”变为“网址已在 Google 上”。
+| 属性 | 内容 |
+| :--- | :--- |
+| **发布时间** | 2026-11-14 00:04 |
+| **牌组名称** | `TypingChinese — HSK 1-6 中文词汇卡（看汉字练拼音）` |
+| **永久直链** | https://ankiweb.net/shared/info/1737561094 |
+| **牌组 ID** | `1737561094` |
+| **卡片总数** | 5,004 张（HSK 1-6 汉字、拼音、释义、例句） |
+| **导流设置** | 作者链接指向 `https://www.typingchinese.club`，卡片内含打字回访链接 |
+| **审核状态** | 24 小时版权缓冲期（预计于 **2026-11-15 00:05** 进入公共搜索市场） |
+
+---
+
+## 四、后续核验时间节点与复盘检查项
+
+### 阶段 1：明天核心核验（2026-11-15）
+- [ ] **AnkiWeb 公开搜索生效检查**：
+  - 访问 AnkiWeb 共享牌组搜索（https://ankiweb.net/shared/decks/chinese），搜索关键词 `HSK` 或 `TypingChinese`；
+  - 确认 `TypingChinese — HSK 1-6` 已出现在公共搜索列表中，直达链接 https://ankiweb.net/shared/info/1737561094 正常展示。
+- [ ] **GSC Sitemap 抓取状态**：
+  - 进入 GSC 的“站点地图”，确认 `sitemap.xml` 的状态转为绿色的 **“成功 (Success)”**。
+- [ ] **`/write` 汉字笔顺枢纽收录确认**：
+  - 在 GSC 顶部检查 `https://www.typingchinese.club/write`，确认已编入索引。
 
 ### 阶段 2：7 天后核验（约 2026-11-20）
 - [ ] **标题与快照更新**：在 Google 搜索 `site:typingchinese.club/pinyin`，确认结果标题已更新为 `Chinese Pinyin Chart with Audio — Initials, Finals & 4 Tones | TypingChinese`。
