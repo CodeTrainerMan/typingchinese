@@ -1,9 +1,28 @@
 import type { Metadata } from 'next'
 import CyberLanding from '@/components/CyberLanding'
+import { ogImages, twitterImages } from '@/lib/seo'
 
-/** canonical 只在首页声明，避免 layout 级设置污染所有子页面 */
+/** 首页元数据：精准匹配 "learn chinese by typing", "pinyin typing practice" 核心词 */
 export const metadata: Metadata = {
+  title: 'TypingChinese — Learn Chinese & Pinyin by Typing | Free & Open Source',
+  description:
+    'Master Chinese pinyin and characters through interactive typing practice. Features HSK 1–6 vocabulary lists, tone training, spaced-repetition (FSRS) review, and stroke order animations. 100% free, runs in your browser.',
   alternates: { canonical: '/' },
+  openGraph: {
+    title: 'TypingChinese — Learn Chinese & Pinyin by Typing',
+    description:
+      'Master Chinese pinyin and characters through interactive typing practice. Features HSK 1–6 vocabulary lists and spaced-repetition review.',
+    url: 'https://www.typingchinese.club',
+    type: 'website',
+    images: ogImages,
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'TypingChinese — Learn Chinese & Pinyin by Typing',
+    description:
+      'Master Chinese pinyin and characters through interactive typing practice. Free & open source.',
+    images: twitterImages,
+  },
 }
 
 /**

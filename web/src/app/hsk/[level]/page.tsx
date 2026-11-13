@@ -67,8 +67,67 @@ export default async function HskLevelPage({ params }: { params: Promise<{ level
   const preview = dict.words.slice(0, PREVIEW)
   const rest = dict.length - preview.length
 
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'LearningResource',
+        name: `HSK ${level} Vocabulary Word List`,
+        description: `Complete HSK ${level} vocabulary (${dict.length} words) with pinyin, audio pronunciation, and English translations.`,
+        educationalLevel: `HSK ${level}`,
+        learningResourceType: 'Word List',
+        inLanguage: ['zh', 'en'],
+        url: `https://www.typingchinese.club/hsk/${level}`,
+      },
+      {
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+          { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://www.typingchinese.club/' },
+          { '@type': 'ListItem', position: 2, name: 'HSK Lists', item: 'https://www.typingchinese.club/dicts' },
+          { '@type': 'ListItem', position: 3, name: `HSK ${level}` },
+        ],
+      },
+      {
+        '@type': 'ItemList',
+        name: `HSK ${level} Core Words`,
+        numberOfItems: dict.length,
+        itemListElement: preview.slice(0, 30).map((w, idx) => ({
+          '@type': 'ListItem',
+          position: idx + 1,
+          name: w.word,
+          description: `${(w.pinyin ?? []).join(' ')} - ${w.trans}`,
+        })),
+      },
+      {
+        '@type': 'FAQPage',
+        mainEntity: [
+          {
+            '@type': 'Question',
+            name: `How many words are in HSK ${level}?`,
+            acceptedAnswer: {
+              '@type': 'Answer',
+              text: `The HSK ${level} curriculum contains ${dict.length} standard vocabulary words.`,
+            },
+          },
+          {
+            '@type': 'Question',
+            name: `How can I practice typing HSK ${level} pinyin?`,
+            acceptedAnswer: {
+              '@type': 'Answer',
+              text: `You can practice directly on TypingChinese for free: view the hanzi character, type the pinyin with tones or initials, listen to native audio pronunciation, and review missed words with spaced repetition.`,
+            },
+          },
+        ],
+      },
+    ],
+  }
+
   return (
     <main className="mx-auto w-full max-w-3xl px-4 py-10">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <h1 className="text-2xl font-semibold sm:text-3xl">
         HSK {level} vocabulary — {dict.length} words you can type
       </h1>
