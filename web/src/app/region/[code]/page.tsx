@@ -28,7 +28,13 @@ export async function generateMetadata({ params }: { params: Promise<{ code: str
   return {
     title,
     description,
-    alternates: { canonical: `/region/${page.code}` },
+    alternates: {
+      canonical: `/region/${page.code}`,
+      languages: Object.fromEntries([
+        ...REGION_PAGES.map((p) => [htmlLangOf(p.locale), `/region/${p.code}`]),
+        ['x-default', '/'],
+      ]),
+    },
     openGraph: {
       title,
       description,

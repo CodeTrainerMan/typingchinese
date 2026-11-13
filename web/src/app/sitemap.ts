@@ -52,7 +52,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   return [
     { url: BASE, lastModified: now, changeFrequency: 'weekly', priority: 1 },
-    { url: `${BASE}/dicts`, lastModified: now, changeFrequency: 'monthly', priority: 0.6 },
+    { url: `${BASE}/pinyin`, lastModified: now, changeFrequency: 'monthly', priority: 0.8 },
+    { url: `${BASE}/write`, lastModified: now, changeFrequency: 'monthly', priority: 0.8 },
+    { url: `${BASE}/dicts`, lastModified: now, changeFrequency: 'monthly', priority: 0.7 },
     { url: `${BASE}/guides`, lastModified: now, changeFrequency: 'weekly', priority: 0.7 },
     { url: `${BASE}/course`, lastModified: now, changeFrequency: 'weekly', priority: 0.7 },
     { url: `${BASE}/region`, lastModified: now, changeFrequency: 'monthly', priority: 0.5 },
