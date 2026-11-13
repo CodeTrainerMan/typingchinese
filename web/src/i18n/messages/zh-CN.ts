@@ -694,6 +694,7 @@ export const zhCN: Messages = {
     "nextLesson": "下一课",
     "emptyNext": "更多课程即将上线。",
     "wordCount": "第 {a} / {b} 个词",
+    "shareOnX": "分享到 X",
   },
 
 }

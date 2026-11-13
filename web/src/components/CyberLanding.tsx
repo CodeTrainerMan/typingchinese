@@ -347,6 +347,28 @@ export default function CyberLanding() {
               </a>
             ))}
 
+            <a
+              href="/decks/TypingChinese-HSK.apkg"
+              download="TypingChinese-HSK.apkg"
+              className="cyber-social-card is-anki"
+            >
+              <span className="cyber-social-mark">⚡</span>
+              <span>
+                <span className="cyber-social-name">
+                  Anki Deck (HSK 1-6)
+                  <span className="cyber-social-badge" style={{ background: '#22c55e', color: '#000' }}>
+                    Download .apkg
+                  </span>
+                </span>
+                <span className="cyber-social-desc" style={{ display: 'block' }}>
+                  5,004 flashcards with pinyin, tones & definitions
+                </span>
+              </span>
+              <span className="cyber-social-arrow" aria-hidden="true">
+                ↓
+              </span>
+            </a>
+
             <a href={X_URL} target="_blank" rel="noreferrer" className="cyber-x-wide">
               <span className="cyber-x-logo">
                 <XLogo />

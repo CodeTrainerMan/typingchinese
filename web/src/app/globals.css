@@ -263,6 +263,10 @@ button:not(:disabled):active {
 .course-primary-link:hover { opacity: 0.9; }
 .course-ghost-link { border: 1px solid var(--line); background: var(--solid); color: var(--ink-2); }
 .course-ghost-link:hover { background: var(--hover); }
+.course-share-x { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 18px; border: 1px solid var(--brand); border-radius: 8px; background: var(--solid); color: var(--brand); font-size: 13px; font-weight: 600; text-decoration: none; }
+.course-share-x:hover { background: var(--hover); }
+.course-share-x-mark { display: grid; place-items: center; width: 18px; height: 18px; }
+.course-share-x-mark svg { width: 14px; height: 14px; fill: currentColor; }
 
 @media (max-width: 620px) {
   .course-hanzi { font-size: 32px; }

@@ -702,6 +702,7 @@ export const en = {
     "nextLesson": "Next lesson",
     "emptyNext": "More lessons coming soon.",
     "wordCount": "Word {a} of {b}",
+    "shareOnX": "Share on X",
   },
 
 }

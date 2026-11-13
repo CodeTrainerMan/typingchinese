@@ -100,6 +100,14 @@ export default function CourseLesson({ course, index }: { course: Course; index:
   const { t, locale } = useI18n()
   const speak = useSpeak()
   const text = (v: Localized) => localized(v, locale)
+
+  // X 会按分享的 URL 缓存卡片抓取结果，旧链接若曾被抓成「无图」就一直复用。
+  // 固定 ?v=2 让分享走一个新 URL，强制重抓；用带 www 的完整域名避开 apex 的 308 跳转。
+  const shareUrl = `https://www.typingchinese.club/course/${course.slug}?v=2`
+  const shareIntent =
+    `https://x.com/intent/post?text=${encodeURIComponent(`${text(course.title)} · TypingChinese.club`)}` +
+    `&url=${encodeURIComponent(shareUrl)}`
+
   const levelKey: MessageKey =
     course.level === 'beginner'
       ? 'course.levelBeginner'
@@ -152,6 +160,10 @@ export default function CourseLesson({ course, index }: { course: Course; index:
       </div>
 
       <div className="course-bottom-links">
+        <a href={shareIntent} target="_blank" rel="noreferrer" className="course-share-x">
+          <span className="course-share-x-mark"><XMark /></span>
+          {t('course.shareOnX')} ↗
+        </a>
         <Link href="/practice" className="course-primary-link">
           {t('course.practiceCta')} ↗
         </Link>

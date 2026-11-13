@@ -145,7 +145,18 @@ export default async function HskLevelPage({ params }: { params: Promise<{ level
         >
           Practise HSK {level} now
         </Link>
-        <span className="text-xs text-dim">Free · no account · no ads · runs in your browser</span>
+        <a
+          href="/decks/TypingChinese-HSK.apkg"
+          download="TypingChinese-HSK.apkg"
+          className="inline-flex h-11 items-center gap-2 rounded-lg border border-line bg-card px-4 text-sm font-medium text-ink hover:bg-surface2 transition-colors"
+          title="Download 5,004 HSK 1-6 Anki Flashcards for free"
+        >
+          <svg className="h-4 w-4 text-dim" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+          </svg>
+          Download Free Anki Deck (HSK 1–6)
+        </a>
+        <span className="text-xs text-dim">Free · 5,004 cards · runs offline</span>
       </div>
 
       <h2 className="mt-10 text-lg font-semibold">
