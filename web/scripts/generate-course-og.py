@@ -51,6 +51,18 @@ COURSES = [
         "pinyin": "Nǐ hǎo, qǐngwèn dìtiězhàn zài nǎr?",
         "sentence2": "太谢谢了，帮大忙了。",
     },
+    {
+        "slug": "10-chinese-words-for-daily-life",
+        "no": "03",
+        "n_words": 10,
+        "n_sentences": 30,
+        "title_en": "10 Daily-Life Chinese Words",
+        "sub_en": "from morning to calling it a day",
+        "words": [("现在", "xiàn zài"), ("一起", "yì qǐ"), ("吃饭", "chī fàn")],
+        "sentence": "一起吃饭吧。",
+        "pinyin": "Yìqǐ chīfàn ba.",
+        "sentence2": "今天太累了。",
+    },
 ]
 
 

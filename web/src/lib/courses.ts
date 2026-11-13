@@ -618,6 +618,285 @@ export const COURSES: Course[] = [
       },
     ],
   },
+  {
+    slug: '10-chinese-words-for-daily-life',
+    date: '2026-11-13',
+    level: 'beginner',
+    title: {
+      en: '10 Chinese Words for Daily Life',
+      zh: '日常生活的 10 个中文词',
+    },
+    description: {
+      en: 'Ten words that carry you through an ordinary day: telling time, making plans, inviting someone to eat, saying how you feel, and letting a small thing go. Pinyin, three real sentences each, and the cultural notes textbooks leave out.',
+      zh: '撑起一整天的十个词：说时间、约人、邀饭、讲状态、放小事一马。每个都配拼音、三句真实例句，以及教材很少讲的文化用法。',
+    },
+    goal: {
+      en: "Today's goal: learn 10 everyday life words, with three sentences each you can use the moment you need them.",
+      zh: '今日目标：学会 10 个日常生活用词，每个配三句当场就能用的句子。',
+    },
+    words: [
+      {
+        word: '现在',
+        pinyin: 'xiàn zài',
+        meaning: { en: 'now, right now, these days', zh: '现在、如今' },
+        sentences: [
+          {
+            text: '现在几点？',
+            pinyin: 'Xiànzài jǐ diǎn?',
+            meaning: { en: 'What time is it now?', zh: '问时间最常用的一句。' },
+          },
+          {
+            text: '我现在有点忙，晚点回你。',
+            pinyin: 'Wǒ xiànzài yǒudiǎn máng, wǎn diǎn huí nǐ.',
+            meaning: { en: "I'm a bit busy right now, I'll get back to you later.", zh: '微信里拖一拖回复时的常用说法。' },
+          },
+          {
+            text: '现在开始吧。',
+            pinyin: 'Xiànzài kāishǐ ba.',
+            meaning: { en: "Let's start now.", zh: '提议立刻行动，句尾「吧」让语气更商量。' },
+          },
+        ],
+        note: {
+          en: 'Literally "present + at". Besides "this moment" it also means "these days / as of now" — 现在住北京 means "I live in Beijing now", not "at this second". If you really mean immediately, add 马上.',
+          zh: '除了「此刻」，还能表示「如今／这段时间」——「现在住北京」是「目前住在北京」，不是「这一秒」。真要强调立刻，得说「马上」。',
+        },
+      },
+      {
+        word: '马上',
+        pinyin: 'mǎ shàng',
+        meaning: { en: 'right away, in a sec', zh: '马上、立刻' },
+        sentences: [
+          {
+            text: '我马上到。',
+            pinyin: 'Wǒ mǎshàng dào.',
+            meaning: { en: "I'll be there in a sec.", zh: '回消息、赴约时最常用的一句。' },
+          },
+          {
+            text: '马上就好，等一下。',
+            pinyin: 'Mǎshàng jiù hǎo, děng yíxià.',
+            meaning: { en: "Almost done, one sec.", zh: '「马上就好」是固定搭配，等于「快好了」。' },
+          },
+          {
+            text: '他马上就回来了。',
+            pinyin: 'Tā mǎshàng jiù huílai le.',
+            meaning: { en: "He'll be back any minute.", zh: '加「就」强调很快。' },
+          },
+        ],
+        note: {
+          en: "Literally 'on horseback' — once the fastest way to get somewhere. In practice 马上 means 'very soon' rather than 'instantly'; natives even joke that 马上 can take a while. For real urgency use 立刻.",
+          zh: '字面是「马背上」，古代最快的交通方式。实际指「很快」，不一定一秒就到，中国人自己也会调侃「马上」可能要等一会儿。真着急用「立刻」。',
+        },
+      },
+      {
+        word: '一会儿',
+        pinyin: 'yí huìr',
+        meaning: { en: 'in a little while, a moment', zh: '一会儿、片刻' },
+        sentences: [
+          {
+            text: '一会儿见！',
+            pinyin: 'Yíhuìr jiàn!',
+            meaning: { en: 'See you in a bit!', zh: '短时间分别时的道别。' },
+          },
+          {
+            text: '等一会儿，我马上好。',
+            pinyin: 'Děng yíhuìr, wǒ mǎshàng hǎo.',
+            meaning: { en: 'Give me a moment, I am almost done.', zh: '「等一会儿」＝稍等，比「等一下」稍长一点。' },
+          },
+          {
+            text: '我一会儿再给你打电话。',
+            pinyin: 'Wǒ yíhuìr zài gěi nǐ dǎ diànhuà.',
+            meaning: { en: "I'll call you again in a little while.", zh: '也能指稍后的将来，不只是在「等待」。' },
+          },
+        ],
+        note: {
+          en: "A deliberately vague short stretch — anywhere from two minutes to half an hour. The -r is 儿化 (erhua): northern speakers say yíhuìr, many southern speakers just say yíhuì. For something even shorter, use 一下.",
+          zh: '一段故意模糊的短时间，几分钟到半小时都可能。带儿化音：北方说 yíhuìr，南方常直接说 yíhuì。更短一点用「一下」。',
+        },
+      },
+      {
+        word: '一起',
+        pinyin: 'yì qǐ',
+        meaning: { en: 'together, in the same place', zh: '一起、一块儿' },
+        sentences: [
+          {
+            text: '一起吃饭吧。',
+            pinyin: 'Yìqǐ chīfàn ba.',
+            meaning: { en: "Let's grab a meal together.", zh: '邀约最自然的句式。' },
+          },
+          {
+            text: '我们一起去，好不好？',
+            pinyin: 'Wǒmen yìqǐ qù, hǎo bu hǎo?',
+            meaning: { en: "Let's go together, okay?", zh: '句尾「好不好」带商量语气。' },
+          },
+          {
+            text: '这两个不要放在一起。',
+            pinyin: 'Zhè liǎng ge búyào fàng zài yìqǐ.',
+            meaning: { en: "Don't put these two together.", zh: '也能表示「放在同一个地方」，不只用于人。' },
+          },
+        ],
+        note: {
+          en: "Not only 'with someone' — 放在一起 means putting objects in the same place. For people, 一块儿 is a more casual, northern-flavoured alternative. Note 一起 goes before the verb, unlike English 'together with'.",
+          zh: '不只是「和人一起」，「放在一起」指把东西搁一处。说人时口语也说「一块儿」，更随意、偏北方。注意它放在动词前：「一起去」，不是「去一起」。',
+        },
+      },
+      {
+        word: '有没有',
+        pinyin: 'yǒu méi yǒu',
+        meaning: { en: 'is there / do you have', zh: '有没有、是否存在' },
+        sentences: [
+          {
+            text: '你有没有时间？',
+            pinyin: 'Nǐ yǒu méiyǒu shíjiān?',
+            meaning: { en: 'Do you have time?', zh: '正反疑问句，比「有时间吗」更口语。' },
+          },
+          {
+            text: '这儿有没有 WiFi？',
+            pinyin: 'Zhèr yǒu méiyǒu WiFi?',
+            meaning: { en: 'Is there WiFi here?', zh: '问某处有没有某样东西。' },
+          },
+          {
+            text: '有没有便宜一点的？',
+            pinyin: 'Yǒu méiyǒu piányi yìdiǎn de?',
+            meaning: { en: 'Do you have a cheaper one?', zh: '买东西比价、挑选项时常用。' },
+          },
+        ],
+        note: {
+          en: "The 有-没-有 pattern is the standard yes/no question for possession or existence. In fast speech it slurs toward 'yǒuméi'. You can also ask with 吗 instead: 你有时间吗？ — slightly more neutral.",
+          zh: '「有没有」是问「是否有」的标准正反疑问形式，快读常连成「有没」。也可以换成「…吗」：「你有时间吗？」语气稍中性一点。',
+        },
+      },
+      {
+        word: '觉得',
+        pinyin: 'jué de',
+        meaning: { en: 'to think, to feel', zh: '觉得、认为、感觉' },
+        sentences: [
+          {
+            text: '我觉得挺好吃的。',
+            pinyin: 'Wǒ juéde tǐng hǎochī de.',
+            meaning: { en: 'I think it is pretty good.', zh: '表达看法最常用，比「认为」随意得多。' },
+          },
+          {
+            text: '你觉得怎么样？',
+            pinyin: 'Nǐ juéde zěnmeyàng?',
+            meaning: { en: 'What do you think?', zh: '和第 2 课的「怎么样」搭在一起用。' },
+          },
+          {
+            text: '今天觉得有点累。',
+            pinyin: 'Jīntiān juéde yǒudiǎn lèi.',
+            meaning: { en: 'I am feeling a bit tired today.', zh: '也能引出身体或心理上的感受。' },
+          },
+        ],
+        note: {
+          en: "Covers both 'I think' (opinion) and 'I feel' (physical or emotional). Formal writing uses 认为. It takes a whole clause, not a bare noun: say 我觉得这个好, not 我觉得这个. The 得 is neutral tone.",
+          zh: '既能表示「我认为」，也能表示「我感觉」；正式书面用「认为」。后面一般接完整判断（「我觉得这个好」），不直接光接一个名词。「得」读轻声。',
+        },
+      },
+      {
+        word: '忙',
+        pinyin: 'máng',
+        meaning: { en: 'busy', zh: '忙、没空' },
+        sentences: [
+          {
+            text: '最近忙吗？',
+            pinyin: 'Zuìjìn máng ma?',
+            meaning: { en: 'Been busy lately?', zh: '寒暄高频句，和第 2 课「最近怎么样？」是近亲。' },
+          },
+          {
+            text: '我这周有点忙。',
+            pinyin: 'Wǒ zhè zhōu yǒudiǎn máng.',
+            meaning: { en: 'I am a bit busy this week.', zh: '「有点忙」是委婉说法，也常用来婉拒。' },
+          },
+          {
+            text: '忙什么呢？',
+            pinyin: 'Máng shénme ne?',
+            meaning: { en: 'What are you busy with?', zh: '熟人之间随意打招呼，不必认真回答。' },
+          },
+        ],
+        note: {
+          en: "A classic small-talk opener and a polite way to decline an invitation. 忙死了 / 忙不过来 are everyday exaggerations. It is a stative verb — no 是: 我很忙, never 我是忙.",
+          zh: '既是寒暄，也是委婉拒绝的理由。「忙死了」「忙不过来」都是日常夸张说法。它是状态动词，不加「是」：说「我很忙」，不说「我是忙」。',
+        },
+      },
+      {
+        word: '累',
+        pinyin: 'lèi',
+        meaning: { en: 'tired, worn out', zh: '累、疲倦' },
+        sentences: [
+          {
+            text: '今天太累了。',
+            pinyin: 'Jīntiān tài lèi le.',
+            meaning: { en: 'I am so tired today.', zh: '下班回家最常说的一句。' },
+          },
+          {
+            text: '累不累？休息一下吧。',
+            pinyin: 'Lèi bu lèi? Xiūxi yíxià ba.',
+            meaning: { en: 'Tired? Take a break.', zh: '正反疑问 + 建议，很自然的关心方式。' },
+          },
+          {
+            text: '跑了两公里就累了。',
+            pinyin: 'Pǎo le liǎng gōnglǐ jiù lèi le.',
+            meaning: { en: 'I got tired after just two kilometres.', zh: '指身体上的疲劳，「就」强调来得快。' },
+          },
+        ],
+        note: {
+          en: 'Covers both physical and mental exhaustion — 心累 ("emotionally drained") is an internet-era favourite. Do not confuse it with 困, which means sleepy: 我困了 is "I want to sleep", not "I am tired".',
+          zh: '身体累、心累都算，「心累」是网络时代的高频说法。别和「困」搞混：「我困了」是想睡觉，不是「累」。',
+        },
+      },
+      {
+        word: '吃饭',
+        pinyin: 'chī fàn',
+        meaning: { en: 'to eat, to have a meal', zh: '吃饭、用餐' },
+        sentences: [
+          {
+            text: '吃饭了吗？',
+            pinyin: 'Chīfàn le ma?',
+            meaning: { en: 'Have you eaten?', zh: '中国人式的寒暄，很多时候并不真在问饭。' },
+          },
+          {
+            text: '一起吃饭吧。',
+            pinyin: 'Yìqǐ chīfàn ba.',
+            meaning: { en: "Let's grab a meal together.", zh: '最万能的邀约句，同事、朋友都能用。' },
+          },
+          {
+            text: '我还没吃饭呢。',
+            pinyin: 'Wǒ hái méi chīfàn ne.',
+            meaning: { en: "I haven't eaten yet.", zh: '「还没…呢」表示到现在还没做。' },
+          },
+        ],
+        note: {
+          en: 'Literally "eat + meal"; 饭 means a cooked meal in general, not just rice. 吃饭了吗？ functions like "how are you doing" — a simple 吃了 or 还没呢 is a perfectly complete answer, no menu report needed.',
+          zh: '「饭」泛指一餐，不只是米饭。「吃饭了吗？」功能上接近「最近好吗」，回一句「吃了」或「还没呢」就够了，不用汇报吃了什么。',
+        },
+      },
+      {
+        word: '算了',
+        pinyin: 'suàn le',
+        meaning: { en: 'forget it, never mind, let it go', zh: '算了、作罢' },
+        sentences: [
+          {
+            text: '算了，不买了。',
+            pinyin: 'Suàn le, bù mǎi le.',
+            meaning: { en: 'Never mind, I will not buy it.', zh: '临时改主意、放弃一个打算。' },
+          },
+          {
+            text: '算了，别提了。',
+            pinyin: 'Suàn le, bié tí le.',
+            meaning: { en: 'Forget it, let us not talk about it.', zh: '不想继续某个话题时的收尾。' },
+          },
+          {
+            text: '太麻烦了，算了算了。',
+            pinyin: 'Tài máfan le, suàn le suàn le.',
+            meaning: { en: 'Too much hassle, forget it.', zh: '重复一次表示干脆放弃，常带点无奈。' },
+          },
+        ],
+        note: {
+          en: 'Literally "let it be settled". Drops a plan, closes a topic, or waives a small annoyance. Tone does the work: said lightly it means "no big deal"; said sharply it can sound dismissive — avoid it while apologising to someone.',
+          zh: '字面是「就此作罢」。放弃计划、结束话题、不计较小事都能用。全靠语气：轻轻说是「没事儿」，硬邦邦说会显得敷衍；正在跟人道歉时别用。',
+        },
+      },
+    ],
+  },
 ]
 
 export function getCourse(slug: string): Course | undefined {
