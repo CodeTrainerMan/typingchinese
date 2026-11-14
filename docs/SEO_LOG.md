@@ -72,7 +72,16 @@
 
 ---
 
-## 五、后续核验时间节点与复盘检查项
+## 五、Reddit 垂直社区宣发台账
+
+| 社区 | 帖子标题 | 链接 | 状态 |
+| :--- | :--- | :--- | :---: |
+| **r/ChineseLanguage** (30万+ 中文学习者) | `[Resource] Free 5,004-word HSK 1-6 Anki Deck with pinyin & sentences...` | https://www.reddit.com/r/ChineseLanguage/comments/1xvr34y/resource_free_5004word_hsk_16_anki_deck_with/ | ✅ 正常活跃 |
+| **r/Anki** (17万+ 记忆法/Anki用户) | `[Shared Deck] Complete HSK 1–6 Vocabulary Deck (5,004 cards)...` | https://www.reddit.com/r/Anki/comments/1xw2kj3/shared_deck_complete_hsk_16_vocabulary_deck_5004/ | ✅ 正常活跃 |
+
+---
+
+## 六、后续核验时间节点与复盘检查项
 
 ### 阶段 1：明天核心核验（2026-11-15）
 - [ ] **AnkiWeb 公开搜索生效检查**：
