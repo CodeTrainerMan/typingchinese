@@ -122,6 +122,10 @@ export default async function HskLevelPage({ params }: { params: Promise<{ level
     ],
   }
 
+  const curLevel = Number(level)
+  const nextLevel = curLevel < 6 ? curLevel + 1 : null
+  const prevLevel = curLevel > 1 ? curLevel - 1 : null
+
   return (
     <main className="mx-auto w-full max-w-3xl px-4 py-10">
       <script
@@ -189,6 +193,40 @@ export default async function HskLevelPage({ params }: { params: Promise<{ level
           {rest} more words — open the full list in the app and start typing.
         </p>
       )}
+
+      {/* 底部转化与层级内链卡片 */}
+      <div className="mt-8 rounded-2xl border border-line bg-card p-6 shadow-sm">
+        <h3 className="text-base font-semibold text-ink">
+          Ready to master all {dict.length} HSK {level} words?
+        </h3>
+        <p className="mt-1 text-sm text-dim">
+          Turn passive reading into active recall: type pinyin, hear native tones, and let spaced repetition fix your mistakes.
+        </p>
+        <div className="mt-4 flex flex-wrap items-center gap-3">
+          <Link
+            href={`/dicts/hsk${level}`}
+            className="inline-flex h-10 items-center gap-2 rounded-lg bg-fg px-5 text-sm font-medium text-bg hover:opacity-90"
+          >
+            Start Interactive Practice ↗
+          </Link>
+          {nextLevel && (
+            <Link
+              href={`/hsk/${nextLevel}`}
+              className="inline-flex h-10 items-center gap-2 rounded-lg border border-line bg-solid px-4 text-sm font-medium text-ink hover:bg-hover"
+            >
+              Next: HSK {nextLevel} Word List →
+            </Link>
+          )}
+          {prevLevel && (
+            <Link
+              href={`/hsk/${prevLevel}`}
+              className="inline-flex h-10 items-center gap-2 rounded-lg border border-line bg-solid px-4 text-sm font-medium text-dim hover:bg-hover"
+            >
+              ← Previous: HSK {prevLevel}
+            </Link>
+          )}
+        </div>
+      </div>
 
       <h2 className="mt-10 text-lg font-semibold">How the practice works</h2>
       <ul className="mt-3 list-disc space-y-2 pl-5 text-sm leading-6 text-dim">

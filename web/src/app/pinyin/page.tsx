@@ -112,6 +112,29 @@ export default function PinyinPage() {
         </div>
       </Panel>
 
+      <Panel title="Pinyin Rules & FAQ" desc="Essential rules for typing and pronouncing Mandarin Chinese">
+        <div className="space-y-4 text-sm text-dim leading-relaxed">
+          <div className="rounded-lg border border-line bg-surface p-4">
+            <h3 className="font-semibold text-ink text-base">What are the 4 tones in Chinese?</h3>
+            <p className="mt-1">
+              Mandarin Chinese has 4 tones (plus neutral). 1st tone is flat and high (mā), 2nd tone rises (má), 3rd tone dips down then up (mǎ), and 4th tone drops sharply (mà). Correct tones differentiate identical syllables with completely different meanings.
+            </p>
+          </div>
+          <div className="rounded-lg border border-line bg-surface p-4">
+            <h3 className="font-semibold text-ink text-base">How to type ü on keyboard (the &quot;v&quot; rule)</h3>
+            <p className="mt-1">
+              On computer keyboards, there is no &quot;ü&quot; key. All standard Chinese pinyin input methods map &quot;ü&quot; to the letter <kbd className="rounded border border-line bg-solid px-1.5 py-0.5 font-mono text-xs text-ink">v</kbd>. For example, type <span className="font-mono text-brand">nv</span> for 女 (woman) and <span className="font-mono text-brand">lv</span> for 绿 (green).
+            </p>
+          </div>
+          <div className="rounded-lg border border-line bg-surface p-4">
+            <h3 className="font-semibold text-ink text-base">How to practice typing pinyin?</h3>
+            <p className="mt-1">
+              TypingChinese gives you real-time per-letter feedback. You can practice full pinyin, tone-marked pinyin, or initial abbreviations. Mistakes are automatically collected into spaced repetition (FSRS) for effortless long-term memory.
+            </p>
+          </div>
+        </div>
+      </Panel>
+
       {/* CC BY-SA 要求在使用处署名，所以这行不翻译、不删 */}
       <p className="text-center text-[11px] text-faint">
         Audio{' '}
