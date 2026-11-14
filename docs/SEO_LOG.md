@@ -16,7 +16,9 @@
 | **3** | **首页专属 TDK 与分享卡片** | `web/src/app/page.tsx` | `bc7b6c2` | 精准覆盖 `Learn Chinese & Pinyin by Typing` 核心搜索意图，配置 OpenGraph/Twitter 图文卡片 |
 | **4** | **站点地图全量覆盖** | `web/src/app/sitemap.ts` | `90b7b2c` | 将原先遗漏的核心流量入口 `/pinyin` 和 `/write` 补入 Sitemap，权重设置为 `0.8` |
 | **5** | **客户端大页专属 Layout** | `web/src/app/pinyin/layout.tsx`<br>`web/src/app/dicts/layout.tsx`<br>`web/src/app/write/layout.tsx` | `90b7b2c` | 解决 `'use client'` 页面无法输出 metadata 导致的标题降级问题，锁定高频词（如 `Pinyin Chart with Audio`） |
-| **6** | **国际化多语言 hreflang** | `web/src/app/region/[code]/page.tsx` | `90b7b2c` | 为 15 个国家/地区落地页配置双向 `alternates.languages` 与 `x-default`，提升海外本地化 Google 搜索排名 |
+| **7** | **单字笔顺页规模化放量** | `web/src/lib/write/pilot-chars.ts` | `e602295` | 从 10 个试点字扩充为 **HSK 1 全量 172 个核心汉字**，全站静态页面数从 61 跃升至 **223 个**，全量进入 Sitemap 捕获长尾搜索 |
+| **8** | **HSK 进阶通关与前后级内链** | `web/src/app/hsk/[level]/page.tsx` | `e602295` | 表格下方增设“即刻开启通关练习”大卡片及“上一级 / 下一级”链接，降低跳出率并增强权重传递 |
+| **9** | **拼音规则问答与 Schema FAQ** | `web/src/app/pinyin/page.tsx`<br>`web/src/app/pinyin/layout.tsx` | `e602295` | 补充四声调、ü 规则（v 键）、拼音拼读高频问答，并注入 `FAQPage` + `BreadcrumbList` 结构化数据，争夺 Google 折叠问答卡片 |
 
 ---
 
