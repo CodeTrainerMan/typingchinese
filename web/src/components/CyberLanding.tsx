@@ -271,6 +271,7 @@ export default function CyberLanding() {
               width={687}
               height={1024}
               priority
+              sizes="(max-width: 640px) 90vw, (max-width: 1024px) 50vw, 687px"
               className="cyber-figure-img"
             />
             <div className="cyber-scanlines" />

@@ -96,8 +96,13 @@ export function MobileNav() {
 
   return (
     <header className="sticky top-0 z-20 flex h-14 items-center gap-1 overflow-x-auto border-b border-line bg-surface px-2 md:hidden">
-      <Link href="/" className="mr-1 inline-flex shrink-0 items-center px-2">
+      <Link
+        href="/"
+        aria-label="TypingChinese Home"
+        className="mr-1 inline-flex shrink-0 items-center px-2"
+      >
         <BrandMark className="h-6 w-6 text-ink" />
+        <span className="sr-only">TypingChinese Home</span>
       </Link>
       {[...ITEMS.slice(1), FOOTER].map(item => (
         <Link

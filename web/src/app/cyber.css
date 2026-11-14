@@ -726,7 +726,7 @@ html[data-cyber='on'] :where(a, button, input, select, textarea, [tabindex]):foc
   font-size: 10px;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: #5f7b8b;
+  color: #8dafc2;
 }
 
 .cy-memory-summary {
@@ -795,7 +795,7 @@ html[data-cyber='on'] :where(a, button, input, select, textarea, [tabindex]):foc
   color: var(--cy-cyan);
 }
 .cyber-feature-icon svg { width: 20px; height: 20px; }
-.cyber-feature-no { font-family: var(--cy-mono); font-size: 11px; letter-spacing: 0.16em; color: #4d6878; }
+.cyber-feature-no { font-family: var(--cy-mono); font-size: 11px; letter-spacing: 0.16em; color: #8ba9bd; }
 .cyber-feature h3 { margin: 18px 0 0; font-size: 17px; font-weight: 700; color: #eaf9ff; }
 .cyber-feature p { margin: 8px 0 0; font-size: 13px; line-height: 1.7; color: #8ea9b7; }
 .cyber-feature-tag {
@@ -936,7 +936,7 @@ html[data-cyber='on'] :where(a, button, input, select, textarea, [tabindex]):foc
   font-size: 10px;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: #4f6878;
+  color: #8dafc2;
 }
 .cyber-footer-link {
   color: var(--cy-cyan);
