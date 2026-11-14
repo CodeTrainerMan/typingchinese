@@ -19,6 +19,7 @@
 | **7** | **单字笔顺页规模化放量** | `web/src/lib/write/pilot-chars.ts` | `e602295` | 从 10 个试点字扩充为 **HSK 1 全量 172 个核心汉字**，全站静态页面数从 61 跃升至 **223 个**，全量进入 Sitemap 捕获长尾搜索 |
 | **8** | **HSK 进阶通关与前后级内链** | `web/src/app/hsk/[level]/page.tsx` | `e602295` | 表格下方增设“即刻开启通关练习”大卡片及“上一级 / 下一级”链接，降低跳出率并增强权重传递 |
 | **9** | **拼音规则问答与 Schema FAQ** | `web/src/app/pinyin/page.tsx`<br>`web/src/app/pinyin/layout.tsx` | `e602295` | 补充四声调、ü 规则（v 键）、拼音拼读高频问答，并注入 `FAQPage` + `BreadcrumbList` 结构化数据，争夺 Google 折叠问答卡片 |
+| **10** | **移动端 LCP 与无障碍优化** | `web/src/components/CyberLanding.tsx`<br>`web/src/components/Nav.tsx`<br>`web/src/app/cyber.css` | `ed477fc` | 配置 LCP 图片响应式 sizes、补齐移动 Logo aria-label、调亮暗部小字对比度，使 Google PageSpeed Insights 达到 SEO 100 满分、桌面性能 100 满分 |
 
 ---
 
@@ -59,7 +60,19 @@
 
 ---
 
-## 四、后续核验时间节点与复盘检查项
+## 四、海外权威软件收录平台（AlternativeTo）发布台账
+
+| 属性 | 内容 |
+| :--- | :--- |
+| **提交时间** | 2026-11-14 12:30 |
+| **软件主页** | https://alternativeto.net/software/typingchinese/about/ |
+| **平台类别** | Web / Online (Browser) · Free & Open Source (MIT) |
+| **对标竞品 (Alternatives)** | **Anki**、**Duolingo**、**Memrise**、**HelloChinese**、**HSKStory** |
+| **审核状态** | 已进入官方人工编辑审核队列（1 app waiting for review） |
+
+---
+
+## 五、后续核验时间节点与复盘检查项
 
 ### 阶段 1：明天核心核验（2026-11-15）
 - [ ] **AnkiWeb 公开搜索生效检查**：
